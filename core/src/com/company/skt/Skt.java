@@ -9,14 +9,5 @@ public class Skt extends ApplicationAdapter {
 	public void create () {
 
 	}
-
-	@Override
-	public void render () {
-
-	}
 	
-	@Override
-	public void dispose () {
-
-	}
 }

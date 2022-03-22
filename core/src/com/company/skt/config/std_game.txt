@@ -1,0 +1,4 @@
+amount_games=9
+ramsch=true
+time_limit=0
+lost_factor=-2
