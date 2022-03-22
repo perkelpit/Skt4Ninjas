@@ -1,13 +1,14 @@
 package com.company.skt;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.company.skt.lib.ScreenController;
 
-public class Skt extends ApplicationAdapter {
+public class Skt extends ScreenController {
 
 	
 	@Override
 	public void create () {
-
+		super.create();
+		
 	}
 	
 }
