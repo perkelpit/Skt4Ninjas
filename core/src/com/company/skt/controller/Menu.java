@@ -1,5 +1,6 @@
 package com.company.skt.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.lib.UpdateStage;
@@ -43,7 +44,10 @@ public class Menu extends StageScreen {
                 System.out.println("Credits clicked");
                 break;
             case "EXIT":
+                // TODO DEBUG This first one causes the "AL lib: alc_cleanup: 1 device not closed"-Error
+                // DEBUG The second one leaves the "non-zero-exit value" in place and may cause problems on iOS
                 System.exit(0);
+                //Gdx.app.exit();
                 break;
             default :
                 System.out.println("buttonName " + buttonName +" in " + this.getClass().getSimpleName() +  " not found");
