@@ -73,7 +73,7 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
             stages.act(delta);
         }
         
-        ScreenUtils.clear(1, 0, 0, 1, false);
+        ScreenUtils.clear(0, 1, 0, 1, false);
         
         stages.draw();
     }
