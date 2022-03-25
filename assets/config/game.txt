@@ -1,0 +1,5 @@
+#Fri Oct 01 23:10:33 CEST 2021
+amount_games=6
+time_limit=0
+lost_factor=-2
+ramsch=true

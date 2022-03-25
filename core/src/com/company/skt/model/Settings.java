@@ -1,4 +1,4 @@
-package com.company.skt.data;
+package com.company.skt.model;
 
 import java.io.*;
 import java.util.Properties;

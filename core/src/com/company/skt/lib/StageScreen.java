@@ -6,41 +6,63 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.company.skt.model.Assets;
 
-public abstract class StageScreen implements Screen, InputProcessor {
+public abstract class StageScreen implements Screen, InputProcessor, Initialize_Update {
     
-    protected LayeredStages stages;
+    private LayeredStages stages;
+    private InputMultiplexer inputMultiplexer;
+    private boolean initialized;
     protected boolean stop;
     
     public StageScreen() {
         stages = new LayeredStages();
-        create();
     }
     
+    public void initialize(){
+        initialized = true;
+    }
     
-    public abstract void create();
+    @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
     
-    public abstract void update(float dt);
+    @Override
+    public void update(float delta) {
+        Initialize_Update.super.update(delta);
+    }
     
     public abstract AssetManager getAssets();
     
+    public void addStage(UpdateStage stage) {
+        stages.addStage(stage);
+        if(inputMultiplexer != null) {
+            inputMultiplexer.addProcessor(0, stage);
+        }
+    }
+    
     @Override
     public void show() {
-        InputMultiplexer inputMultiplexer = (InputMultiplexer)Gdx.input.getInputProcessor();
+        inputMultiplexer = (InputMultiplexer)Gdx.input.getInputProcessor();
         inputMultiplexer.addProcessor(this);
         for(int i = stages.getStages().size - 1; i >= 0; i-- ) {
             inputMultiplexer.addProcessor(stages.getStages().get(i));
         }
         Utils.setCurrentScreen(this);
+        Assets.setCurrentScreen(this);
     }
     
     @Override
     public void hide() {
-        InputMultiplexer inputMultiplexer = (InputMultiplexer)Gdx.input.getInputProcessor();
         inputMultiplexer.removeProcessor(this);
         for(UpdateStage stage : stages.getStages()) {
             inputMultiplexer.removeProcessor(stage);
         }
+        inputMultiplexer = null;
+        dispose();
+        Utils.setCurrentScreen(null);
+        Assets.setCurrentScreen(null);
     }
     
     public void render(float delta) {

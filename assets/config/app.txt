@@ -1,0 +1,8 @@
+#Tue Mar 22 15:16:32 CET 2022
+resolution_y=720
+resolution_x=1280
+fullscreen=false
+name=OilenSkat
+player_name=P
+lang=0
+version=a0.02
