@@ -2,6 +2,9 @@ package com.company.skt.lib;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.HashMap;
@@ -12,6 +15,40 @@ public abstract class Utils {
   
   static {
     vMaps = new HashMap<>();
+  }
+  
+  public static Texture scaleTextureTo(Texture texture, int width, int height, Pixmap.Filter filter) {
+    if(!texture.getTextureData().isPrepared()) {
+      texture.getTextureData().prepare();
+    }
+    Pixmap unscaled = texture.getTextureData().consumePixmap();
+    Pixmap scaled = new Pixmap(width, height, unscaled.getFormat());
+    scaled.setFilter(filter);
+    scaled.drawPixmap(unscaled,
+                      0,0, unscaled.getWidth(), unscaled.getHeight(),
+                      0,0, scaled.getWidth(), scaled.getHeight());
+    Texture scaledTexture = new Texture(scaled);
+    unscaled.dispose();
+    scaled.dispose();
+    return scaledTexture;
+  }
+  
+  public static Texture scaleTextureTo(TextureRegion textureRegion, int width, int height, Pixmap.Filter filter) {
+    if(!textureRegion.getTexture().getTextureData().isPrepared()){
+      textureRegion.getTexture().getTextureData().prepare();
+    }
+    Pixmap unscaled = textureRegion.getTexture().getTextureData().consumePixmap();
+    Pixmap scaled = new Pixmap(width, height, unscaled.getFormat());
+    scaled.setFilter(filter);
+    scaled.drawPixmap(unscaled,
+                      textureRegion.getRegionX(),textureRegion.getRegionY(),
+                      textureRegion.getRegionX() + textureRegion.getRegionWidth(),
+                      textureRegion.getRegionY() + textureRegion.getRegionHeight(),
+                      0,0, scaled.getWidth(), scaled.getHeight());
+    Texture scaledTexture = new Texture(scaled);
+    unscaled.dispose();
+    scaled.dispose();
+    return scaledTexture;
   }
   
   public static float limitDegrees(float degree) {

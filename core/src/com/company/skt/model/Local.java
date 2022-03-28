@@ -2,7 +2,6 @@ package com.company.skt.model;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
@@ -21,7 +20,7 @@ public abstract class Local {
         appCfg = Settings.getProperties(Settings.APP);
         lang = Integer.parseInt(appCfg.getProperty("lang"));
         localFileExtension = ".txt";
-        String langStr = "";
+        String langStr;
         switch(lang) {
             case 1:
                 langStr = "deu";

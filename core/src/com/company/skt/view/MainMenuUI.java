@@ -91,7 +91,7 @@ public class MainMenuUI extends UpdateStage {
         menuTable.add(welcomeMessageLabel);
         menuTable.row();
         
-        // *** HOSTBUTTON ***
+        // *** HOST BUTTON ***
         hostButton = new ImageTextButton(
             Local.getString("mm_host"), new ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, null, buttonFont));
@@ -104,7 +104,7 @@ public class MainMenuUI extends UpdateStage {
         menuTable.add(hostButton);
         menuTable.row();
         
-        // *** JOINBUTTON ***
+        // *** JOIN BUTTON ***
         joinButton = new ImageTextButton(
             Local.getString("mm_join"), new ImageTextButtonStyle(
             buttonDrawable, buttonPressedDrawable, null, buttonFont));
@@ -143,7 +143,7 @@ public class MainMenuUI extends UpdateStage {
         menuTable.add(settingsButton);
         menuTable.row();
     
-        // *** CREDITSBUTTON
+        // *** CREDITS BUTTON ***
         creditsButton = new ImageTextButton(
             Local.getString("mm_credits"), new ImageTextButtonStyle(
             buttonDrawable, buttonPressedDrawable, null, buttonFont));
@@ -156,7 +156,7 @@ public class MainMenuUI extends UpdateStage {
         menuTable.add(creditsButton);
         menuTable.row();
         
-        // *** EXITBUTTON ***
+        // *** EXIT BUTTON ***
         exitButton = new ImageTextButton(
             Local.getString("mm_exit"), new ImageTextButtonStyle(
             buttonDrawable, buttonPressedDrawable, null, buttonFont));
