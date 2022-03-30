@@ -21,6 +21,7 @@ import com.company.skt.controller.Menu;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.lib.Utils;
 import com.company.skt.model.Assets;
+import com.company.skt.model.Fonts;
 import com.company.skt.model.Local;
 import com.company.skt.model.Settings;
 
@@ -35,7 +36,7 @@ public class MainMenuUI extends UpdateStage {
     FreeTypeFontParameter fontParametersWelcome, fontParametersButtons;
     ImageTextButton hostButton, joinButton, archiveButton, settingsButton, creditsButton, exitButton;
     TextureRegionDrawable buttonDrawable, buttonPressedDrawable;
-    BitmapFont welcomeMessageFont, buttonFont;
+    BitmapFont buttonFont;
     LabelStyle labelStyleWelcome, labelStyleButtons;
     Properties appCfg;
     AssetManager aM;
@@ -43,30 +44,12 @@ public class MainMenuUI extends UpdateStage {
     {
         appCfg = Settings.getProperties(Settings.APP);
         aM = Assets.getAssets();
-        fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("assets/fonts/PirataOne-Regular.ttf"));
-        fontParametersWelcome = new FreeTypeFontParameter();
-        fontParametersWelcome.size = 48;
-        fontParametersWelcome.color = Color.BLACK;
-        fontParametersWelcome.borderWidth = 2;
-        fontParametersWelcome.borderColor = Color.WHITE;
-        fontParametersWelcome.borderStraight = true;
-        fontParametersWelcome.minFilter = TextureFilter.Linear;
-        fontParametersWelcome.magFilter = TextureFilter.Linear;
-        
-        welcomeMessageFont = fontGenerator.generateFont(fontParametersWelcome);
+
         labelStyleWelcome = new LabelStyle();
-        labelStyleWelcome.font = welcomeMessageFont;
-    
-        fontParametersButtons = new FreeTypeFontParameter();
-        fontParametersButtons.size = 32;
-        fontParametersButtons.color = Color.BLACK;
-        fontParametersButtons.borderWidth = 2;
-        fontParametersButtons.borderColor = Color.WHITE;
-        fontParametersButtons.borderStraight = true;
-        fontParametersButtons.minFilter = TextureFilter.Linear;
-        fontParametersButtons.magFilter = TextureFilter.Linear;
+        labelStyleWelcome.font = Fonts.getFont("PirataOne-Regular_Welcome");
         
-        buttonFont = fontGenerator.generateFont(fontParametersButtons);
+        
+        buttonFont = Fonts.getFont("PirataOne-Regular_Button");
         buttonDrawable = new TextureRegionDrawable(aM.<Texture>get(
             "assets/art/menu/ButtonTexture.png"));
         
