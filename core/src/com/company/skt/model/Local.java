@@ -16,7 +16,7 @@ public abstract class Local {
     private static String localPathStr;
     private static String localFileExtension;
     
-    public static void initiate(String path) {
+    public static void boot(String path) {
         appCfg = Settings.getProperties(Settings.APP);
         lang = Integer.parseInt(appCfg.getProperty("lang"));
         localFileExtension = ".txt";

@@ -2,15 +2,12 @@ package com.company.skt.view;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.company.skt.lib.ActorBundle;
 import com.company.skt.lib.TextureActor;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.lib.Utils;
 import com.company.skt.model.Assets;
 import com.company.skt.model.Settings;
 
-import javax.xml.soap.Text;
 import java.util.Properties;
 
 public class MenuBackground extends UpdateStage {

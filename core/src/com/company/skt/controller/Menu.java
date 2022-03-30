@@ -46,8 +46,8 @@ public class Menu extends StageScreen {
             case "EXIT":
                 // TODO DEBUG This first one causes the "AL lib: alc_cleanup: 1 device not closed"-Error
                 // DEBUG The second one leaves the "non-zero-exit value" in place and may cause problems on iOS
-                System.exit(0);
-                //Gdx.app.exit();
+                //System.exit(0);
+                Gdx.app.exit();
                 break;
             default :
                 System.out.println("buttonName " + buttonName +" in " + this.getClass().getSimpleName() +  " not found");

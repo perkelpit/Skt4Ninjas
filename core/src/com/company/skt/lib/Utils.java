@@ -25,8 +25,8 @@ public abstract class Utils {
     Pixmap scaled = new Pixmap(width, height, unscaled.getFormat());
     scaled.setFilter(filter);
     scaled.drawPixmap(unscaled,
-                      0,0, unscaled.getWidth(), unscaled.getHeight(),
-                      0,0, scaled.getWidth(), scaled.getHeight());
+                      0, 0, unscaled.getWidth(), unscaled.getHeight(),
+                      0, 0, scaled.getWidth(), scaled.getHeight());
     Texture scaledTexture = new Texture(scaled);
     unscaled.dispose();
     scaled.dispose();
@@ -44,7 +44,7 @@ public abstract class Utils {
                       textureRegion.getRegionX(),textureRegion.getRegionY(),
                       textureRegion.getRegionX() + textureRegion.getRegionWidth(),
                       textureRegion.getRegionY() + textureRegion.getRegionHeight(),
-                      0,0, scaled.getWidth(), scaled.getHeight());
+                      0, 0, scaled.getWidth(), scaled.getHeight());
     Texture scaledTexture = new Texture(scaled);
     unscaled.dispose();
     scaled.dispose();

@@ -1,4 +1,5 @@
 #Tue Mar 22 15:16:32 CET 2022
+ref_res=1920x1080
 resolution_y=720
 resolution_x=1280
 fullscreen=false

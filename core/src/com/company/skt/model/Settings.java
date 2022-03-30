@@ -18,7 +18,7 @@ public abstract class Settings {
         stdGameCfgPathStr,
         cfgFileExtension;
     
-    public static void initiate(String path) {
+    public static void boot(String path) {
         appCfg = null;
         gameCfg = null;
         cfgFileExtension = ".txt";
