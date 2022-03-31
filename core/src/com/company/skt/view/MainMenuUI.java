@@ -32,12 +32,10 @@ public class MainMenuUI extends UpdateStage {
     
     Table menuTable;
     Label welcomeMessageLabel;
-    FreeTypeFontGenerator fontGenerator;
-    FreeTypeFontParameter fontParametersWelcome, fontParametersButtons;
     ImageTextButton hostButton, joinButton, archiveButton, settingsButton, creditsButton, exitButton;
     TextureRegionDrawable buttonDrawable, buttonPressedDrawable;
     BitmapFont buttonFont;
-    LabelStyle labelStyleWelcome, labelStyleButtons;
+    LabelStyle labelStyleWelcome;
     Properties appCfg;
     AssetManager aM;
     
