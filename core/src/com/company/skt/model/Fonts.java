@@ -15,9 +15,10 @@ public abstract class Fonts {
     static HashMap<String, BitmapFont> FontsMap;
     static private FreeTypeFontParameter fontParametersWelcome, fontParametersButton;
     
-    static {
+    public static void boot(String path) {
+        Fonts.path = path;
         FontsMap = new HashMap<>();
-
+    
         fontParametersWelcome = new FreeTypeFontParameter();
         fontParametersWelcome.size = 48;
         fontParametersWelcome.color = Color.BLACK;
@@ -41,10 +42,6 @@ public abstract class Fonts {
         FontsMap.put("PirataOne-Regular_Button",
                      new FreeTypeFontGenerator(
                          Gdx.files.internal(path + "PirataOne-Regular.ttf")).generateFont(fontParametersButton));
-    }
-    
-    public static void boot(String path) {
-        Fonts.path = path;
     }
     
     public static BitmapFont getFont(String fontName){

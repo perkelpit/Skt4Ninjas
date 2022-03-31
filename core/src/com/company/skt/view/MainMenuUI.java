@@ -1,13 +1,7 @@
 package com.company.skt.view;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
@@ -19,11 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.company.skt.controller.Menu;
 import com.company.skt.lib.UpdateStage;
-import com.company.skt.lib.Utils;
-import com.company.skt.model.Assets;
-import com.company.skt.model.Fonts;
-import com.company.skt.model.Local;
-import com.company.skt.model.Settings;
+import com.company.skt.model.*;
 
 import java.util.Properties;
 
@@ -37,22 +27,17 @@ public class MainMenuUI extends UpdateStage {
     BitmapFont buttonFont;
     LabelStyle labelStyleWelcome;
     Properties appCfg;
-    AssetManager aM;
     
     {
         appCfg = Settings.getProperties(Settings.APP);
-        aM = Assets.getAssets();
 
         labelStyleWelcome = new LabelStyle();
         labelStyleWelcome.font = Fonts.getFont("PirataOne-Regular_Welcome");
         
         
         buttonFont = Fonts.getFont("PirataOne-Regular_Button");
-        buttonDrawable = new TextureRegionDrawable(aM.<Texture>get(
-            "assets/Menu/art/ButtonTexture.png"));
-        
-        buttonPressedDrawable = new TextureRegionDrawable(aM.<Texture>get(
-            "assets/Menu/art/ButtonTexturePressed.png"));
+        buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
+        buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
         
     }
     

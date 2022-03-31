@@ -13,8 +13,8 @@ public class Skt extends ScreenController {
 	public void create () {
 		super.create();
 		Local.boot("assets/local/");
-		Assets.boot("assets/");
 		Fonts.boot("assets/fonts/");
+		Assets.boot("assets/");
 		setActiveScreen(new Menu());
 	}
 	

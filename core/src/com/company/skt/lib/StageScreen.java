@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.company.skt.model.Assets;
+import com.company.skt.model.Utils;
 
 public abstract class StageScreen implements Screen, InputProcessor, Initialize_Update {
     
@@ -73,7 +74,7 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
             stages.act(delta);
         }
         
-        ScreenUtils.clear(0, 1, 0, 1, false);
+        ScreenUtils.clear(0, 0, 0, 1, false);
         
         stages.draw();
     }

@@ -27,11 +27,15 @@ public abstract class Assets {
         aL.finishLoading();
     }
     
-    float getProgress() {
+    public static synchronized <T> T get(String fileName) {
+        return aL.get(fileName);
+    }
+    
+    public static float getProgress() {
         return aL.getProgress();
     }
     
-    boolean update(float delta) {
+    public static boolean update(float delta) {
         return aL.update(delta);
     }
     
