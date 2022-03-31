@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.lib.UpdateStage;
+import com.company.skt.model.Assets;
 import com.company.skt.view.MainMenuUI;
 import com.company.skt.view.MenuBackground;
 
@@ -12,6 +13,7 @@ public class Menu extends StageScreen {
     @Override
     public void initialize() {
         super.initialize();
+        Assets.finishLoading();
         addStage(new MenuBackground());
         addStage(new MainMenuUI());
     }

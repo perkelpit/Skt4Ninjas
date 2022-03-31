@@ -17,10 +17,6 @@ public class MenuBackground extends UpdateStage {
         super.initialize();
         Properties appCfg = Settings.getProperties(Settings.APP);
         addActor(new TextureActor(
-            "Background",
-            Utils.scaleTextureTo(Assets.getAssets().<Texture>get("assets/art/menu/Background.png"),
-                                 Integer.parseInt(appCfg.getProperty("resolution_x")),
-                                 Integer.parseInt(appCfg.getProperty("resolution_y")),
-                                 Pixmap.Filter.BiLinear)));
+            "Background", Assets.getAssets().<Texture>get("assets/Menu/art/Background.png")));
     }
 }

@@ -49,10 +49,10 @@ public class MainMenuUI extends UpdateStage {
         
         buttonFont = Fonts.getFont("PirataOne-Regular_Button");
         buttonDrawable = new TextureRegionDrawable(aM.<Texture>get(
-            "assets/art/menu/ButtonTexture.png"));
+            "assets/Menu/art/ButtonTexture.png"));
         
         buttonPressedDrawable = new TextureRegionDrawable(aM.<Texture>get(
-            "assets/art/menu/ButtonTexturePressed.png"));
+            "assets/Menu/art/ButtonTexturePressed.png"));
         
     }
     

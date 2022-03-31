@@ -23,4 +23,16 @@ public abstract class Assets {
         aL.boot(path);
     }
     
+    public static void finishLoading() {
+        aL.finishLoading();
+    }
+    
+    float getProgress() {
+        return aL.getProgress();
+    }
+    
+    boolean update(float delta) {
+        return aL.update(delta);
+    }
+    
 }

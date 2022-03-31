@@ -2,7 +2,10 @@ package com.company.skt.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 
 import javax.swing.*;
@@ -31,26 +34,39 @@ class AssetLoader {
         }
         aM = new AssetManager();
         loadAssets();
-        aM.finishLoading();
     }
     
     private void loadAssets() {
         listFiles();
-        switch(screenName) {
-            case "Menu":
-                aM.load("assets/art/menu/Background.png", Texture.class);
-                aM.load("assets/art/menu/ButtonTexture.png", Texture.class);
-                aM.load("assets/art/menu/ButtonTexturePressed.png", Texture.class);
-                aM.load("assets/art/menu/skat1444x900.png", Texture.class);
-                aM.load("assets/art/menu/buttonDebug.png", Texture.class);
-                break;
-            case "Gaming":
-                break;
+        for(String fileName : pngList.toArray()) {
+            if(fileName.startsWith("atlas_")) {
+                aM.load(basePath + screenName + "/" + fileName, TextureAtlas.class);
+            } else {
+                aM.load(basePath + screenName + "/" + fileName, Texture.class);
+            }
+        }
+        for(String fileName : soundList.toArray()) {
+            aM.load(basePath + screenName + "/" + fileName, Sound.class);
+        }
+        for(String fileName : musicList.toArray()) {
+            aM.load(basePath + screenName + "/" + fileName, Music.class);
         }
     }
     
+    void finishLoading() {
+        aM.finishLoading();
+    }
+    
+    float getProgress() {
+        return aM.getProgress();
+    }
+    
+    boolean update(float delta) {
+        return aM.update((int)(delta * 1000));
+    }
+    
     private void rescaleAndCache() {
-
+    
     }
     
     private void listFiles() {
@@ -61,7 +77,7 @@ class AssetLoader {
         
         // *** scan directories in sub-folder of current screen and prepare directory-list ***
         Array<File> dirs = new Array<>();
-        for(File folder : new File(basePath + screenName).listFiles()) {
+        for(File folder : new File(basePath + screenName + "/").listFiles()) {
             if(folder.isDirectory()) {
                 dirs.add(folder);
             }
@@ -88,6 +104,7 @@ class AssetLoader {
                         dirs.removeValue(folder, true);
                     }
                 }
+                rescaleAndCache();
             }
         // else (reference resolution)
         } else {
