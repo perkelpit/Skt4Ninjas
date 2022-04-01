@@ -38,8 +38,10 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     
     public void addStage(UpdateStage stage) {
         layeredStages.addStage(stage);
-        if(inputMultiplexer != null) {
-            inputMultiplexer.addProcessor(0, stage);
+        if(stage.isActive()) {
+            if(inputMultiplexer != null) {
+                inputMultiplexer.addProcessor(0, stage);
+            }
         }
     }
     
@@ -79,14 +81,32 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
         layeredStages.draw();
     }
 
+    public void setStageActive(String name, boolean active) {
+        UpdateStage stage = findStage(name);
+        if(stage != null) {
+            if(active && !stage.isActive()) {
+                stage.setActive(true);
+                inputMultiplexer.addProcessor(0, stage);
+            }
+            if(!active && stage.isActive()) {
+                stage.setActive(false);
+                inputMultiplexer.removeProcessor(stage);
+            }
+        } else {
+            System.out.println("\u001B[31m" +
+                               "ERROR: No such stage in " + this.getClass().getSimpleName() + ": " + name +
+                               "\u001B[0m");
+        }
+    }
+    
     public UpdateStage findStage(String name){
-        UpdateStage output = null;
+        UpdateStage returnStage = null;
         for (UpdateStage stage : layeredStages.getStages()){
             if(stage.getName().equals(name)){
-                output = stage;
+                returnStage = stage;
             }
         }
-        return output;
+        return returnStage;
     }
 
     @Override

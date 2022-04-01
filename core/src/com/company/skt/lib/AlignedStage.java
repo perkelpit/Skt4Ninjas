@@ -18,7 +18,7 @@ public class AlignedStage extends UpdateStage {
     }
 
     public AlignedStage(String name) {
-        super(name);
+        super(name, true);
     }
 
     public void setParallaxFactor(float parallaxFactor) {

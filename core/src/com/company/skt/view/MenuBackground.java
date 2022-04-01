@@ -10,6 +10,10 @@ public class MenuBackground extends UpdateStage {
     public MenuBackground(String name) {
         super(name);
     }
+    
+    public MenuBackground(String name, boolean active) {
+        super(name, active);
+    }
 
     @Override
     public void initialize() {

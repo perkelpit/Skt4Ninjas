@@ -12,7 +12,7 @@ public class LayeredStages extends UpdateStage {
     }
 
     public LayeredStages(String name) {
-        super(name);
+        super(name, true);
     }
 
     public Array<UpdateStage> getStages() {

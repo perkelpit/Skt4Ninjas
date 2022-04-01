@@ -9,12 +9,13 @@ public class UpdateStage extends Stage implements Initialize_Update, Named {
   private boolean active;
   private String name;
 
-  {
-    active = true;
-  }
-
   public UpdateStage(String name){
     this.name = name;
+  }
+  
+  public UpdateStage(String name, boolean active){
+    this.name = name;
+    this.active = active;
   }
 
   public void initialize(){

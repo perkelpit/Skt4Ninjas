@@ -44,6 +44,10 @@ public class MainMenuUI extends UpdateStage {
     public MainMenuUI(String name) {
         super(name);
     }
+    
+    public MainMenuUI(String name, boolean active) {
+        super(name, active);
+    }
 
     @Override
     public void initialize() {

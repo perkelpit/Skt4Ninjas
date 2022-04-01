@@ -44,6 +44,10 @@ public class SettingsUI extends UpdateStage {
     public SettingsUI(String name) {
         super(name);
     }
+    
+    public SettingsUI(String name, boolean active) {
+        super(name, active);
+    }
 
     @Override
     public void initialize() {
