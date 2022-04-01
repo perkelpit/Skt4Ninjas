@@ -16,7 +16,11 @@ public class AlignedStage extends UpdateStage {
         shift = new Vector2(0, 0);
         parallaxFactor = 1;
     }
-    
+
+    public AlignedStage(String name) {
+        super(name);
+    }
+
     public void setParallaxFactor(float parallaxFactor) {
         this.parallaxFactor = parallaxFactor;
     }

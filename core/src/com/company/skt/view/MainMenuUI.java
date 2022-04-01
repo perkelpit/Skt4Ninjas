@@ -40,7 +40,11 @@ public class MainMenuUI extends UpdateStage {
         buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
         
     }
-    
+
+    public MainMenuUI(String name) {
+        super(name);
+    }
+
     @Override
     public void initialize() {
         super.initialize();

@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.company.skt.lib.StageScreen;
 
 import java.util.HashMap;
+import java.util.Properties;
 
 public abstract class Utils {
     /* TODO split class into:
@@ -144,5 +145,19 @@ public abstract class Utils {
     public static void setCurrentScreen(StageScreen screen) {
         currentScreen = screen;
     }
-    
+
+    public static float getScaleFactorX(){
+        Properties appCfg = Settings.getProperties(Settings.APP);
+        String refRes = appCfg.getProperty("ref_res");
+        return Float.parseFloat(appCfg.getProperty("resolution_x")) /
+                Float.parseFloat(refRes.substring(0, refRes.indexOf('x')));
+    }
+
+    public static float getScaleFactorY(){
+        Properties appCfg = Settings.getProperties(Settings.APP);
+        String refRes = appCfg.getProperty("ref_res");
+        return Float.parseFloat(appCfg.getProperty("resolution_y")) /
+                Float.parseFloat(refRes.substring(refRes.indexOf('x') + 1));
+    }
+
 }

@@ -11,13 +11,13 @@ import com.company.skt.model.Utils;
 
 public abstract class StageScreen implements Screen, InputProcessor, Initialize_Update {
     
-    private LayeredStages stages;
+    private LayeredStages layeredStages;
     private InputMultiplexer inputMultiplexer;
     private boolean initialized;
     protected boolean stop;
     
     public StageScreen() {
-        stages = new LayeredStages();
+        layeredStages = new LayeredStages("layeredStages");
     }
     
     public void initialize(){
@@ -37,7 +37,7 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     public abstract AssetManager getAssets();
     
     public void addStage(UpdateStage stage) {
-        stages.addStage(stage);
+        layeredStages.addStage(stage);
         if(inputMultiplexer != null) {
             inputMultiplexer.addProcessor(0, stage);
         }
@@ -47,8 +47,8 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     public void show() {
         inputMultiplexer = (InputMultiplexer)Gdx.input.getInputProcessor();
         inputMultiplexer.addProcessor(this);
-        for(int i = stages.getStages().size - 1; i >= 0; i-- ) {
-            inputMultiplexer.addProcessor(stages.getStages().get(i));
+        for(int i = layeredStages.getStages().size - 1; i >= 0; i-- ) {
+            inputMultiplexer.addProcessor(layeredStages.getStages().get(i));
         }
         Utils.setCurrentScreen(this);
         Assets.setCurrentScreen(this);
@@ -57,7 +57,7 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     @Override
     public void hide() {
         inputMultiplexer.removeProcessor(this);
-        for(UpdateStage stage : stages.getStages()) {
+        for(UpdateStage stage : layeredStages.getStages()) {
             inputMultiplexer.removeProcessor(stage);
         }
         inputMultiplexer = null;
@@ -67,22 +67,31 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     }
     
     public void render(float delta) {
-        stages.update(delta);
+        layeredStages.update(delta);
         update(delta);
         
         if(!stop) {
-            stages.act(delta);
+            layeredStages.act(delta);
         }
         
         ScreenUtils.clear(0, 0, 0, 1, false);
         
-        stages.draw();
+        layeredStages.draw();
     }
-    
+
+    public UpdateStage findStage(String name){
+        UpdateStage output = null;
+        for (UpdateStage stage : layeredStages.getStages()){
+            if(stage.getName().equals(name)){
+                output = stage;
+            }
+        }
+        return output;
+    }
 
     @Override
     public void dispose() {
-        stages.dispose();
+        layeredStages.dispose();
     }
     
     

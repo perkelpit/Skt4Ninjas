@@ -10,7 +10,11 @@ public class LayeredStages extends UpdateStage {
     {
         stages = new Array<>();
     }
-    
+
+    public LayeredStages(String name) {
+        super(name);
+    }
+
     public Array<UpdateStage> getStages() {
         return stages;
     }
@@ -38,7 +42,9 @@ public class LayeredStages extends UpdateStage {
     @Override
     public void update(float delta) {
         for(UpdateStage stage : stages) {
-            stage.update(delta);
+            if (stage.isActive()) {
+                stage.update(delta);
+            }
         }
     }
     
@@ -46,14 +52,18 @@ public class LayeredStages extends UpdateStage {
     public void act(float delta) {
         alignStages();
         for(UpdateStage stage : stages) {
-            stage.act(delta);
+            if (stage.isActive()) {
+                stage.act(delta);
+            }
         }
     }
     
     @Override
     public void draw() {
         for(UpdateStage stage : stages) {
-            stage.draw();
+            if (stage.isActive()) {
+                stage.draw();
+            }
         }
     }
     

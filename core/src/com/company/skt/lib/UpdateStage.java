@@ -3,19 +3,36 @@ package com.company.skt.lib;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public class UpdateStage extends Stage implements Initialize_Update {
+public class UpdateStage extends Stage implements Initialize_Update, Named {
   
   private boolean initialized;
-  
+  private boolean active;
+  private String name;
+
+  {
+    active = true;
+  }
+
+  public UpdateStage(String name){
+    this.name = name;
+  }
+
   public void initialize(){
-  
     initialized = true;
   }
   
   public boolean isInitialized() {
     return initialized;
   }
-  
+
+  public void setActive(boolean active){
+    this.active = active;
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
   @Override
   public void update(float delta) {
     Initialize_Update.super.update(delta);
@@ -25,5 +42,13 @@ public class UpdateStage extends Stage implements Initialize_Update {
       }
     }
   }
-  
+
+  @Override
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 }

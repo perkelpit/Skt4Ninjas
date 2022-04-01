@@ -6,7 +6,11 @@ import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.Assets;
 
 public class MenuBackground extends UpdateStage {
-    
+
+    public MenuBackground(String name) {
+        super(name);
+    }
+
     @Override
     public void initialize() {
         super.initialize();

@@ -7,6 +7,7 @@ import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.Assets;
 import com.company.skt.view.MainMenuUI;
 import com.company.skt.view.MenuBackground;
+import com.company.skt.view.SettingsUI;
 
 public class Menu extends StageScreen {
     
@@ -14,8 +15,10 @@ public class Menu extends StageScreen {
     public void initialize() {
         super.initialize();
         Assets.finishLoading();
-        addStage(new MenuBackground());
-        addStage(new MainMenuUI());
+        addStage(new MenuBackground("menuBackground"));
+        addStage(new MainMenuUI("mainMenuUI"));
+        addStage(new SettingsUI("settingsUI"));
+        findStage("settingsUI").setActive(false);
     }
     
     @Override
@@ -30,6 +33,7 @@ public class Menu extends StageScreen {
     
     public void buttonClicked(String buttonName){
         switch(buttonName) {
+            // *** MAINMENU-CLICKS ***
             case "HOST":
                 System.out.println("Host clicked");
                 break;
@@ -41,6 +45,8 @@ public class Menu extends StageScreen {
                 break;
             case "SETTINGS":
                 System.out.println("Settings clicked");
+                findStage("mainMenuUI").setActive(false);
+                findStage("settingsUI").setActive(true);
                 break;
             case "CREDITS":
                 System.out.println("Credits clicked");
@@ -50,6 +56,15 @@ public class Menu extends StageScreen {
                 // DEBUG The second one leaves the "non-zero-exit value" in place and may cause problems on iOS
                 //System.exit(0);
                 Gdx.app.exit();
+                break;
+            // *** SETTINGSMENU-CLICKS ***
+            case "CHANGE_NAME":
+                System.out.println("Change name clicked");
+                break;
+            case "QUIT_SETTINGS":
+                System.out.println("Quit settings clicked");
+                findStage("mainMenuUI").setActive(true);
+                findStage("settingsUI").setActive(false);
                 break;
             default :
                 System.out.println("buttonName " + buttonName +" in " + this.getClass().getSimpleName() +  " not found");
