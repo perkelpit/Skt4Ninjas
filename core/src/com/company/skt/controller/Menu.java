@@ -103,7 +103,14 @@ public class Menu extends StageScreen {
                 // TODO remove player2 in LobbyUI because connection lost (as host)
                 // TODO can be solved differently?
                 break;
-                
+            case "LOBBY_ALL_CLIENTS_READY_TOGGLE":
+                // TODO toggle all clients ready in lobby (as host)
+                // TODO can be solved differently?
+                break;
+            case "SUMMARY_ALL_CLIENTS_READY_TOGGLE":
+                // TODO toggle all clients ready in summary (as host)
+                // TODO can be solved differently?
+                break;
         }
     }
 }

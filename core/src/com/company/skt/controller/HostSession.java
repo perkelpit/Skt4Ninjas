@@ -140,24 +140,28 @@ public class HostSession extends Session {
         ((Menu)Utils.getCurrentScreen()).event("LOBBY_UPDATE_PLAYERS");
         // OLD: lobbyUI.updatePlayers(players);
         sendObjectToAll("players");
-        if (players[1].isReady && players[2].isReady) {
-            // TODO DEBUG somehow get clientReadyState from model to repair this:
-      /* ### DEBUG OLD CODE TO REPAIR ###
-      if(lobby && !lobbyUI.getAllClientsReady()) {
-        lobbyUI.allClientsReadyToggle();
-      }
-      if(summary && !summaryUI.getAllClientsReady()) {
-        summaryUI.allClientsReadyToggle();
-      }
-    }
-    if (!players[1].isReady || !players[2].isReady) {
-      if(lobby && lobbyUI.getAllClientsReady()) {
-        lobbyUI.allClientsReadyToggle();
-      }
-      if(summary && summaryUI.getAllClientsReady()) {
-        summaryUI.allClientsReadyToggle();
-      }
-       */
+        /* ### DEBUG OLD CODE TO REPAIR ### */
+        // TODO DEBUG somehow get clientReadyState from model to repair this:
+        if(players[1].isReady && players[2].isReady) {
+            if(lobby /* DEBUG OLD: && !lobbyUI.getAllClientsReady() */) {
+                ((Menu)Utils.getCurrentScreen()).event("LOBBY_ALL_CLIENTS_READY_TOGGLE");
+                // OLD: lobbyUI.allClientsReadyToggle();
+            }
+            if(summary /* DEBUG OLD: && !summaryUI.getAllClientsReady() */) {
+                ((Menu)Utils.getCurrentScreen()).event("SUMMARY_ALL_CLIENTS_READY_TOGGLE");
+                // OLD: summaryUI.allClientsReadyToggle();
+            }
+        }
+        if(!players[1].isReady || !players[2].isReady) {
+            if(lobby /* DEBUG OLD: && lobbyUI.getAllClientsReady() */) {
+                ((Menu)Utils.getCurrentScreen()).event("LOBBY_ALL_CLIENTS_READY_TOGGLE");
+                // OLD: lobbyUI.allClientsReadyToggle();
+            }
+            if(summary /* DEBUG OLD: && summaryUI.getAllClientsReady() */) {
+                ((Menu)Utils.getCurrentScreen()).event("SUMMARY_ALL_CLIENTS_READY_TOGGLE");
+                // OLD: summaryUI.allClientsReadyToggle();
+            }
+        
         }
     }
     
