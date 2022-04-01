@@ -16,7 +16,9 @@ public abstract class Assets {
     }
     
     public static void setCurrentScreen(StageScreen screen) {
-        aL.setScreen(screen.getClass().getSimpleName());
+        if(screen != null) {
+            aL.setScreen(screen.getClass().getSimpleName());
+        }
     }
     
     public static void boot(String path) {

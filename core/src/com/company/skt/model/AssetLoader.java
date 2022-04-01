@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 
 import javax.swing.*;
-import java.io.File;
+import java.io.*;
 import java.util.Properties;
 
 class AssetLoader {
@@ -21,6 +21,7 @@ class AssetLoader {
     String pngPath;
     String audioPath;
     String screenName;
+    String currentResStr;
     Array<String> pngList;
     Array<String> soundList;
     Array<String> musicList;
@@ -38,12 +39,12 @@ class AssetLoader {
         this.screenName = screenName;
         refResPngPath = basePath + screenName + "/" + "art/";
         audioPath = basePath + screenName + "/" + "audio/";
-        String currentResStr = appCfg.getProperty("resolution_x") + "x" +
+        currentResStr = appCfg.getProperty("resolution_x") + "x" +
                                appCfg.getProperty("resolution_y");
         if(currentResStr.equals(appCfg.getProperty("ref_res"))) {
             pngPath = refResPngPath;
         } else {
-            pngPath = basePath + screenName + "/" + currentResStr + "/";
+            pngPath = refResPngPath + "cache/";
         }
         if(aM != null) {
             aM.dispose();
@@ -74,11 +75,11 @@ class AssetLoader {
     }
     
     <T> T get(String fileName) {
-        if(fileName.substring(fileName.indexOf('.') + 1).equals("png")) {
+        if(fileName.endsWith("png")) {
             return aM.get(pngPath + fileName);
         }
-        if(fileName.substring(fileName.indexOf('.') + 1).equals("wav") ||
-           fileName.substring(fileName.indexOf('.') + 1).equals("mp3")) {
+        if(fileName.endsWith("wav") ||
+           fileName.endsWith("mp3")) {
             return aM.get(audioPath + fileName);
         }
         return null;
@@ -103,17 +104,17 @@ class AssetLoader {
         }
         for(File file : new File(pngPath).listFiles()) {
             if(file.isFile()) {
-                if(file.getName().substring(file.getName().indexOf('.') + 1).equals("png")) {
+                if(file.getName().endsWith("png")) {
                     pngList.add(file.getName());
                 }
             }
         }
         for(File file : new File(audioPath).listFiles()) {
             if(file.isFile()) {
-                if(file.getName().substring(file.getName().indexOf('.') + 1).equals("wav")) {
+                if(file.getName().endsWith("wav")) {
                     soundList.add(file.getName());
                 }
-                if(file.getName().substring(file.getName().indexOf('.') + 1).equals("mp3")) {
+                if(file.getName().endsWith("mp3")) {
                     musicList.add(file.getName());
                 }
             }
@@ -122,32 +123,83 @@ class AssetLoader {
     
     private void scaleAndCache() {
         System.out.println("scaleAndCache()"); // DEBUG
-        File cacheFolder = new File(pngPath);
-        if(!(cacheFolder.exists())) {
-            if(!cacheFolder.mkdir()) ioError();
-        }
-        // TODO distinguish between scaling with respect to aspect ratio and not doing so?
-        // scale without respect to aspect ratio
-        String refRes = appCfg.getProperty("ref_res");
-        float scaleFactorX = Float.parseFloat(appCfg.getProperty("resolution_x")) /
-                             Float.parseFloat(refRes.substring(0, refRes.indexOf('x')));
-        float scaleFactorY = Float.parseFloat(appCfg.getProperty("resolution_y")) /
-                             Float.parseFloat(refRes.substring(refRes.indexOf('x') + 1));
         Array<String> refPngList = new Array<>();
         for(File file : new File(refResPngPath).listFiles()) {
             if(file.isFile()) {
-                if(file.getName().substring(file.getName().indexOf('.') + 1).equals("png")) {
+                if(file.getName().endsWith("png")) {
                     refPngList.add(file.getName());
                 }
             }
         }
-        /* TODO figure out, how to add loading screen
-        * timing problem? -> this code is called by Game´s setActiveScreen() */
-        for(String pngName : refPngList) {
-            Utils.scaleAndCachePng(refResPngPath + pngName, pngPath + pngName,
-                                   scaleFactorX, scaleFactorY, Pixmap.Filter.BiLinear);
+        boolean filesOk = false;
+        File cacheFolder = new File(pngPath);
+        System.out.println(cacheFolder.getPath()); // DEBUG
+        File cacheCfg = new File(pngPath + "cache.cfg");
+        System.out.println(cacheCfg.getPath()); // DEBUG
+        
+        // cache folder does not exist : create new folder and cfg, write cache-resolution to cfg
+        if(!(cacheFolder.exists())) {
+            System.out.println("Cache-Folder does not exist"); // DEBUG
+            if(!cacheFolder.mkdir()) ioError();
+            try {
+                if(!cacheCfg.createNewFile()) ioError();
+            } catch(Exception ignored) {}
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(cacheCfg))) {
+                writer.write(currentResStr + "\n");
+            } catch(Exception e) {ioError();}
+        // cache folder exists
+        } else {
+            System.out.println("Cache-Folder exists"); // DEBUG
+            // cache folder exists, but cacheCfg does not exist
+            if(!(cacheCfg.exists())) {
+                System.out.println("Cache-Cfg does not exist"); // DEBUG
+                // create new cacheCfg
+                try {
+                    if(!cacheCfg.createNewFile()) ioError();
+                    System.out.println("Cache-Cfg created @" + cacheCfg.getPath()); // DEBUG
+                } catch(Exception ignored) {}
+                try(BufferedWriter writer = new BufferedWriter(new FileWriter(cacheCfg))) {
+                    writer.write(currentResStr + "\n");
+                } catch(Exception e) {ioError();}
+            // cacheCfg exists
+            } else {
+                String cacheResStr = "";
+                try(BufferedReader reader = new BufferedReader(new FileReader(cacheCfg))) {
+                    cacheResStr = reader.readLine();
+                } catch (Exception e) {ioError();}
+                if(cacheResStr.equals(currentResStr)) {
+                    filesOk = true;
+                    for(String fileName : refPngList) {
+                        if(!(new File(pngPath + fileName).exists())) {
+                            filesOk = false;
+                        }
+                    }
+                }
+            }
         }
-
+        
+        if(!filesOk) {
+            // delete all files in folder
+            for(File file : cacheFolder.listFiles()) {
+                if(!file.getPath().endsWith("cfg")) {
+                    if(!file.delete()) ioError();
+                }
+            }
+            // TODO distinguish between scaling with respect to aspect ratio and not doing so?
+            // scale without respect to aspect ratio
+            String refRes = appCfg.getProperty("ref_res");
+            float scaleFactorX = Float.parseFloat(appCfg.getProperty("resolution_x")) /
+                                 Float.parseFloat(refRes.substring(0, refRes.indexOf('x')));
+            float scaleFactorY = Float.parseFloat(appCfg.getProperty("resolution_y")) /
+                                 Float.parseFloat(refRes.substring(refRes.indexOf('x') + 1));
+    
+            /* TODO figure out, how to add loading screen
+             * timing problem? -> this code is called by Game´s setActiveScreen() */
+            for(String pngName : refPngList) {
+                Utils.scaleAndCachePng(refResPngPath + pngName, pngPath + pngName,
+                                       scaleFactorX, scaleFactorY, Pixmap.Filter.BiLinear);
+            }
+        }
     }
     
     private void ioError() {

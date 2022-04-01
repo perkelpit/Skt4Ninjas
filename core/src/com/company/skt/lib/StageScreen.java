@@ -61,9 +61,9 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
             inputMultiplexer.removeProcessor(stage);
         }
         inputMultiplexer = null;
-        dispose();
         Utils.setCurrentScreen(null);
         Assets.setCurrentScreen(null);
+        dispose();
     }
     
     public void render(float delta) {
