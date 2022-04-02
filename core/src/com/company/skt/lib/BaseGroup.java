@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.company.skt.model.Utils;
+import com.company.skt.controller.Utils;
 
 public class BaseGroup extends Group implements Initialize_Update, Named {
     

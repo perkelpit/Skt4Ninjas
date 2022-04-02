@@ -1,9 +1,9 @@
 package com.company.skt.controller;
 
 import com.company.skt.model.GameList;
+import com.company.skt.model.SessionData;
 import com.company.skt.model.Player;
 import com.company.skt.model.Settings;
-import com.company.skt.model.Utils;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -19,10 +19,9 @@ public class HostSession extends Session {
     public boolean lobby;
     public boolean summary;
     public boolean game;
-    Player[] players;   // TODO store somewhere in model
-    GameList gameList;   // TODO store somewhere in model
+    SessionData sessionData;
     Properties appCfg;
-    Properties gameCfg;
+    Properties sessionCfg;
     ServerSocket sSocketT;
     ServerSocket sSocketO;
     ClientHandler handlerCPlayer1;
@@ -31,14 +30,10 @@ public class HostSession extends Session {
     public HostSession() {
         lobby = false;
         appCfg = Settings.getProperties(Settings.APP);
-        gameCfg = Settings.getProperties(Settings.GAME);
-        ((Menu)Utils.getCurrentScreen()).event("HOST_LOBBYUI");
-        // OLD: lobbyUI = new LobbyUI(mainMenu, this);
         lobby = true;
-        players = new Player[3];
-        players[0] = new Player(appCfg.getProperty("player_name"));
-        ((Menu)Utils.getCurrentScreen()).event("LOBBY_SET_PLAYER0_SELF");
-        // OLD: lobbyUI.setPlayer(0, players[0].name);
+        sessionData = SessionData.get(true);
+        sessionCfg = sessionData.getSessionCfg();
+        sessionData.setPlayer(new Player(appCfg.getProperty("player_name")), 0);
         clientSearchOngoing = false;
         stop = false;
         try {
@@ -48,21 +43,11 @@ public class HostSession extends Session {
         } catch (IOException e) {e.printStackTrace();}
     }
     
-    // TODO remove when moved to model
-    public GameList getGameList() {
-        return gameList;
-    }
-    
-    // TODO remove when moved to model
-    public void createGameList() {
-        gameList = new GameList(Integer.parseInt(gameCfg.getProperty("amount_games")));
-    }
-    
     public void sendObjectToAll(String objName) {
         Object o;
         switch(objName) {
             case "gameCfg":
-                o = gameCfg; // TODO change when moved to model
+                o = sessionCfg; // TODO change when moved to model
                 break;
             case "players":
                 o = players; // TODO change when moved to model

@@ -1,10 +1,14 @@
-package com.company.skt.model;
+package com.company.skt.controller;
+
+import com.company.skt.model.Card;
+import com.company.skt.model.Game;
+import com.company.skt.model.Hand;
 
 public abstract class Calc {
     
     public static int getGameValue(Game game) {
         return calcValue(
-            game.playerMap.get(game.getPlaying()).startHand, game.gameType,
+            game.playerMap.get(game.getPlaying()).startHand, game.getGameType(),
             game.modifier[Game.HAND], game.modifier[Game.OVERT],
             game.modifier[Game.SCHNEIDER], game.modifier[Game.SCHWARZ],
             game.modifier[Game.CALLED_SCHNEIDER], game.modifier[Game.CALLED_SCHWARZ],

@@ -3,7 +3,6 @@ package com.company.skt.controller;
 import com.company.skt.model.GameList;
 import com.company.skt.model.Player;
 import com.company.skt.model.Settings;
-import com.company.skt.model.Utils;
 
 import javax.swing.*;
 import java.io.*;
