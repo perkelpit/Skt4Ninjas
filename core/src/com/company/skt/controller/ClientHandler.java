@@ -74,11 +74,11 @@ public class ClientHandler extends Thread {
   }
   
   private class HostTextStreamHandler extends TextStreamHandler {
-    private ClientHandler ch;
+    private ClientHandler clientHandler;
     
-    HostTextStreamHandler(BufferedReader br, int delay, ClientHandler ch) {
+    HostTextStreamHandler(BufferedReader br, int delay, ClientHandler clientHandler) {
       super(br, delay);
-      this.ch = ch;
+      this.clientHandler = clientHandler;
     }
 
     protected void process(String in) throws IOException {
@@ -99,7 +99,7 @@ public class ClientHandler extends Thread {
           sendObject(hostSession.gameList);
         }
         if (in.startsWith("RDY_TGL")) {
-          hostSession.clientReadyToggle(ch);
+          hostSession.clientReadyToggle(clientHandler);
         }
       }
     }

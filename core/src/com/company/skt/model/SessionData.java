@@ -40,25 +40,23 @@ public class SessionData {
     }
     
     public void setPlayer(@Null Player player, int playerNumber) {
-        if(playerNumber < 3) {
+        if((playerNumber >= 0) && (playerNumber < 3)) {
             switch(playerNumber) {
                 case 0:
                     if(player0 != player) {
                         player0 = player;
-                    }
-                    break;
+                    } break;
                 case 1:
                     if(player1 != player) {
                         player1 = player;
-                    }
-                    break;
+                    } break;
                 case 2:
                     if(player2 != player) {
                         player2 = player;
-                    }
-                    break;
+                    } break;
             }
         }
+        changed();
     }
     
     public Player getPlayer(int playerNumber) {

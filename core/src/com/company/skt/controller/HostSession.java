@@ -1,8 +1,7 @@
 package com.company.skt.controller;
 
-import com.company.skt.model.GameList;
-import com.company.skt.model.SessionData;
 import com.company.skt.model.Player;
+import com.company.skt.model.SessionData;
 import com.company.skt.model.Settings;
 
 import java.io.IOException;
@@ -87,20 +86,19 @@ public class HostSession extends Session {
                 while (handlerCPlayer1 == null || handlerCPlayer2 == null) {
                     try {
                         if (handlerCPlayer1 == null && !stop) {
-                            handlerCPlayer1 = new ClientHandler(HostSession.this, sSocketT.accept(), sSocketO.accept());
-                            while (players[1] == null && !stop) {
-                                players[1] = handlerCPlayer1.getPlayer();
+                            handlerCPlayer1 = new ClientHandler(
+                                HostSession.this, sSocketT.accept(), sSocketO.accept());
+                            while (sessionData.getPlayer(1) == null && !stop) {
+                                sessionData.setPlayer(handlerCPlayer1.getPlayer(), 1);
                             }
-                            ((Menu)Utils.getCurrentScreen()).event("LOBBY_SET_PLAYER1_HOST");
-                            // OLD: lobbyUI.setPlayer(1, players[1].name);
                         }
                         if (handlerCPlayer1 != null && handlerCPlayer2 == null && !stop) {
-                            handlerCPlayer2 = new ClientHandler(HostSession.this, sSocketT.accept(), sSocketO.accept());
-                            while (players[2] == null && !stop) {
-                                players[2] = handlerCPlayer2.getPlayer();
+                            handlerCPlayer2 = new ClientHandler(
+                                HostSession.this, sSocketT.accept(), sSocketO.accept());
+                            while (sessionData.getPlayer(2) == null && !stop) {
+                                sessionData.setPlayer(handlerCPlayer2.getPlayer(), 2);
                             }
                             ((Menu)Utils.getCurrentScreen()).event("LOBBY_SET_PLAYER1_HOST");
-                            // OLD: lobbyUI.setPlayer(2, players[2].name);
                         }
                     } catch (IOException ignored) {}
                 }
@@ -111,16 +109,16 @@ public class HostSession extends Session {
     }
     
     public void unreadyAllClients() {
-        players[1].isReady = false;
-        players[2].isReady = false;
+        sessionData.getPlayer(1).isReady = false;
+        sessionData.getPlayer(2).isReady = false;
     }
     
-    void clientReadyToggle(ClientHandler ch) {
-        if (ch.equals(handlerCPlayer1)) {
-            players[1].isReady = !(players[1].isReady);
+    void clientReadyToggle(ClientHandler clientHandler) {
+        if (clientHandler.equals(handlerCPlayer1)) {
+            sessionData.getPlayer(1).isReady = !(sessionData.getPlayer(1).isReady);
         }
-        if (ch.equals(handlerCPlayer2)) {
-            players[2].isReady = !(players[2].isReady);
+        if (clientHandler.equals(handlerCPlayer2)) {
+            sessionData.getPlayer(2).isReady = !(sessionData.getPlayer(2).isReady);
         }
         ((Menu)Utils.getCurrentScreen()).event("LOBBY_UPDATE_PLAYERS");
         // OLD: lobbyUI.updatePlayers(players);
