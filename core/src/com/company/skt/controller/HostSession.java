@@ -88,10 +88,10 @@ public class HostSession extends Session {
     
     void clientReadyToggle(ClientHandler clientHandler) {
         if (clientHandler.equals(handlerCPlayer1)) {
-            sessionData.setPlayerReady(1, !(sessionData.getPlayer(1).isReady));
+            sessionData.setPlayerReady(1, !(sessionData.getPlayer(1).isReady()));
         }
         if (clientHandler.equals(handlerCPlayer2)) {
-            sessionData.setPlayerReady(2, !(sessionData.getPlayer(2).isReady));
+            sessionData.setPlayerReady(2, !(sessionData.getPlayer(2).isReady()));
         }
     }
     

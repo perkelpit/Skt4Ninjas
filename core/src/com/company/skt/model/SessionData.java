@@ -83,17 +83,17 @@ public class SessionData {
         switch(playerNumber) {
             case 0:
                 if(data.player0 != null) {
-                    data.player0.isReady = ready;
+                    data.player0.setReady(ready);
                 }
                 break;
             case 1:
                 if(data.player1 != null) {
-                    data.player1.isReady = ready;
+                    data.player1.setReady(ready);
                 }
                 break;
             case 2:
                 if(data.player2 != null) {
-                    data.player2.isReady = ready;
+                    data.player2.setReady(ready);
                 }
                 break;
         }
