@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.model.Assets;
-import com.company.skt.view.ConsoleView;
-import com.company.skt.view.MainMenuUI;
-import com.company.skt.view.MenuBackground;
-import com.company.skt.view.SettingsUI;
+import com.company.skt.view.*;
 
 public class Menu extends StageScreen {
     
@@ -18,6 +15,7 @@ public class Menu extends StageScreen {
         addStage(new MenuBackground("menuBackground", true));
         addStage(new MainMenuUI("mainMenuUI", true));
         addStage(new SettingsUI("settingsUI"));
+
     }
     
     @Override
@@ -35,9 +33,11 @@ public class Menu extends StageScreen {
             // *** MAIN MENU-CLICKS ***
             case "HOST":
                 System.out.println("Host clicked");
+                new HostSession();
                 break;
             case "JOIN":
                 System.out.println("Join clicked");
+                new ClientSession();
                 break;
             case "ARCHIVE":
                 System.out.println("Archive clicked");
@@ -70,13 +70,15 @@ public class Menu extends StageScreen {
     public void event(String eventName) {
         switch(eventName) {
             case "LOBBY_ENTERED":
-                // TODO open LobbyUI
+                addStage(new LobbyUI("lobbyUI",true ));
+                setStageActive("mainMenuUI", false);
                 // [TEMP]
                 System.out.println("Lobby entered.");
-                ConsoleView.printLobbyData();
+                //ConsoleView.printLobbyData();
                 break;
             case "LOGGEDIN":
-                // TODO open LobbyUI as client
+                addStage(new LobbyUI("lobbyUI", true));
+                setStageActive("mainMenuUI", false);
                 break;
             case "SUMMARY":
                 // TODO open SummaryUI

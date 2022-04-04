@@ -14,17 +14,17 @@ import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.*;
 
 public class SettingsUI extends UpdateStage {
-    
-    Table tabTable, videoTable, audioTable, gameTable;
-    ImageTextButton
+
+    private Table tabTable, videoTable, audioTable, gameTable;
+    private ImageTextButton
             gameTabButton, videoTabButton, audioTabButton, quitSettingsButton,
             changeNameButton;
-    TextureRegionDrawable buttonTabDrawable, buttonTabPressedDrawable;
-    Label changeNameLabel;
-    TextField changeNameTextField;
+    private TextureRegionDrawable buttonTabDrawable, buttonTabPressedDrawable;
+    private Label changeNameLabel;
+    private TextField changeNameTextField;
 
 
-    Float scaleX, scaleY;
+    private Float scaleX, scaleY;
     
     {
         tabTable = new Table();
@@ -130,7 +130,7 @@ public class SettingsUI extends UpdateStage {
         gameTable.add(changeNameLabel);
 
         changeNameTextField = new TextField(Settings.getProperties(Settings.APP).getProperty("player_name"),
-                new TextField.TextFieldStyle(Fonts.getFont("PirataOne-Regular_Button"), Color.BLACK,
+                new TextField.TextFieldStyle(Fonts.getFont("PirataOne-Regular_Button"), Color.WHITE,
                         null, null, null));
         gameTable.add(changeNameTextField);
 

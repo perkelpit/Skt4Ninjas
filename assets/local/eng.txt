@@ -36,6 +36,7 @@ l_eng=English
 l_ger=German
 lb_q_end=Do you really want to stop the Session?
 lb_q_quit=Do you really want to quit the Session?
+lb_player_null=Waiting for player
 players=Players
 host_player=Host Player
 lb_waiting=Waiting...

@@ -20,14 +20,14 @@ import java.util.Properties;
 
 
 public class MainMenuUI extends UpdateStage {
-    
-    Table menuTable;
-    Label welcomeMessageLabel;
-    ImageTextButton hostButton, joinButton, archiveButton, settingsButton, creditsButton, exitButton;
-    TextureRegionDrawable buttonDrawable, buttonPressedDrawable;
-    BitmapFont buttonFont;
-    LabelStyle labelStyleWelcome;
-    Properties appCfg;
+
+    private Table menuTable;
+    private Label welcomeMessageLabel;
+    private ImageTextButton hostButton, joinButton, archiveButton, settingsButton, creditsButton, exitButton;
+    private TextureRegionDrawable buttonDrawable, buttonPressedDrawable;
+    private BitmapFont buttonFont;
+    private LabelStyle labelStyleWelcome;
+    private Properties appCfg;
     
     {
         appCfg = Settings.getProperties(Settings.APP);
@@ -35,11 +35,9 @@ public class MainMenuUI extends UpdateStage {
         labelStyleWelcome = new LabelStyle();
         labelStyleWelcome.font = Fonts.getFont("PirataOne-Regular_Welcome");
         
-        
         buttonFont = Fonts.getFont("PirataOne-Regular_Button");
         buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
         buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
-        
     }
 
     public MainMenuUI(String name) {
@@ -61,7 +59,9 @@ public class MainMenuUI extends UpdateStage {
         menuTable.align(Align.center);
         
         // *** LABEL ***
-        welcomeMessageLabel = new Label(Local.getString("mm_greet") + " " + Local.getString("player-name"),
+        welcomeMessageLabel = new Label(
+                Local.getString("mm_greet") + " " +
+                Settings.getProperties(Settings.APP).getProperty("player_name"),
                                         labelStyleWelcome);
         menuTable.add(welcomeMessageLabel);
         menuTable.row();

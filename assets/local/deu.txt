@@ -36,6 +36,7 @@ l_eng=Englisch
 l_ger=Deutsch
 lb_q_end=Sitzung wirklich beenden?
 lb_q_quit=Sitzung wirklich verlassen?
+lb_player_null=Warte auf Spieler
 players=Spieler
 host_player=Sitzungsleiter
 lb_waiting=Warte...
