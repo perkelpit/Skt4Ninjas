@@ -84,6 +84,12 @@ public class Menu extends StageScreen {
             case "LOBBY_DATA_HAS_CHANGED":
                 // TODO update lobbyUI accordingly + if(host): broadcast changes
                 break;
+            case "CONNECTION_WARNING_PLAYER_1":
+                // TODO p1
+                break;
+            case "CONNECTION_WARNING_PLAYER_2":
+                // TODO p2
+                break;
         }
     }
 }

@@ -10,8 +10,7 @@ import java.util.Properties;
 
 public class HostSession extends Session {
     
-    private final int tPORT = 2152;
-    private final int oPORT = 2153;
+    private final int PORT = 2152;
     private Thread clientSearch;
     private volatile boolean stop;
     private boolean clientSearchOngoing;
@@ -21,8 +20,7 @@ public class HostSession extends Session {
     SessionData sessionData;
     Properties appCfg;
     Properties sessionCfg;
-    ServerSocket sSocketT;
-    ServerSocket sSocketO;
+    ServerSocket serverSocket;
     ClientHandler handlerCPlayer1;
     ClientHandler handlerCPlayer2;
     
@@ -36,35 +34,12 @@ public class HostSession extends Session {
         clientSearchOngoing = false;
         stop = false;
         try {
-            sSocketT = new ServerSocket(tPORT);
-            sSocketO = new ServerSocket(oPORT);
+            serverSocket = new ServerSocket(PORT);
             start();
         } catch (IOException e) {e.printStackTrace();}
     }
     
-    public void sendObjectToAll(String objName) {
-        Object o;
-        switch(objName) {
-            case "gameCfg":
-                o = sessionCfg; // TODO change when moved to model
-                break;
-            case "players":
-                o = players; // TODO change when moved to model
-                break;
-            default:
-                System.out.println("Illegal object name for broadcasting to all players");
-                o = null;
-                break;
-        }
-        if (handlerCPlayer1 != null) {
-            handlerCPlayer1.sendObject(o);
-        }
-        if (handlerCPlayer2 != null) {
-            handlerCPlayer2.sendObject(o);
-        }
-    }
-    
-    public void sendTextToAll(String msg) {
+    public void sendStringToAll(String msg) {
         if (handlerCPlayer1 != null) {
             handlerCPlayer1.sendText(msg);
         }
@@ -79,7 +54,6 @@ public class HostSession extends Session {
     }
     
     private void clientSearch() {
-        
         clientSearch = new Thread(() -> {
             while (!stop) {
                 clientSearchOngoing = true;
@@ -87,81 +61,59 @@ public class HostSession extends Session {
                     try {
                         if (handlerCPlayer1 == null && !stop) {
                             handlerCPlayer1 = new ClientHandler(
-                                HostSession.this, sSocketT.accept(), sSocketO.accept());
+                                HostSession.this, serverSocket.accept());
                             while (sessionData.getPlayer(1) == null && !stop) {
                                 sessionData.setPlayer(handlerCPlayer1.getPlayer(), 1);
                             }
                         }
                         if (handlerCPlayer1 != null && handlerCPlayer2 == null && !stop) {
                             handlerCPlayer2 = new ClientHandler(
-                                HostSession.this, sSocketT.accept(), sSocketO.accept());
+                                HostSession.this, serverSocket.accept());
                             while (sessionData.getPlayer(2) == null && !stop) {
                                 sessionData.setPlayer(handlerCPlayer2.getPlayer(), 2);
                             }
-                            ((Menu)Utils.getCurrentScreen()).event("LOBBY_SET_PLAYER1_HOST");
                         }
                     } catch (IOException ignored) {}
                 }
             }
         });
         clientSearch.start();
-        clientSearchOngoing = false;
+        clientSearchOngoing = false; // TODO DEBUG correct? (seems off placed)
     }
     
     public void unreadyAllClients() {
-        sessionData.getPlayer(1).isReady = false;
-        sessionData.getPlayer(2).isReady = false;
+        sessionData.setPlayerReady(1, false);
+        sessionData.setPlayerReady(2, false);
     }
     
     void clientReadyToggle(ClientHandler clientHandler) {
         if (clientHandler.equals(handlerCPlayer1)) {
-            sessionData.getPlayer(1).isReady = !(sessionData.getPlayer(1).isReady);
+            sessionData.setPlayerReady(1, !(sessionData.getPlayer(1).isReady));
         }
         if (clientHandler.equals(handlerCPlayer2)) {
-            sessionData.getPlayer(2).isReady = !(sessionData.getPlayer(2).isReady);
-        }
-        ((Menu)Utils.getCurrentScreen()).event("LOBBY_UPDATE_PLAYERS");
-        // OLD: lobbyUI.updatePlayers(players);
-        sendObjectToAll("players");
-        /* ### DEBUG OLD CODE TO REPAIR ### */
-        // TODO DEBUG somehow get clientReadyState from model to repair this:
-        if(players[1].isReady && players[2].isReady) {
-            if(lobby /* DEBUG OLD: && !lobbyUI.getAllClientsReady() */) {
-                ((Menu)Utils.getCurrentScreen()).event("LOBBY_ALL_CLIENTS_READY_TOGGLE");
-                // OLD: lobbyUI.allClientsReadyToggle();
-            }
-            if(summary /* DEBUG OLD: && !summaryUI.getAllClientsReady() */) {
-                ((Menu)Utils.getCurrentScreen()).event("SUMMARY_ALL_CLIENTS_READY_TOGGLE");
-                // OLD: summaryUI.allClientsReadyToggle();
-            }
-        }
-        if(!players[1].isReady || !players[2].isReady) {
-            if(lobby /* DEBUG OLD: && lobbyUI.getAllClientsReady() */) {
-                ((Menu)Utils.getCurrentScreen()).event("LOBBY_ALL_CLIENTS_READY_TOGGLE");
-                // OLD: lobbyUI.allClientsReadyToggle();
-            }
-            if(summary /* DEBUG OLD: && summaryUI.getAllClientsReady() */) {
-                ((Menu)Utils.getCurrentScreen()).event("SUMMARY_ALL_CLIENTS_READY_TOGGLE");
-                // OLD: summaryUI.allClientsReadyToggle();
-            }
-        
+            sessionData.setPlayerReady(2, !(sessionData.getPlayer(2).isReady));
         }
     }
     
-    void clientLost(ClientHandler ch) {
-        if (ch.equals(handlerCPlayer1)) {
+    void clientConnectionWarning(ClientHandler clientHandler) {
+        if (clientHandler.equals(handlerCPlayer1)) {
+            ((Menu)Utils.getCurrentScreen()).event("CONNECTION_WARNING_PLAYER_1");
+        }
+        if (clientHandler.equals(handlerCPlayer2)) {
+            ((Menu)Utils.getCurrentScreen()).event("CONNECTION_WARNING_PLAYER_2");
+        }
+    }
+    
+    void clientLost(ClientHandler clientHandler) {
+        if (clientHandler.equals(handlerCPlayer1)) {
             handlerCPlayer1 = null;
-            ((Menu)Utils.getCurrentScreen()).event("LOBBY_REMOVE_PLAYER1_HOST");
-            // OLD: lobbyUI.removePlayer(1);
-            players[1] = null;
+            sessionData.setPlayer(null, 1);
             if (!clientSearchOngoing)
                 clientSearch();
         }
-        if (ch.equals(handlerCPlayer2)) {
+        if (clientHandler.equals(handlerCPlayer2)) {
             handlerCPlayer2 = null;
-            ((Menu)Utils.getCurrentScreen()).event("LOBBY_REMOVE_PLAYER2_HOST");
-            // OLD: lobbyUI.removePlayer(2);
-            players[2] = null;
+            sessionData.setPlayer(null, 2);
             if (!clientSearchOngoing)
                 clientSearch();
         }
@@ -187,10 +139,8 @@ public class HostSession extends Session {
                 handlerCPlayer2.stopClientHandler();
                 handlerCPlayer2 = null;
             }
-            sSocketT.close();
-            sSocketT = null;
-            sSocketO.close();
-            sSocketO = null;
+            serverSocket.close();
+            serverSocket = null;
         } catch (IOException e) {e.printStackTrace();}
         
     }

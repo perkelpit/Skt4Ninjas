@@ -39,6 +39,14 @@ public class SessionData {
         data = null;
     }
     
+    public static String getCfgString() {
+        String cfgString = "CFG#";
+        for(String key : (String[])data.getSessionCfg().keySet().toArray()) {
+            cfgString += key + "=" + data.getCfgValue(key) + ";";
+        }
+        return cfgString;
+    }
+    
     public void setPlayer(@Null Player player, int playerNumber) {
         if((playerNumber >= 0) && (playerNumber < 3)) {
             switch(playerNumber) {

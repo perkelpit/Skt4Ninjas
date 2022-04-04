@@ -8,10 +8,12 @@ public class Player implements Serializable {
     private String name;
     public Tally tally; // TODO what was that for ???
     public boolean isReady;
+    public int connectivity;
     
     public Player(String name) {
         this.name = name;
         isReady = false;
+        connectivity = -1;
     }
     
     @Override
