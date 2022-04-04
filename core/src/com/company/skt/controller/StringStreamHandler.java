@@ -3,13 +3,13 @@ package com.company.skt.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-abstract class TextStreamHandler extends StreamHandler<String> {
+abstract class StringStreamHandler extends StreamHandler<String> {
   protected BufferedReader br;
 
-  public TextStreamHandler() {
+  public StringStreamHandler() {
   }
   
-  public TextStreamHandler(BufferedReader br, int delay){
+  public StringStreamHandler(BufferedReader br, int delay){
     super(br, delay);
     this.br = br;
   }

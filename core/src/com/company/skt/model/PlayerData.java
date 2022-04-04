@@ -1,8 +1,8 @@
 package com.company.skt.model;
 
-class PlayerData {
-    Hand startHand,
-        currentHand;
+public class PlayerData {
+    public Hand startHand;
+    Hand currentHand;
     TrickStack trickStack;
     int order;
     boolean plays;

@@ -1,4 +1,4 @@
-package com.company.skt.model;
+package com.company.skt.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.company.skt.lib.StageScreen;
+import com.company.skt.model.Settings;
 
 import java.util.HashMap;
 import java.util.Properties;

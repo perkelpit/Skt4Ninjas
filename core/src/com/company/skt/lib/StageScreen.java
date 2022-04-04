@@ -7,7 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.company.skt.model.Assets;
-import com.company.skt.model.Utils;
+import com.company.skt.controller.Utils;
 
 public abstract class StageScreen implements Screen, InputProcessor, Initialize_Update {
     

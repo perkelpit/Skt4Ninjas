@@ -5,5 +5,5 @@ resolution_x=1280
 fullscreen=false
 name=OilenSkat
 player_name=P
-lang=0
+lang=1
 version=a0.02

@@ -1,5 +1,7 @@
 package com.company.skt.model;
 
+import com.company.skt.controller.Calc;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -20,11 +22,11 @@ public class Game {
     public static final int CALLED_SCHNEIDER = 4;
     public static final int CALLED_SCHWARZ = 5;
     
-    HashMap<Player, PlayerData> playerMap;
+    public HashMap<Player, PlayerData> playerMap;
     Properties gameCfg;
-    Properties storedGameCfg;
-    Boolean won;
-    boolean[] modifier;
+    public Properties storedGameCfg;
+    public Boolean won;
+    public boolean[] modifier;
     int gameType;
     int result;
     
