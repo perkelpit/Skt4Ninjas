@@ -6,7 +6,11 @@ import com.company.skt.lib.StageScreen;
 import com.company.skt.model.Assets;
 import com.company.skt.view.*;
 
+import java.io.IOException;
+
 public class Menu extends StageScreen {
+    
+    Session session;
     
     @Override
     public void initialize() {
@@ -33,11 +37,11 @@ public class Menu extends StageScreen {
             // *** MAIN MENU-CLICKS ***
             case "HOST":
                 System.out.println("Host clicked");
-                new HostSession();
+                session = new HostSession();
                 break;
             case "JOIN":
                 System.out.println("Join clicked");
-                new ClientSession();
+                session = new ClientSession();
                 break;
             case "ARCHIVE":
                 System.out.println("Archive clicked");
@@ -62,8 +66,18 @@ public class Menu extends StageScreen {
                 setStageActive("mainMenuUI", true);
                 setStageActive("settingsUI", false);
                 break;
+            case "QUIT_LOBBY":
+                System.out.println("Quit Lobby clicked");
+                setStageActive("mainMenuUI", true);
+                setStageActive("lobbyUI", false);
+                findStage("lobbyUI").dispose();
+                try {
+                    session.stopSession();
+                } catch(IOException e) {e.printStackTrace();}
+                break;
             default :
-                System.out.println("buttonName " + buttonName +" in " + this.getClass().getSimpleName() +  " not found");
+                System.out.println("buttonName " + buttonName + " in " +
+                                   this.getClass().getSimpleName() +  " not found");
         }
     }
     
@@ -72,19 +86,21 @@ public class Menu extends StageScreen {
             case "LOBBY_ENTERED":
                 addStage(new LobbyUI("lobbyUI",true ));
                 setStageActive("mainMenuUI", false);
-                // [TEMP]
                 System.out.println("Lobby entered.");
-                //ConsoleView.printLobbyData();
+                //TextAreaView.updateTAVLobbyData();
                 break;
             case "LOGGEDIN":
                 addStage(new LobbyUI("lobbyUI", true));
                 setStageActive("mainMenuUI", false);
+                //TextAreaView.updateTAVLobbyData();
                 break;
             case "SUMMARY":
                 // TODO open SummaryUI
                 break;
             case "LOBBY_DATA_HAS_CHANGED":
                 // TODO update lobbyUI accordingly + if(host): broadcast changes
+                //TextAreaView.updateTAVLobbyData();
+                ((LobbyUI)findStage("lobbyUI")).updateUI();
                 break;
             case "CONNECTION_WARNING_PLAYER_1":
                 // TODO p1

@@ -24,7 +24,7 @@ public class HostSession extends Session {
     ClientHandler handlerCPlayer1;
     ClientHandler handlerCPlayer2;
     
-    public HostSession() {
+    HostSession() {
         lobby = false;
         appCfg = Settings.getProperties(Settings.APP);
         lobby = true;
@@ -39,7 +39,7 @@ public class HostSession extends Session {
         } catch (IOException e) {e.printStackTrace();}
     }
     
-    public void sendStringToAll(String msg) {
+    void sendStringToAll(String msg) {
         if (handlerCPlayer1 != null) {
             handlerCPlayer1.sendText(msg);
         }
@@ -48,7 +48,7 @@ public class HostSession extends Session {
         }
     }
     
-    public void stopSession() {
+    void stopSession() {
         if(!stop)
             stop = true;
     }
@@ -62,16 +62,12 @@ public class HostSession extends Session {
                         if (handlerCPlayer1 == null && !stop) {
                             handlerCPlayer1 = new ClientHandler(
                                 HostSession.this, serverSocket.accept());
-                            while (sessionData.getPlayer(1) == null && !stop) {
-                                sessionData.setPlayer(handlerCPlayer1.getPlayer(), 1);
-                            }
+                            fetchPlayerName(handlerCPlayer1);
                         }
                         if (handlerCPlayer1 != null && handlerCPlayer2 == null && !stop) {
                             handlerCPlayer2 = new ClientHandler(
                                 HostSession.this, serverSocket.accept());
-                            while (sessionData.getPlayer(2) == null && !stop) {
-                                sessionData.setPlayer(handlerCPlayer2.getPlayer(), 2);
-                            }
+                            fetchPlayerName(handlerCPlayer2);
                         }
                     } catch (IOException ignored) {}
                 }
@@ -81,7 +77,21 @@ public class HostSession extends Session {
         clientSearchOngoing = false; // TODO DEBUG correct? (seems off placed)
     }
     
-    public void unreadyAllClients() {
+    private void fetchPlayerName(ClientHandler clientHandler) {
+        Thread thread = new Thread(() -> {
+            while (sessionData.getPlayer(1) == null && !stop) {
+                if(clientHandler.getPlayer() != null) {
+                    sessionData.setPlayer(clientHandler.getPlayer(), 1);
+                }
+                try {
+                    Thread.sleep(100);
+                } catch(InterruptedException e) {e.printStackTrace();}
+            }
+        });
+        thread.start();
+    }
+    
+    void unreadyAllClients() {
         sessionData.setPlayerReady(1, false);
         sessionData.setPlayerReady(2, false);
     }

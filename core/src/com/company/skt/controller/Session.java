@@ -8,6 +8,6 @@ import java.io.IOException;
 
 public abstract class Session extends Thread {
   
-  public abstract void stopSession() throws IOException;
+  abstract void stopSession() throws IOException;
 
 }

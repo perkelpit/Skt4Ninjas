@@ -2,9 +2,12 @@ package com.company.skt.view;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.company.skt.controller.Menu;
 import com.company.skt.controller.Utils;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.*;
@@ -49,7 +52,7 @@ public class LobbyUI extends UpdateStage {
         super.initialize();
 
 
-        // *** LEFT TABLE***
+        // *** LEFT TABLE ***
         leftTable = new Table();
         leftTable.setWidth((Float.parseFloat(appCfg.getProperty("resolution_x")) / 2f) * scaleX);
         leftTable.setHeight((Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f) * scaleY);
@@ -57,8 +60,8 @@ public class LobbyUI extends UpdateStage {
                 (Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f) * scaleY,
                 Align.bottomLeft);
 
-       // *** PLAYER LABELS* **
-        player0Name = new Label(SessionData.get().getPlayer(0).getName(),
+       // *** PLAYER LABELS ***
+        player0Name = new Label(Local.getString("lb_player_null"),
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
         leftTable.add(player0Name);
         leftTable.row();
@@ -72,23 +75,46 @@ public class LobbyUI extends UpdateStage {
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
         leftTable.add(player2Name);
         leftTable.row();
+    
+        // *** von Perkel reingepfuschter quitButton ***
+        quitButton = new ImageTextButton(
+            Local.getString("sm_quit"), new ImageTextButton.ImageTextButtonStyle(
+            buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")
+        ));
+        quitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                ((Menu) Utils.getCurrentScreen()).buttonClicked("QUIT_LOBBY");
+            }
+        });
+        leftTable.add(quitButton);
+        leftTable.row();
 
         addActor(leftTable);
     }
 
     public void updateUI(){
-        if (SessionData.get().getPlayer(1 ) != null) {
+        // DEBUG NullPointer in "player0Name.setText(SessionData.get().getPlayer(0).getName());" ?!?!?
+        /*
+        if (SessionData.get().getPlayer(0) != null) {
+            player0Name.setText(SessionData.get().getPlayer(0).getName());
+        }
+        else{
+            player0Name.setText(Local.getString("lb_player_null"));
+        }
+        if (SessionData.get().getPlayer(1) != null) {
             player1Name.setText(SessionData.get().getPlayer(1).getName());
         }
         else{
             player1Name.setText(Local.getString("lb_player_null"));
         }
-        if (SessionData.get().getPlayer(2 ) != null) {
-            player1Name.setText(SessionData.get().getPlayer(2).getName());
+        if (SessionData.get().getPlayer(2) != null) {
+            player2Name.setText(SessionData.get().getPlayer(2).getName());
         }
         else{
-            player1Name.setText(Local.getString("lb_player_null"));
+            player2Name.setText(Local.getString("lb_player_null"));
         }
+         */
     }
 
 }

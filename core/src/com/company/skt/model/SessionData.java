@@ -21,7 +21,7 @@ public class SessionData {
         gameList = new GameList(Integer.parseInt(sessionCfg.getProperty("amount_games")));
     }
     
-    public static SessionData get() {
+    public synchronized static SessionData get() {
         if(data == null) {
             data = new SessionData();
             ((Menu)Utils.getCurrentScreen()).event("LOBBY_ENTERED");
@@ -47,7 +47,7 @@ public class SessionData {
         return cfgString;
     }
     
-    public void setPlayer(@Null Player player, int playerNumber) {
+    public synchronized void setPlayer(@Null Player player, int playerNumber) {
         if((playerNumber >= 0) && (playerNumber < 3)) {
             switch(playerNumber) {
                 case 0:
@@ -79,7 +79,7 @@ public class SessionData {
         return null;
     }
     
-    public void setPlayerReady(int playerNumber, boolean ready) {
+    public synchronized void setPlayerReady(int playerNumber, boolean ready) {
         switch(playerNumber) {
             case 0:
                 if(data.player0 != null) {
@@ -100,13 +100,28 @@ public class SessionData {
         changed();
     }
     
-    public void setCfg(String key, String value) {
+    public synchronized void setCfgValue(String key, String value) {
         data.sessionCfg.setProperty(key, value);
         if(isHost) {
             Settings.setProperty(Settings.GAME, key, value);
         }
         if(key.equals("amount_games")) {
             gameList.setMaxGames(Integer.parseInt(value));
+        }
+        changed();
+    }
+    
+    public synchronized void setCfgValues(String[] keys, String[] values) {
+        if(keys.length == values.length) {
+            for(int i = 0; i < keys.length; i++) {
+                data.sessionCfg.setProperty(keys[i], values[i]);
+                if(isHost) {
+                    Settings.setProperty(Settings.GAME, keys[i], values[i]);
+                }
+                if(keys[i].equals("amount_games")) {
+                    gameList.setMaxGames(Integer.parseInt(values[i]));
+                }
+            }
         }
         changed();
     }
@@ -127,4 +142,7 @@ public class SessionData {
         ((Menu)Utils.getCurrentScreen()).event("LOBBY_DATA_HAS_CHANGED");
     }
     
+    public GameList getGameList() {
+        return gameList;
+    }
 }

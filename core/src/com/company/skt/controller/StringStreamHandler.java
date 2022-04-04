@@ -5,11 +5,8 @@ import java.io.IOException;
 
 abstract class StringStreamHandler extends StreamHandler<String> {
   protected BufferedReader br;
-
-  public StringStreamHandler() {
-  }
   
-  public StringStreamHandler(BufferedReader br, int delay){
+  StringStreamHandler(BufferedReader br, int delay){
     super(br, delay);
     this.br = br;
   }

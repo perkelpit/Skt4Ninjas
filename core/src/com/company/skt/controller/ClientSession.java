@@ -1,6 +1,8 @@
 package com.company.skt.controller;
 
+import com.badlogic.gdx.utils.Array;
 import com.company.skt.model.Player;
+import com.company.skt.model.SessionData;
 import com.company.skt.model.Settings;
 
 import javax.swing.*;
@@ -10,6 +12,7 @@ import java.util.Properties;
 
 public class ClientSession extends Session {
     
+    private SessionData sessionData;
     private Socket socket;
     private PrintWriter out;
     private ClientStringStreamHandler in;
@@ -42,14 +45,37 @@ public class ClientSession extends Session {
                     ((Menu)Utils.getCurrentScreen()).event("SUMMARY");
                 }
                 if (in.startsWith("CFG#")) {
-                    // TODO change SessionCfg
+                    parseAndChangeSessionCfg(in.substring(in.indexOf('#') + 1));
+                    sendString("PLAYER#" + thisPlayer.getName());
                 }
             }
         }
     }
     
-    public ClientSession() {
+    private void parseAndChangeSessionCfg(String in) {
+        String cfgStr = in;
+        Array<String> keys = new Array<>();
+        Array<String> values = new Array<>();
+        while(cfgStr.length() > 0) {
+            keys.add(cfgStr.substring(0, cfgStr.indexOf('=')));
+            values.add(cfgStr.substring(cfgStr.indexOf('=') + 1, cfgStr.indexOf(';')));
+            cfgStr = cfgStr.substring(cfgStr.indexOf(';'));
+            cfgStr = cfgStr.replace(";", "");
+        }
+        sessionData.setCfgValues(keys.toArray(), values.toArray());
+    }
+    
+    ClientSession() {
         lock = new Object();
+        sessionData = SessionData.get();
+        thisPlayer = new Player(fetchPlayerName());
+        fetchServerIpAndLogin();
+        if(connected) {
+            start();
+        }
+    }
+    
+    private String fetchPlayerName() {
         String playerName = null;
         appCfg = Settings.getProperties(Settings.APP);
         playerName = appCfg.getProperty("player_name");
@@ -66,8 +92,10 @@ public class ClientSession extends Session {
                 null
                                                             );
         }
-        thisPlayer = new Player(playerName);
-        connected = false;
+        return playerName;
+    }
+    
+    private void fetchServerIpAndLogin() {
         boolean abort = false;
         String prompt = "Enter Server-IP: ";
         do {
@@ -94,9 +122,8 @@ public class ClientSession extends Session {
                 } catch (IOException e) {e.printStackTrace();}
                 // TODO any action if input of serverIP was aborted?
             }
-            
+        
         } while (!connected && !abort);
-        start();
     }
     
     private boolean logIn() {
@@ -116,12 +143,14 @@ public class ClientSession extends Session {
         sendString("QUIT");
     }
     
-    public void sendString(String msg) {
+    void sendString(String msg) {
         out.println(msg);
     }
     
-    public void stopSession() throws IOException {
-        logOut();
+    void stopSession() throws IOException {
+        if(connected) {
+            logOut();
+        }
         stop = true;
         in.stopStreamHandler();
         out.close();

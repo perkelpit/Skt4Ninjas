@@ -8,10 +8,7 @@ abstract class StreamHandler<T> extends Thread {
   protected int delay;
   protected Closeable c;
   
-  public StreamHandler() {
-  }
-  
-  public StreamHandler(Closeable c, int delay){
+  StreamHandler(Closeable c, int delay){
     this.c = c;
     this.delay = delay;
   }
@@ -20,12 +17,12 @@ abstract class StreamHandler<T> extends Thread {
   
   protected abstract void process(T in) throws IOException;
   
-  public void startStreamHandler() {
+  void startStreamHandler() {
     stop = false;
     this.start();
   }
   
-  public void stopStreamHandler() {
+  void stopStreamHandler() {
     stop = true;
     try {
       c.close();

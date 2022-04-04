@@ -25,8 +25,6 @@ public class ClientHandler extends Thread {
         HeartBeat(int ms) {
             pingRate = ms;
             noPongCount = 0;
-            pong = false;
-            stop = false;
         }
         
         public void stopHeartBeat() {
@@ -93,7 +91,7 @@ public class ClientHandler extends Thread {
         
     }
     
-    public ClientHandler(HostSession hostSession, Socket socket) {
+    ClientHandler(HostSession hostSession, Socket socket) {
         this.hostSession = hostSession;
         this.socket = socket;
         if (!connectToClient()) {
@@ -120,15 +118,15 @@ public class ClientHandler extends Thread {
         }
     }
     
-    protected void sendText(String msg) {
+    void sendText(String msg) {
         out.println(msg);
     }
     
-    public Player getPlayer() {
+    Player getPlayer() {
         return player;
     }
     
-    public void stopClientHandler() throws IOException {
+    void stopClientHandler() throws IOException {
         stop = true;
         heartBeat.stopHeartBeat();
         in.stopStreamHandler();
