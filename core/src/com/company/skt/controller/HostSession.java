@@ -3,21 +3,23 @@ package com.company.skt.controller;
 import com.company.skt.model.Player;
 import com.company.skt.model.SessionData;
 import com.company.skt.model.Settings;
+import com.company.skt.view.DebugWindow;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class HostSession extends Session {
     
     private final int PORT = 2152;
-    private Thread clientSearch;
     private volatile boolean stop;
     private boolean clientSearchOngoing;
-    public boolean lobby;
-    public boolean summary;
-    public boolean game;
+    ScheduledExecutorService clientSearchThread;
+    ScheduledExecutorService nameFetchThread;
     SessionData sessionData;
     Properties appCfg;
     Properties sessionCfg;
@@ -27,7 +29,6 @@ public class HostSession extends Session {
     
     HostSession() {
         appCfg = Settings.getProperties(Settings.APP);
-        lobby = true;
         sessionData = SessionData.get(true);
         sessionCfg = sessionData.getSessionCfg();
         sessionData.setPlayer(new Player(appCfg.getProperty("player_name")), 0);
@@ -36,6 +37,7 @@ public class HostSession extends Session {
             serverSocket.setSoTimeout(10000); //DEBUG
             start();
         } catch (IOException e) {e.printStackTrace();}
+        ((Menu)Utils.getCurrentScreen()).event("READY_FOR_LOBBY");
     }
     
     void sendStringToAll(String msg) {
@@ -52,50 +54,43 @@ public class HostSession extends Session {
             stop = true;
     }
     
-    private void clientSearch() {
-        clientSearch = new Thread(() -> {
-            while (!stop) {
-                System.out.println("loop: clientsearch");  //DEBUG
-                clientSearchOngoing = true;
-                while (!stop && (handlerCPlayer1 == null || handlerCPlayer2 == null)) {
-                    try {
-                        if (handlerCPlayer1 == null && !stop) {
-                            handlerCPlayer1 = new ClientHandler(
-                                HostSession.this, serverSocket.accept());
-                            fetchPlayerName(handlerCPlayer1);
-                        }
-                        if (handlerCPlayer1 != null && handlerCPlayer2 == null && !stop) {
-                            handlerCPlayer2 = new ClientHandler(
-                                HostSession.this, serverSocket.accept());
-                            fetchPlayerName(handlerCPlayer2);
-                        }
+    private synchronized void clientSearch() {
+        clientSearchThread = Executors.newSingleThreadScheduledExecutor();
+        clientSearchThread.scheduleAtFixedRate(() -> {
+            clientSearchOngoing = true;
+            while (!stop && (handlerCPlayer1 == null || handlerCPlayer2 == null)) {
+                DebugWindow.println("loop: clientsearch");  //DEBUG
+                try {
+                    if (handlerCPlayer1 == null && !stop) {
+                        handlerCPlayer1 = new ClientHandler(
+                            HostSession.this, serverSocket.accept());
+                        fetchPlayerName(handlerCPlayer1);
                     }
-                    catch (SocketTimeoutException ste){
-                        System.out.println("serverSocket.accept Timeout"); // DEBUG
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
+                    if (handlerCPlayer1 != null && handlerCPlayer2 == null && !stop) {
+                        handlerCPlayer2 = new ClientHandler(
+                            HostSession.this, serverSocket.accept());
+                        fetchPlayerName(handlerCPlayer2);
                     }
                 }
+                catch (SocketTimeoutException ste){
+                    DebugWindow.println("serverSocket.accept(): timeout"); // DEBUG
+                }
+                catch (IOException ignored) {}
             }
-        });
-        clientSearch.start();
-        clientSearchOngoing = false; // TODO DEBUG correct? (seems off placed)
+        }, 0, 100, TimeUnit.MILLISECONDS);
+        clientSearchOngoing = false;
     }
     
-    private void fetchPlayerName(ClientHandler clientHandler) {
-        Thread thread = new Thread(() -> {
+    private synchronized void fetchPlayerName(ClientHandler clientHandler) {
+        nameFetchThread = Executors.newSingleThreadScheduledExecutor();
+        nameFetchThread.scheduleAtFixedRate(() -> {
             while (sessionData.getPlayer(1) == null && !stop) {
-                System.out.println("loop:fetch player name");  //DEBUG
+                DebugWindow.println("loop:fetch player name");  //DEBUG
                 if(clientHandler.getPlayer() != null) {
                     sessionData.setPlayer(clientHandler.getPlayer(), 1);
                 }
-                try {
-                    Thread.sleep(100);
-                } catch(InterruptedException e) {e.printStackTrace();}
             }
-        });
-        thread.start();
+        }, 0, 100, TimeUnit.MILLISECONDS);
     }
     
     void unreadyAllClients() {
@@ -138,27 +133,38 @@ public class HostSession extends Session {
     
     @Override
     public void run() {
-        
         clientSearch();
         
         while (!stop) {
-            System.out.println("loop: hostsession");  //DEBUG
+            DebugWindow.println("loop: hostsession");  //DEBUG
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {e.printStackTrace();}
 
         }
         
+        endSession();
+        
+    }
+    
+    private void endSession() {
+    
         try {
             if (handlerCPlayer1 != null) {
-                System.out.println("Hostsession stopping handler... handlerCPlayer1 != null");
+                DebugWindow.println("Hostsession stopping handler... handlerCPlayer1 != null");
                 handlerCPlayer1.stopClientHandler();
                 handlerCPlayer1 = null;
             }
             if (handlerCPlayer2 != null) {
-                System.out.println("Hostsession stopping handler... handlerCPlayer2 != null");
+                DebugWindow.println("Hostsession stopping handler... handlerCPlayer2 != null");
                 handlerCPlayer2.stopClientHandler();
                 handlerCPlayer2 = null;
+            }
+            if(clientSearchThread != null) {
+                clientSearchThread.shutdownNow();
+            }
+            if(nameFetchThread != null) {
+                nameFetchThread.shutdownNow();
             }
             serverSocket.close();
             serverSocket = null;

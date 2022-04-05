@@ -24,7 +24,6 @@ public class SessionData {
     public synchronized static SessionData get() {
         if(data == null) {
             data = new SessionData();
-            ((Menu)Utils.getCurrentScreen()).event("LOBBY_ENTERED");
         }
         return data;
     }

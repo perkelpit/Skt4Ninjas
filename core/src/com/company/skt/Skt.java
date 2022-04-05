@@ -5,7 +5,7 @@ import com.company.skt.lib.ScreenController;
 import com.company.skt.model.Assets;
 import com.company.skt.model.Fonts;
 import com.company.skt.model.Local;
-import com.company.skt.view.TextAreaView;
+import com.company.skt.view.DebugWindow;
 
 public class Skt extends ScreenController {
 
@@ -16,7 +16,7 @@ public class Skt extends ScreenController {
 		Local.boot("assets/local/");
 		Fonts.boot("assets/fonts/");
 		Assets.boot("assets/");
-		// TextAreaView.showTextAreaView();
+		DebugWindow.showTextAreaView();
 		setActiveScreen(new Menu());
 	}
 	

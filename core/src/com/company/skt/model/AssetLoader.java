@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.company.skt.controller.Utils;
+import com.company.skt.view.DebugWindow;
 
 import javax.swing.*;
 import java.io.*;
@@ -99,7 +100,7 @@ class AssetLoader {
         pngList.clear();
         soundList.clear();
         musicList.clear();
-        System.out.println("listFiles()"); // DEBUG
+        DebugWindow.println("listFiles()"); // DEBUG
         if(!pngPath.equals(refResPngPath)) {
             scaleAndCache();
         }
@@ -123,7 +124,7 @@ class AssetLoader {
     }
     
     private void scaleAndCache() {
-        System.out.println("scaleAndCache()"); // DEBUG
+        DebugWindow.println("scaleAndCache()"); // DEBUG
         Array<String> refPngList = new Array<>();
         for(File file : new File(refResPngPath).listFiles()) {
             if(file.isFile()) {
@@ -134,13 +135,13 @@ class AssetLoader {
         }
         boolean filesOk = false;
         File cacheFolder = new File(pngPath);
-        System.out.println(cacheFolder.getPath()); // DEBUG
+        DebugWindow.println("CacheFolder:" + cacheFolder.getPath()); // DEBUG
         File cacheCfg = new File(pngPath + "cache.cfg");
-        System.out.println(cacheCfg.getPath()); // DEBUG
+        DebugWindow.println(cacheCfg.getPath()); // DEBUG
         
         // cache folder does not exist : create new folder and cfg, write cache-resolution to cfg
         if(!(cacheFolder.exists())) {
-            System.out.println("Cache-Folder does not exist"); // DEBUG
+            DebugWindow.println("Cache-Folder does not exist"); // DEBUG
             if(!cacheFolder.mkdir()) ioError();
             try {
                 if(!cacheCfg.createNewFile()) ioError();
@@ -150,14 +151,14 @@ class AssetLoader {
             } catch(Exception e) {ioError();}
         // cache folder exists
         } else {
-            System.out.println("Cache-Folder exists"); // DEBUG
+            DebugWindow.println("Cache-Folder exists"); // DEBUG
             // cache folder exists, but cacheCfg does not exist
             if(!(cacheCfg.exists())) {
-                System.out.println("Cache-Cfg does not exist"); // DEBUG
+                DebugWindow.println("Cache-Cfg does not exist"); // DEBUG
                 // create new cacheCfg
                 try {
                     if(!cacheCfg.createNewFile()) ioError();
-                    System.out.println("Cache-Cfg created @" + cacheCfg.getPath()); // DEBUG
+                    DebugWindow.println("Cache-Cfg created @" + cacheCfg.getPath()); // DEBUG
                 } catch(Exception ignored) {}
                 try(BufferedWriter writer = new BufferedWriter(new FileWriter(cacheCfg))) {
                     writer.write(currentResStr + "\n");

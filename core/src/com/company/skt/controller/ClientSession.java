@@ -38,15 +38,20 @@ public class ClientSession extends Session {
                     sendString("PONG");
                 }
                 if (in.startsWith("LOGGEDIN")) {
-                    ((Menu)Utils.getCurrentScreen()).event("LOGGEDIN");
-                    sendString("LOBBY");
+                    ((Menu)Utils.getCurrentScreen()).event("READY_FOR_LOBBY");
                 }
                 if (in.startsWith("SUMMARY")) {
-                    ((Menu)Utils.getCurrentScreen()).event("SUMMARY");
+                    ((Menu)Utils.getCurrentScreen()).event("READY_FOR_SUMMARY");
                 }
                 if (in.startsWith("CFG#")) {
                     parseAndChangeSessionCfg(in.substring(in.indexOf('#') + 1));
                     sendString("PLAYER#" + thisPlayer.getName());
+                }
+                if (in.startsWith("END")) {
+                    // TODO Message to User
+                    ((Menu)Utils.getCurrentScreen()).event("LEAVE_LOBBY");
+                    try {stopSession();}
+                    catch(IOException e) {e.printStackTrace();}
                 }
             }
         }

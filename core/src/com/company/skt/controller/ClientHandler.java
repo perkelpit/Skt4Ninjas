@@ -2,6 +2,7 @@ package com.company.skt.controller;
 
 import com.company.skt.model.Player;
 import com.company.skt.model.SessionData;
+import com.company.skt.view.DebugWindow;
 
 import java.io.*;
 import java.net.Socket;
@@ -37,7 +38,7 @@ public class ClientHandler extends Thread {
         
         public void run() {
             while (!stop) {
-                System.out.println("loop: heartbeat"); //DEBUG
+                DebugWindow.println("loop: heartbeat");
                 pong = false;
                 out.println("PING");
                 /* TODO Pingrate ans Ende, hier wait() mit max. waiting time check, latency
@@ -129,6 +130,7 @@ public class ClientHandler extends Thread {
     }
     
     void stopClientHandler() throws IOException {
+        out.println("END");
         stop = true;
         heartBeat.stopHeartBeat();
         in.stopStreamHandler();
@@ -138,7 +140,7 @@ public class ClientHandler extends Thread {
     public void run() {
         while (!socket.isClosed()) {
             while(!stop) {
-                System.out.println("loop: clienthandler"); //DEBUG
+                DebugWindow.println("loop: clienthandler");
                 try {
                     // TODO do something usefull here
                     Thread.sleep(500);
