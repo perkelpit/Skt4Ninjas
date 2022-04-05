@@ -84,13 +84,14 @@ public class Menu extends StageScreen {
                                    this.getClass().getSimpleName() +  " not found");
         }
     }
-    
+
     public void event(String eventName) {
         switch(eventName) {
             case "READY_FOR_LOBBY":
                 DebugWindow.println("Event: READY_FOR_LOBBY");
                 addStage(new LobbyUI("lobbyUI", true));
                 setStageActive("mainMenuUI", false);
+                ((LobbyUI)findStage("lobbyUI")).updateUI();
                 DebugWindow.updateTAVLobbyData();
                 break;
             case "READY_FOR_SUMMARY":
