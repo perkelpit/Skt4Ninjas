@@ -37,17 +37,21 @@ public class Menu extends StageScreen {
             // *** MAIN MENU-CLICKS ***
             case "HOST":
                 DebugWindow.println("Host clicked");
+                DebugWindow.setFocus(DebugWindow.Focus.Lobby);
                 session = new HostSession();
                 break;
             case "JOIN":
                 DebugWindow.println("Join clicked");
+                DebugWindow.setFocus(DebugWindow.Focus.Lobby);
                 session = new ClientSession();
                 break;
             case "ARCHIVE":
                 DebugWindow.println("Archive clicked");
+                DebugWindow.setFocus(DebugWindow.Focus.Archive);
                 break;
             case "SETTINGS":
                 DebugWindow.println("Settings clicked");
+                DebugWindow.setFocus(DebugWindow.Focus.Settings);
                 setStageActive("mainMenuUI", false);
                 setStageActive("settingsUI", true);
                 break;
@@ -56,8 +60,8 @@ public class Menu extends StageScreen {
                 break;
             case "EXIT":
                 DebugWindow.println("Exit clicked");
-                try {Thread.sleep(500);
-                } catch(InterruptedException e) {e.printStackTrace();}
+                try {Thread.sleep(500);}
+                catch(InterruptedException e) {e.printStackTrace();}
                 DebugWindow.disposeTextAreaView();
                 Gdx.app.exit();
                 break;
@@ -67,11 +71,13 @@ public class Menu extends StageScreen {
                 break;
             case "QUIT_SETTINGS":
                 DebugWindow.println("Quit settings clicked");
+                DebugWindow.setFocus(DebugWindow.Focus.Main);
                 setStageActive("mainMenuUI", true);
                 setStageActive("settingsUI", false);
                 break;
             case "QUIT_LOBBY":
                 DebugWindow.println("Quit Lobby clicked");
+                DebugWindow.setFocus(DebugWindow.Focus.Main);
                 setStageActive("mainMenuUI", true);
                 setStageActive("lobbyUI", false);
                 removeStage("lobbyUI");
@@ -94,7 +100,7 @@ public class Menu extends StageScreen {
                 addStage(new LobbyUI("lobbyUI", true));
                 setStageActive("mainMenuUI", false);
                 ((LobbyUI)findStage("lobbyUI")).updateUI();
-                DebugWindow.updateTAVLobbyData();
+                DebugWindow.update();
                 break;
             case "READY_FOR_SUMMARY":
                 DebugWindow.println("Event: READY_FOR_SUMMARY");
@@ -103,7 +109,7 @@ public class Menu extends StageScreen {
             case "LOBBY_DATA_HAS_CHANGED":
                 DebugWindow.println("Event: LOBBY_DATA_HAS_CHANGED");
                 // TODO update lobbyUI accordingly + if(host): broadcast changes
-                DebugWindow.updateTAVLobbyData();
+                DebugWindow.update();
                 if(findStage("lobbyUI") != null) {
                     ((LobbyUI)findStage("lobbyUI")).updateUI();
                 }
@@ -118,6 +124,7 @@ public class Menu extends StageScreen {
                 break;
             case "LEAVE_LOBBY":
                 DebugWindow.println("Event: LEAVE_LOBBY");
+                DebugWindow.setFocus(DebugWindow.Focus.Main);
                 setStageActive("mainMenuUI", true);
                 setStageActive("lobbyUI", false);
                 removeStage("lobbyUI");

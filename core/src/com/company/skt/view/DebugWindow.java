@@ -9,16 +9,27 @@ import java.awt.*;
 
 public class DebugWindow extends JFrame {
 
+    public enum Focus {
+        Main, Settings, Archive, Lobby, Summary, Game
+    }
+    
     private static DebugWindow debugWindow;
     private static JTextArea textAreaTop;
     private static JTextArea textAreaBottom;
     private static String lobbyData;
+    private static String mainData;
+    private static String settingsData;
+    private static String archiveData;
+    private static String summaryData;
+    private static String gameData;
+    private static Focus focus;
 
     public static void showTextAreaView() {
         if (debugWindow == null) {
             debugWindow = new DebugWindow();
         }
         debugWindow.setVisible(true);
+        update();
     }
 
     public static void hideDebugWindow() {
@@ -32,8 +43,14 @@ public class DebugWindow extends JFrame {
             debugWindow.dispose();
         }
     }
+    
+    public static void setFocus(Focus focus) {
+        DebugWindow.focus = focus;
+        update();
+    }
 
     public DebugWindow() {
+        focus = Focus.Main;
         Dimension dimension = new Dimension(420, 750);
         setSize(dimension);
         setMinimumSize(dimension);
@@ -78,23 +95,6 @@ public class DebugWindow extends JFrame {
         pack();
     }
 
-    public static void updateTAVLobbyData() {
-        SessionData data = SessionData.get();
-        lobbyData = "";
-        lobbyData += "        ### LOBBY ###        " + "\n";
-        lobbyData += "Host: " + SessionData.isHost() + "\n";
-        lobbyData += "-----------------------------" + "\n";
-        lobbyData += "Player0: " + data.getPlayer(0) + "\n";
-        lobbyData += "Player1: " + data.getPlayer(1) + "\n";
-        lobbyData += "Player2: " + data.getPlayer(2) + "\n";
-        lobbyData += "-----------------------------" + "\n";
-        lobbyData += "      Session Settings:      " + "\n";
-        for (String key : data.getSessionCfg().stringPropertyNames()) {
-            lobbyData += key + ": " + data.getCfgValue(key) + "\n";
-        }
-        updateTopDebugArea();
-    }
-
     public static void println(String string) {
         if (textAreaBottom != null) {
             textAreaBottom.append(string + "\n");
@@ -105,10 +105,84 @@ public class DebugWindow extends JFrame {
             }
         }
     }
-
-    private static void updateTopDebugArea() {
+    
+    public static void update() {
+        updateData();
         if (textAreaTop != null) {
-            textAreaTop.setText(lobbyData);
+            switch(focus) {
+                case Lobby:
+                    textAreaTop.setText(lobbyData);
+                    break;
+                case Main:
+                    textAreaTop.setText(mainData);
+                    break;
+                case Settings:
+                    textAreaTop.setText(settingsData);
+                    break;
+                case Archive:
+                    textAreaTop.setText(archiveData);
+                    break;
+                case Summary:
+                    textAreaTop.setText(summaryData);
+                    break;
+                case Game:
+                    textAreaTop.setText(gameData);
+                    break;
+            }
         }
     }
+
+    private static void updateData() {
+        StringBuilder stringBuilder;
+        switch(focus) {
+            case Lobby:
+                SessionData data = SessionData.get();
+                lobbyData = "";
+                stringBuilder = new StringBuilder(lobbyData);
+                stringBuilder.append("        ### LOBBY ###        " + "\n");
+                stringBuilder.append("Host: " + SessionData.isHost() + "\n");
+                stringBuilder.append("-----------------------------" + "\n");
+                stringBuilder.append("Player0: " + data.getPlayer(0) + "\n");
+                stringBuilder.append("Player1: " + data.getPlayer(1) + "\n");
+                stringBuilder.append("Player2: " + data.getPlayer(2) + "\n");
+                stringBuilder.append("-----------------------------" + "\n");
+                stringBuilder.append("      Session Settings:      " + "\n");
+                for (String key : data.getSessionCfg().stringPropertyNames()) {
+                    stringBuilder.append(key + ": " + data.getCfgValue(key) + "\n");
+                }
+                lobbyData = stringBuilder.toString();
+                break;
+            case Main:
+                mainData = "";
+                stringBuilder = new StringBuilder(mainData);
+                stringBuilder.append("      ### MAIN MENU ###     " + "\n");
+                mainData = stringBuilder.toString();
+                break;
+            case Summary:
+                summaryData = "";
+                stringBuilder = new StringBuilder(summaryData);
+                stringBuilder.append("      ### SUMMARY ###     " + "\n");
+                summaryData = stringBuilder.toString();
+                break;
+            case Settings:
+                settingsData = "";
+                stringBuilder = new StringBuilder(settingsData);
+                stringBuilder.append("      ### SETTINGS ###     " + "\n");
+                settingsData = stringBuilder.toString();
+                break;
+            case Game:
+                gameData = "";
+                stringBuilder = new StringBuilder(gameData);
+                stringBuilder.append("         ### GAME ###        " + "\n");
+                gameData = stringBuilder.toString();
+                break;
+            case Archive:
+                archiveData = "";
+                stringBuilder = new StringBuilder(archiveData);
+                stringBuilder.append("        ### ARCHIVE ###       " + "\n");
+                archiveData = stringBuilder.toString();
+                break;
+        }
+    }
+    
 }
