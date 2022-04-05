@@ -1,5 +1,6 @@
 package com.company.skt.view;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,7 +17,7 @@ import java.util.Properties;
 
 public class LobbyUI extends UpdateStage {
 
-    private Table leftTable, rightTable;
+    private Table topLeftTable, topRightTable;
     private Label player0Name, player1Name, player2Name;
     private TextField chatField;
     private TextArea chatArea;
@@ -24,12 +25,13 @@ public class LobbyUI extends UpdateStage {
     private Properties appCfg;
     private BitmapFont buttonFont;
     private TextureRegionDrawable buttonDrawable, buttonPressedDrawable;
+    private SelectBox<String> numberOfGamesSelectBox, timeLimitSelectBox;
+    private CheckBox junkCheckbox;
     private Float scaleX, scaleY;
 
 
     {
         appCfg = Settings.getProperties(Settings.APP);
-        rightTable = new Table();
 
         buttonFont = Fonts.getFont("PirataOne-Regular_Button");
         buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
@@ -51,33 +53,33 @@ public class LobbyUI extends UpdateStage {
 
     private void build() {
 
-        // *** LEFT TABLE ***
-        leftTable = new Table();
-        leftTable.setWidth((Float.parseFloat(appCfg.getProperty("resolution_x")) / 2f) * scaleX);
-        leftTable.setHeight((Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f) * scaleY);
-        leftTable.setPosition(0,
+        // *** TOP LEFT TABLE ***
+        topLeftTable = new Table();
+        topLeftTable.setWidth((Float.parseFloat(appCfg.getProperty("resolution_x")) / 2f) * scaleX);
+        topLeftTable.setHeight((Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f) * scaleY);
+        topLeftTable.setPosition(0,
                 (Float.parseFloat(appCfg.getProperty("resolution_y"))) * scaleY,
                 Align.bottomLeft);
 
         // *** PLAYER LABELS ***
         player0Name = new Label(Local.getString("lb_player_null"),
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
-        leftTable.add(player0Name);
-        leftTable.row();
+        topLeftTable.add(player0Name);
+        topLeftTable.row();
 
         player1Name = new Label(Local.getString("lb_player_null"),
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
-        leftTable.add(player1Name);
-        leftTable.row();
+        topLeftTable.add(player1Name);
+        topLeftTable.row();
 
         player2Name = new Label(Local.getString("lb_player_null"),
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
-        leftTable.add(player2Name);
-        leftTable.row();
+        topLeftTable.add(player2Name);
+        topLeftTable.row();
 
-        // *** quitButton ***
+        // *** QUIT BUTTON ***
         quitButton = new ImageTextButton(
-                Local.getString("sm_quit"), new ImageTextButton.ImageTextButtonStyle(
+                Local.getString("quit"), new ImageTextButton.ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")
         ));
         quitButton.addListener(new ClickListener() {
@@ -87,10 +89,40 @@ public class LobbyUI extends UpdateStage {
             }
         });
 
-        leftTable.add(quitButton);
-        leftTable.row();
+        topLeftTable.add(quitButton);
+        topLeftTable.row();
 
-        addActor(leftTable);
+        addActor(topLeftTable);
+
+        // *** TOP RIGHT TABLE ***
+        topRightTable = new Table();
+        topRightTable.setWidth((Float.parseFloat(appCfg.getProperty("resolution_x")) / 2f) * scaleX);
+        topRightTable.setHeight((Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f) * scaleY);
+        topRightTable.setPosition(
+                Float.parseFloat(appCfg.getProperty("resolution_x")) * scaleX,
+                (Float.parseFloat(appCfg.getProperty("resolution_y"))) * scaleY,
+                Align.bottomLeft);
+
+        numberOfGamesSelectBox = new SelectBox<String>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
+                null, new ScrollPane.ScrollPaneStyle(), new List.ListStyle(buttonFont, Color.ORANGE,
+                Color.WHITE, new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png")))));
+        numberOfGamesSelectBox.setItems("1", "3", "6", "9", "18", "36");
+        topRightTable.add(numberOfGamesSelectBox);
+        topRightTable.row();
+
+        timeLimitSelectBox = new SelectBox<String>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
+                null, new ScrollPane.ScrollPaneStyle(), new List.ListStyle(buttonFont, Color.ORANGE,
+                Color.WHITE, new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png")))));
+        timeLimitSelectBox.setItems("no limit", "30sec", "1 min.", "2 min.", "3 min.", "5 min.", "10 min.");
+        topRightTable.add(timeLimitSelectBox);
+        topRightTable.row();
+
+        /* //TODO CHECKBOXSTYLECONSTRUCTOR SUCKT
+        junkCheckbox = new CheckBox(Local.getString("lb_include_junk"), new CheckBox.CheckBoxStyle());
+        topRightTable.add(junkCheckbox);
+        topRightTable.row();
+        */
+        addActor(topRightTable);
     }
 
     @Override
