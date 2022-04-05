@@ -41,10 +41,56 @@ public class LobbyUI extends UpdateStage {
 
     public LobbyUI(String name) {
         super(name);
+        build();
     }
 
     public LobbyUI(String name, boolean active) {
         super(name, active);
+        build();
+    }
+
+    private void build() {
+
+        // *** LEFT TABLE ***
+        leftTable = new Table();
+        leftTable.setWidth((Float.parseFloat(appCfg.getProperty("resolution_x")) / 2f) * scaleX);
+        leftTable.setHeight((Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f) * scaleY);
+        leftTable.setPosition(0,
+                (Float.parseFloat(appCfg.getProperty("resolution_y"))) * scaleY,
+                Align.bottomLeft);
+
+        // *** PLAYER LABELS ***
+        player0Name = new Label(Local.getString("lb_player_null"),
+                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+        leftTable.add(player0Name);
+        leftTable.row();
+
+        player1Name = new Label(Local.getString("lb_player_null"),
+                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+        leftTable.add(player1Name);
+        leftTable.row();
+
+        player2Name = new Label(Local.getString("lb_player_null"),
+                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+        leftTable.add(player2Name);
+        leftTable.row();
+
+        // *** quitButton ***
+        quitButton = new ImageTextButton(
+                Local.getString("sm_quit"), new ImageTextButton.ImageTextButtonStyle(
+                buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")
+        ));
+        quitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                ((Menu) Utils.getCurrentScreen()).buttonClicked("QUIT_LOBBY");
+            }
+        });
+
+        leftTable.add(quitButton);
+        leftTable.row();
+
+        addActor(leftTable);
     }
 
     @Override

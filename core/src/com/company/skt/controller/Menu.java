@@ -77,7 +77,9 @@ public class Menu extends StageScreen {
                 removeStage("lobbyUI");
                 try {
                     session.stopSession();
-                } catch(IOException e) {e.printStackTrace();}
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
             default :
                 DebugWindow.println("buttonName " + buttonName + " in " +

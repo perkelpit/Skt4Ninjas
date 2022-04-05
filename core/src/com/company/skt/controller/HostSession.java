@@ -59,7 +59,6 @@ public class HostSession extends Session {
         clientSearchThread.scheduleAtFixedRate(() -> {
             clientSearchOngoing = true;
             while (!stop && (handlerCPlayer1 == null || handlerCPlayer2 == null)) {
-                DebugWindow.println("loop: clientsearch");  //DEBUG
                 try {
                     if (handlerCPlayer1 == null && !stop) {
                         handlerCPlayer1 = new ClientHandler(
@@ -73,7 +72,6 @@ public class HostSession extends Session {
                     }
                 }
                 catch (SocketTimeoutException ste){
-                    DebugWindow.println("serverSocket.accept(): timeout"); // DEBUG
                 }
                 catch (IOException ignored) {}
             }
