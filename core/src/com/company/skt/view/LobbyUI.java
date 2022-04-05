@@ -87,6 +87,7 @@ public class LobbyUI extends UpdateStage {
                 ((Menu) Utils.getCurrentScreen()).buttonClicked("QUIT_LOBBY");
             }
         });
+
         leftTable.add(quitButton);
         leftTable.row();
 

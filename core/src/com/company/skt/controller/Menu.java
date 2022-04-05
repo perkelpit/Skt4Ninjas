@@ -70,7 +70,7 @@ public class Menu extends StageScreen {
                 System.out.println("Quit Lobby clicked");
                 setStageActive("mainMenuUI", true);
                 setStageActive("lobbyUI", false);
-                findStage("lobbyUI").dispose();
+                removeStage("lobbyUI");
                 try {
                     session.stopSession();
                 } catch(IOException e) {e.printStackTrace();}

@@ -37,6 +37,7 @@ public class ClientHandler extends Thread {
         
         public void run() {
             while (!stop) {
+                System.out.println("loop: heartbeat"); //DEBUG
                 pong = false;
                 out.println("PING");
                 /* TODO Pingrate ans Ende, hier wait() mit max. waiting time check, latency
@@ -60,6 +61,7 @@ public class ClientHandler extends Thread {
                     }
                 }
             }
+            System.out.println("Hearbeat ended");
         }
         
     }
@@ -136,12 +138,14 @@ public class ClientHandler extends Thread {
     public void run() {
         while (!socket.isClosed()) {
             while(!stop) {
+                System.out.println("loop: clienthandler"); //DEBUG
                 try {
                     // TODO do something usefull here
                     Thread.sleep(500);
                 } catch (InterruptedException e) {e.printStackTrace();}
             }
         }
+        System.out.println("Clienthandler ended");
     }
     
 }

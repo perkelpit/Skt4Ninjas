@@ -6,6 +6,7 @@ import com.company.skt.model.Settings;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.SocketTimeoutException;
 import java.util.Properties;
 
 public class HostSession extends Session {
@@ -25,16 +26,14 @@ public class HostSession extends Session {
     ClientHandler handlerCPlayer2;
     
     HostSession() {
-        lobby = false;
         appCfg = Settings.getProperties(Settings.APP);
         lobby = true;
         sessionData = SessionData.get(true);
         sessionCfg = sessionData.getSessionCfg();
         sessionData.setPlayer(new Player(appCfg.getProperty("player_name")), 0);
-        clientSearchOngoing = false;
-        stop = false;
         try {
             serverSocket = new ServerSocket(PORT);
+            serverSocket.setSoTimeout(10000); //DEBUG
             start();
         } catch (IOException e) {e.printStackTrace();}
     }
@@ -56,8 +55,9 @@ public class HostSession extends Session {
     private void clientSearch() {
         clientSearch = new Thread(() -> {
             while (!stop) {
+                System.out.println("loop: clientsearch");  //DEBUG
                 clientSearchOngoing = true;
-                while (handlerCPlayer1 == null || handlerCPlayer2 == null) {
+                while (!stop && (handlerCPlayer1 == null || handlerCPlayer2 == null)) {
                     try {
                         if (handlerCPlayer1 == null && !stop) {
                             handlerCPlayer1 = new ClientHandler(
@@ -69,7 +69,13 @@ public class HostSession extends Session {
                                 HostSession.this, serverSocket.accept());
                             fetchPlayerName(handlerCPlayer2);
                         }
-                    } catch (IOException ignored) {}
+                    }
+                    catch (SocketTimeoutException ste){
+                        System.out.println("serverSocket.accept Timeout"); // DEBUG
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -80,6 +86,7 @@ public class HostSession extends Session {
     private void fetchPlayerName(ClientHandler clientHandler) {
         Thread thread = new Thread(() -> {
             while (sessionData.getPlayer(1) == null && !stop) {
+                System.out.println("loop:fetch player name");  //DEBUG
                 if(clientHandler.getPlayer() != null) {
                     sessionData.setPlayer(clientHandler.getPlayer(), 1);
                 }
@@ -135,24 +142,28 @@ public class HostSession extends Session {
         clientSearch();
         
         while (!stop) {
+            System.out.println("loop: hostsession");  //DEBUG
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {e.printStackTrace();}
+
         }
         
         try {
             if (handlerCPlayer1 != null) {
+                System.out.println("Hostsession stopping handler... handlerCPlayer1 != null");
                 handlerCPlayer1.stopClientHandler();
                 handlerCPlayer1 = null;
             }
             if (handlerCPlayer2 != null) {
+                System.out.println("Hostsession stopping handler... handlerCPlayer2 != null");
                 handlerCPlayer2.stopClientHandler();
                 handlerCPlayer2 = null;
             }
             serverSocket.close();
             serverSocket = null;
         } catch (IOException e) {e.printStackTrace();}
-        
+        System.out.println("Hostsession ended");
     }
     
 }

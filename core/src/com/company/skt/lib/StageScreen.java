@@ -35,6 +35,20 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     }
     
     public abstract AssetManager getAssets();
+
+    /** disposes and removes Stage by name from stagesArray */
+    public void removeStage(String stageName){
+        boolean found = false;
+        for (UpdateStage stage : layeredStages.getStages()){
+            if (stageName.equals(stage.getName())){
+                layeredStages.removeStage(stage);
+                found = true;
+            }
+        }
+        if (!found){
+            System.out.println("removeStage() No such stage found: " + stageName);
+        }
+    }
     
     public void addStage(UpdateStage stage) {
         layeredStages.addStage(stage);
