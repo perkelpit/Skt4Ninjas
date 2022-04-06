@@ -1,6 +1,7 @@
-package com.company.skt.model;
+package com.company.skt.lib;
 
 import com.company.skt.controller.Calc;
+import com.company.skt.model.Settings;
 
 import java.util.HashMap;
 import java.util.Map;

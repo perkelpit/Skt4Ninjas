@@ -78,14 +78,10 @@ public class Menu extends StageScreen {
             case "QUIT_LOBBY":
                 DebugWindow.println("Quit Lobby clicked");
                 DebugWindow.setFocus(DebugWindow.Focus.Main);
-                setStageActive("mainMenuUI", true);
+                try {session.stopSession();} catch (IOException e) {e.printStackTrace();}
                 setStageActive("lobbyUI", false);
                 removeStage("lobbyUI");
-                try {
-                    session.stopSession();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                setStageActive("mainMenuUI", true);
                 break;
             default :
                 DebugWindow.println("buttonName " + buttonName + " in " +
@@ -128,6 +124,11 @@ public class Menu extends StageScreen {
                 setStageActive("mainMenuUI", true);
                 setStageActive("lobbyUI", false);
                 removeStage("lobbyUI");
+                try {
+                    session.stopSession();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }

@@ -6,8 +6,9 @@ import java.io.IOException;
  *  public abstract void run()
  * */
 
-public abstract class Session extends Thread {
+public abstract class Session {
   
+  abstract void startSession() throws IOException;
   abstract void stopSession() throws IOException;
 
 }

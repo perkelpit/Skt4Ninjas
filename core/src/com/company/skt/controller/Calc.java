@@ -1,8 +1,8 @@
 package com.company.skt.controller;
 
-import com.company.skt.model.Card;
-import com.company.skt.model.Game;
-import com.company.skt.model.Hand;
+import com.company.skt.lib.Card;
+import com.company.skt.lib.Game;
+import com.company.skt.lib.Hand;
 
 public abstract class Calc {
     

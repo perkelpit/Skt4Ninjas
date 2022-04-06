@@ -1,7 +1,7 @@
 package com.company.skt.controller;
 
 import com.badlogic.gdx.utils.Array;
-import com.company.skt.model.Player;
+import com.company.skt.lib.Player;
 import com.company.skt.model.SessionData;
 import com.company.skt.model.Settings;
 
@@ -20,10 +20,7 @@ public class ClientSession extends Session {
     private Player thisPlayer;
     private final int PORT = 2152;
     private String serverIP;
-    private final Object lock;
     private boolean connected;
-    private boolean initialSettingRecieved;
-    private volatile boolean stop;
     
     private class ClientStringStreamHandler extends StringStreamHandler {
         
@@ -31,9 +28,9 @@ public class ClientSession extends Session {
             super(br, delay);
         }
         
+        @Override
         protected void process(String in) {
             if (in != null) {
-                // TODO other messages, in switch-case umbauen
                 if (in.startsWith("PING")) {
                     sendString("PONG");
                 }
@@ -45,6 +42,8 @@ public class ClientSession extends Session {
                 }
                 if (in.startsWith("CFG#")) {
                     parseAndChangeSessionCfg(in.substring(in.indexOf('#') + 1));
+                }
+                if (in.startsWith("QRY_PLAYER")) {
                     sendString("PLAYER#" + thisPlayer.getName());
                 }
                 if (in.startsWith("END")) {
@@ -71,19 +70,18 @@ public class ClientSession extends Session {
     }
     
     ClientSession() {
-        lock = new Object();
-        sessionData = SessionData.get();
-        thisPlayer = new Player(fetchPlayerName());
-        fetchServerIpAndLogin();
-        if(connected) {
-            start();
+        startSession();
+    }
+    
+    ClientSession(boolean start) {
+        if (start) {
+           startSession();
         }
     }
     
     private String fetchPlayerName() {
-        String playerName = null;
         appCfg = Settings.getProperties(Settings.APP);
-        playerName = appCfg.getProperty("player_name");
+        String playerName = appCfg.getProperty("player_name");
         while (playerName == null) {
             // TODO better fitting UI-element to enter playerName
             String prompt = "Enter Player Name: ";
@@ -104,6 +102,8 @@ public class ClientSession extends Session {
         boolean abort = false;
         String prompt = "Enter Server-IP: ";
         do {
+            /*
+            // DEBUG turned off cause Dialog does not show properly
             // TODO better fitting UI-element to enter serverIP
             serverIP = (String)JOptionPane.showInputDialog(
                 null,
@@ -112,8 +112,9 @@ public class ClientSession extends Session {
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 null,
-                "localhost"
-                                                          );
+                "localhost");
+                */
+            serverIP = "localhost";
             if (serverIP != null) {
                 try {
                     connected = logIn();
@@ -152,24 +153,22 @@ public class ClientSession extends Session {
         out.println(msg);
     }
     
+    @Override
+    void startSession() {
+        sessionData = SessionData.get();
+        thisPlayer = new Player(fetchPlayerName());
+        fetchServerIpAndLogin();
+    }
+    
     void stopSession() throws IOException {
         if(connected) {
             logOut();
         }
-        stop = true;
         in.stopStreamHandler();
         out.close();
         socket.close();
+        ((Menu)Utils.getCurrentScreen()).event("LEAVE_LOBBY");
     }
     
-    @Override
-    public void run() {
-        while (!stop) {
-            // TODO do something usefull
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {e.printStackTrace();}
-        }
-    }
     
 }

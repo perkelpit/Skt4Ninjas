@@ -1,4 +1,4 @@
-package com.company.skt.model;
+package com.company.skt.lib;
 
 public class Card {
     
