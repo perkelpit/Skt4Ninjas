@@ -11,13 +11,14 @@ import java.net.ServerSocket;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class HostSession extends Session {
     
     private final int PORT = 2152;
     private boolean clientSearchOngoing;
-    private ScheduledExecutorService executor;
+    private ScheduledThreadPoolExecutor executor;
     private SessionData sessionData;
     private Properties appCfg;
     private ServerSocket serverSocket;
@@ -44,7 +45,10 @@ public class HostSession extends Session {
             serverSocket = new ServerSocket(PORT);
         } catch(IOException e) {e.printStackTrace();}
         ((Menu)Utils.getCurrentScreen()).event("READY_FOR_LOBBY");
-        executor = Executors.newScheduledThreadPool(1);
+        // TODO seems a bad solution: better wrap singleThreadScheduled araund a CachedThreadPool
+        executor = new ScheduledThreadPoolExecutor(Runtime.getRuntime().availableProcessors() * 8);
+        executor.setKeepAliveTime(60, TimeUnit.SECONDS);
+        executor.allowCoreThreadTimeOut(true);
         handlerPlayer1 = new ClientHandler(HostSession.this);
         handlerPlayer2 = new ClientHandler(HostSession.this);
         clientSearch();
@@ -81,7 +85,7 @@ public class HostSession extends Session {
                     handlerPlayer1.listenAtPort();
                     if(handlerPlayer1.hasSocket()) {
                         DebugWindow.println("[HostSession] starting handlerPlayer1");
-                        executor.execute(handlerPlayer1);
+                        executor.schedule(handlerPlayer1, 0, TimeUnit.MILLISECONDS);
                     }
                 }
                 if(handlerPlayer1.hasSocket() && !handlerPlayer2.hasSocket()) {
@@ -89,7 +93,7 @@ public class HostSession extends Session {
                     handlerPlayer2.listenAtPort();
                     if(handlerPlayer2.hasSocket()) {
                         DebugWindow.println("[HostSession] starting handlerPlayer2");
-                        executor.execute(handlerPlayer2);
+                        executor.schedule(handlerPlayer2, 0, TimeUnit.MILLISECONDS);
                     }
                 }
             } else {
@@ -153,10 +157,10 @@ public class HostSession extends Session {
         DebugWindow.println("[HostSession] sending String to all clients: " +
                             (msg.length() > 8 ? msg.substring(0, 8) + "..." : msg));
         if(handlerPlayer1 != null) {
-            handlerPlayer1.sendText(msg);
+            handlerPlayer1.sendString(msg);
         }
         if(handlerPlayer2 != null) {
-            handlerPlayer2.sendText(msg);
+            handlerPlayer2.sendString(msg);
         }
     }
     

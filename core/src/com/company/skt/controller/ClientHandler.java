@@ -98,15 +98,17 @@ public class ClientHandler implements Runnable {
                     heartBeat.pong();
                 }
                 if (in.startsWith("SETT_REC")) {
-                    sendText("QRY_PLAYER");
+                    sendString("QRY_PLAYER");
                 }
                 if (in.startsWith("PLAYER")) {
                     parseAndSetPlayer(in);
-                    sendText("LOGGEDIN");
+                    sendString("LOGGEDIN");
                 }
                 if (in.startsWith("RDY_TGL")) {
                     hostSession.clientReadyToggle(clientHandler);
                 }
+                DebugWindow.println(handlerTag + " Msg recieved: " +
+                                    (in.length() > 8 ? in.substring(0, 8) + "..." : in));
             }
         }
         
@@ -117,15 +119,19 @@ public class ClientHandler implements Runnable {
     
     ClientHandler(HostSession hostSession) {
         this.hostSession = hostSession;
-        playerNumber = ClientHandler.this == hostSession.getHandler(1) ? 1 : 2;
+        playerNumber = (ClientHandler.this == hostSession.getHandler(1)) ? 1 : 2;
         handlerTag = "[ClientHandler(" + playerNumber + ")]";
     }
     
     @Override
     public void run() {
+        DebugWindow.println(handlerTag + " initializing connection");
         connected = connectToClient();
         if (!connected) {
             try {stopClientHandler();} catch(IOException e) {e.printStackTrace();}
+        } else {
+            DebugWindow.println(handlerTag + " connected");
+            sendString(SessionData.getCfgString());
         }
     }
     
@@ -141,7 +147,7 @@ public class ClientHandler implements Runnable {
             in = new HostStringStreamHandler(new BufferedReader(
                 new InputStreamReader(socket.getInputStream())), 100, this);
             in.startStreamHandler();
-            sendText(SessionData.getCfgString());
+            sendString(SessionData.getCfgString());
             heartBeat = new HeartBeat(200);
             heartBeat.start();
             return true;
@@ -151,7 +157,9 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    void sendText(String msg) {
+    void sendString(String msg) {
+        DebugWindow.println(handlerTag + " Sending Msg: " +
+                            (msg.length() > 8 ? msg.substring(0, 8) + "..." : msg));
         out.println(msg);
     }
     

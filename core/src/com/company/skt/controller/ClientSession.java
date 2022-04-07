@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.company.skt.lib.Player;
 import com.company.skt.model.SessionData;
 import com.company.skt.model.Settings;
+import com.company.skt.view.DebugWindow;
 
 import javax.swing.*;
 import java.io.*;
@@ -52,6 +53,8 @@ public class ClientSession extends Session {
                     try {stopSession();}
                     catch(IOException e) {e.printStackTrace();}
                 }
+                DebugWindow.println("[ClientSession]: Msg recieved: " +
+                                    (in.length() > 8 ? in.substring(0, 8) + "..." : in));
             }
         }
     }
@@ -150,6 +153,8 @@ public class ClientSession extends Session {
     }
     
     void sendString(String msg) {
+        DebugWindow.println("[ClientSession]: Sending Msg: " +
+                            (msg.length() > 8 ? msg.substring(0, 8) + "..." : msg));
         out.println(msg);
     }
     
