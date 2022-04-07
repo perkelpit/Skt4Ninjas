@@ -31,19 +31,19 @@ public class SessionData {
     }
     
     // TODO depricate this by getting this information automatically
-    public static SessionData get(boolean isHost) {
+    public synchronized static SessionData get(boolean isHost) {
         SessionData.isHost = isHost;
         return get();
     }
     
-    public static void dispose() {
+    public synchronized static void dispose() {
         data = null;
     }
     
-    public String getCfgString() {
+    public synchronized static String getCfgString() {
         StringBuilder cfgString = new StringBuilder("CFG#");
-        for(String key : (String[])getSessionCfg().keySet().toArray()) {
-            cfgString.append(key).append("=").append(getCfgValue(key)).append(";");
+        for(String key : (String[])data.getSessionCfg().keySet().toArray()) {
+            cfgString.append(key).append("=").append(data.getCfgValue(key)).append(";");
         }
         return cfgString.toString();
     }
@@ -68,7 +68,7 @@ public class SessionData {
         changed();
     }
     
-    public Player getPlayer(int playerNumber) {
+    public synchronized Player getPlayer(int playerNumber) {
         switch(playerNumber) {
             case 0:
                 return player0;
@@ -127,23 +127,24 @@ public class SessionData {
         changed();
     }
     
-    public String getCfgValue(String key) {
+    public synchronized String getCfgValue(String key) {
         return data.sessionCfg.getProperty(key);
     }
     
-    public Properties getSessionCfg() {
+    public synchronized Properties getSessionCfg() {
         return sessionCfg;
     }
     
-    public static boolean isHost() {
+    public synchronized static boolean isHost() {
         return isHost;
+    }
+    
+    public synchronized GameList getGameList() {
+        return gameList;
     }
     
     private static void changed() {
         ((Menu)Utils.getCurrentScreen()).event("LOBBY_DATA_HAS_CHANGED");
     }
     
-    public GameList getGameList() {
-        return gameList;
-    }
 }

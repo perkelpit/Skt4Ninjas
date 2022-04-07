@@ -109,7 +109,7 @@ public class ClientHandler implements Runnable {
                 if (in.startsWith("PONG")) {
                     heartBeat.pong();
                 }
-                if (in.startsWith("SETT_REC")) {
+                if (in.startsWith("CFG_REC")) {
                     sendString("QRY_PLAYER");
                 }
                 if (in.startsWith("PLAYER")) {
@@ -142,11 +142,22 @@ public class ClientHandler implements Runnable {
             try {stopClientHandler();} catch(IOException e) {e.printStackTrace();}
         } else {
             DebugWindow.println(handlerTag + " connected");
-            sendString(sessionData.getCfgString());
-            DebugWindow.println(handlerTag + " sendString(sessionData.getCfgString()) called");
+            sendString("CFG>amount_games=6;time_limit=0;lost_factor=-2;ramsch=true;"); // DEBUG
+            //TODO DEBUG why the heck causes the following line the calling thread to freeze?!?(seems so)
+            //sendString(SessionData.getCfgString());
         }
     }
     
+    synchronized void sendString(String msg) {
+        if (!msg.startsWith("PING"))
+            DebugWindow.println(handlerTag + " Sending Msg: " +
+                                (msg.length() > 8 ? msg.substring(0, 8) + "..." : msg));
+        out.println(msg);
+    }
+    
+    Player getPlayer() {
+        return player;
+    }
     
     void listenAtPort(){
         try {socket = hostSession.getServerSocket().accept();}
@@ -168,17 +179,6 @@ public class ClientHandler implements Runnable {
             ioe.printStackTrace();
             return false;
         }
-    }
-    
-    synchronized void sendString(String msg) {
-        if (!msg.startsWith("PING"))
-        DebugWindow.println(handlerTag + " Sending Msg: " +
-                            (msg.length() > 8 ? msg.substring(0, 8) + "..." : msg));
-        out.println(msg);
-    }
-    
-    Player getPlayer() {
-        return player;
     }
     
     void stopClientHandler() throws IOException {
@@ -209,7 +209,7 @@ public class ClientHandler implements Runnable {
     }
     
     void parseAndSetPlayer(String playerString) {
-        String name = playerString.substring(playerString.indexOf('#') + 1);
+        String name = playerString.substring(playerString.indexOf('>') + 1);
         SessionData.get().setPlayer(new Player(name), playerNumber);
     }
     

@@ -45,11 +45,12 @@ public class ClientSession extends Session {
                 if (in.startsWith("SUMMARY")) {
                     ((Menu)Utils.getCurrentScreen()).event("READY_FOR_SUMMARY");
                 }
-                if (in.startsWith("CFG#")) {
-                    parseAndChangeSessionCfg(in.substring(in.indexOf('#') + 1));
+                if (in.startsWith("CFG>")) {
+                    parseAndChangeSessionCfg(in.substring(in.indexOf('>') + 1));
+                    sendString("CFG_REC");
                 }
                 if (in.startsWith("QRY_PLAYER")) {
-                    sendString("PLAYER#" + thisPlayer.getName());
+                    sendString("PLAYER>" + thisPlayer.getName());
                 }
                 if (in.startsWith("END")) {
                     // TODO Message to User
