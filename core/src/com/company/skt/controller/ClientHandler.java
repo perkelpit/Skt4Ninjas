@@ -1,5 +1,6 @@
 package com.company.skt.controller;
 
+import com.company.skt.lib.Lock;
 import com.company.skt.lib.Player;
 import com.company.skt.lib.TaskCompleteException;
 import com.company.skt.model.SessionData;
@@ -9,12 +10,14 @@ import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
+
 public class ClientHandler implements Runnable {
     
     /* ### [CLIENT HANDLER]: FIELDS */
     
     private String handlerTag;
     private HostSession hostSession;
+    private SessionData sessionData;
     private Socket socket;
     private Player player;
     private int playerNumber;
@@ -27,14 +30,14 @@ public class ClientHandler implements Runnable {
     /* ### [INNER CLASS]: HEARTBEAT ### */
     
     private class HeartBeat {
-        private Object lock;
+        private Lock lock;
         private int pingRate;
         private int noPongCount;
         private volatile boolean pong;
         private volatile boolean stop;
         
         HeartBeat(int ms) {
-            lock = new Object();
+            lock = new Lock();
             pingRate = ms;
             noPongCount = 0;
         }
@@ -49,13 +52,15 @@ public class ClientHandler implements Runnable {
         
         public void start() {
             DebugWindow.println(handlerTag + " starting heartbeat");
+            
             hostSession.getExecutor().scheduleAtFixedRate(() -> {
                 if(stop) {
                     DebugWindow.println(handlerTag + " stopping heartbeat");
                     throw new TaskCompleteException();
                 }
                 pong = false;
-                out.println("PING");
+                sendString("PING");
+                
                 hostSession.getExecutor().schedule(() -> {
                     if (pong) {
                         noPongCount = 0;
@@ -69,10 +74,13 @@ public class ClientHandler implements Runnable {
                             try {stopClientHandler();} catch (IOException e) {e.printStackTrace();}
                         }
                     }
-                    lock.notify();
+
+                    lock.syncNotify();
                 }, pingRate/2, TimeUnit.MILLISECONDS);
-                try {lock.wait();} catch(InterruptedException ignored) {}
+    
+                lock.syncWait();
             }, 0, pingRate/2, TimeUnit.MILLISECONDS);
+            
         }
         
     }
@@ -91,6 +99,10 @@ public class ClientHandler implements Runnable {
         @Override
         protected void process(String in) throws IOException {
             if (in != null) {
+                if(!in.startsWith("PONG")) {
+                    DebugWindow.println(handlerTag + " Msg recieved: " +
+                                        (in.length() > 8 ? in.substring(0, 8) + "..." : in));
+                }
                 if (in.startsWith("QUIT")) {
                     stopClientHandler();
                 }
@@ -107,8 +119,6 @@ public class ClientHandler implements Runnable {
                 if (in.startsWith("RDY_TGL")) {
                     hostSession.clientReadyToggle(clientHandler);
                 }
-                DebugWindow.println(handlerTag + " Msg recieved: " +
-                                    (in.length() > 8 ? in.substring(0, 8) + "..." : in));
             }
         }
         
@@ -119,19 +129,21 @@ public class ClientHandler implements Runnable {
     
     ClientHandler(HostSession hostSession) {
         this.hostSession = hostSession;
-        playerNumber = (ClientHandler.this == hostSession.getHandler(1)) ? 1 : 2;
-        handlerTag = "[ClientHandler(" + playerNumber + ")]";
     }
     
     @Override
     public void run() {
+        sessionData = SessionData.get();
+        playerNumber = (ClientHandler.this == hostSession.getHandler(1)) ? 1 : 2;
+        handlerTag = "[ClientHandler(" + playerNumber + ")]";
         DebugWindow.println(handlerTag + " initializing connection");
         connected = connectToClient();
         if (!connected) {
             try {stopClientHandler();} catch(IOException e) {e.printStackTrace();}
         } else {
             DebugWindow.println(handlerTag + " connected");
-            sendString(SessionData.getCfgString());
+            sendString(sessionData.getCfgString());
+            DebugWindow.println(handlerTag + " sendString(sessionData.getCfgString()) called");
         }
     }
     
@@ -144,10 +156,11 @@ public class ClientHandler implements Runnable {
     private boolean connectToClient() {
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
+            DebugWindow.println(handlerTag + " opened OutputStream");
             in = new HostStringStreamHandler(new BufferedReader(
                 new InputStreamReader(socket.getInputStream())), 100, this);
             in.startStreamHandler();
-            sendString(SessionData.getCfgString());
+            DebugWindow.println(handlerTag + " opened InputStream");
             heartBeat = new HeartBeat(200);
             heartBeat.start();
             return true;
@@ -157,7 +170,8 @@ public class ClientHandler implements Runnable {
         }
     }
     
-    void sendString(String msg) {
+    synchronized void sendString(String msg) {
+        if (!msg.startsWith("PING"))
         DebugWindow.println(handlerTag + " Sending Msg: " +
                             (msg.length() > 8 ? msg.substring(0, 8) + "..." : msg));
         out.println(msg);

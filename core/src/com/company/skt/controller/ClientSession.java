@@ -32,6 +32,10 @@ public class ClientSession extends Session {
         @Override
         protected void process(String in) {
             if (in != null) {
+                if (!in.startsWith("PING")) {
+                    DebugWindow.println("[ClientSession]: Msg recieved: " +
+                                        (in.length() > 8 ? in.substring(0, 8) + "..." : in));
+                }
                 if (in.startsWith("PING")) {
                     sendString("PONG");
                 }
@@ -53,8 +57,6 @@ public class ClientSession extends Session {
                     try {stopSession();}
                     catch(IOException e) {e.printStackTrace();}
                 }
-                DebugWindow.println("[ClientSession]: Msg recieved: " +
-                                    (in.length() > 8 ? in.substring(0, 8) + "..." : in));
             }
         }
     }
@@ -153,8 +155,10 @@ public class ClientSession extends Session {
     }
     
     void sendString(String msg) {
-        DebugWindow.println("[ClientSession]: Sending Msg: " +
-                            (msg.length() > 8 ? msg.substring(0, 8) + "..." : msg));
+        if(!msg.startsWith("PONG")) {
+            DebugWindow.println("[ClientSession]: Sending Msg: " +
+                                (msg.length() > 8 ? msg.substring(0, 8) + "..." : msg));
+        }
         out.println(msg);
     }
     

@@ -40,12 +40,12 @@ public class SessionData {
         data = null;
     }
     
-    public static String getCfgString() {
-        String cfgString = "CFG#";
-        for(String key : (String[])data.getSessionCfg().keySet().toArray()) {
-            cfgString += key + "=" + data.getCfgValue(key) + ";";
+    public String getCfgString() {
+        StringBuilder cfgString = new StringBuilder("CFG#");
+        for(String key : (String[])getSessionCfg().keySet().toArray()) {
+            cfgString.append(key).append("=").append(getCfgValue(key)).append(";");
         }
-        return cfgString;
+        return cfgString.toString();
     }
     
     public synchronized void setPlayer(@Null Player player, int playerNumber) {

@@ -9,10 +9,7 @@ import com.company.skt.view.DebugWindow;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Properties;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class HostSession extends Session {
     
@@ -45,10 +42,9 @@ public class HostSession extends Session {
             serverSocket = new ServerSocket(PORT);
         } catch(IOException e) {e.printStackTrace();}
         ((Menu)Utils.getCurrentScreen()).event("READY_FOR_LOBBY");
-        // TODO seems a bad solution: better wrap singleThreadScheduled araund a CachedThreadPool
-        executor = new ScheduledThreadPoolExecutor(Runtime.getRuntime().availableProcessors() * 8);
-        executor.setKeepAliveTime(60, TimeUnit.SECONDS);
-        executor.allowCoreThreadTimeOut(true);
+        Executors.newCachedThreadPool();
+            // TODO seems a bad solution: better wrap singleThreadScheduled araund a CachedThreadPool
+        executor = new ScheduledThreadPoolExecutor(32);
         handlerPlayer1 = new ClientHandler(HostSession.this);
         handlerPlayer2 = new ClientHandler(HostSession.this);
         clientSearch();

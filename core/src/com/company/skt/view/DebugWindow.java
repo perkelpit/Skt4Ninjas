@@ -24,12 +24,18 @@ public class DebugWindow extends JFrame {
     private static String gameData;
     private static Focus focus;
 
-    public static void showTextAreaView() {
+    public static void createDebugWindow() {
         if (debugWindow == null) {
             debugWindow = new DebugWindow();
         }
-        debugWindow.setVisible(true);
+        debugWindow.setVisible(false);
         update();
+    }
+    
+    public static void showDebugWindow() {
+        if (debugWindow != null) {
+            debugWindow.setVisible(true);
+        }
     }
 
     public static void hideDebugWindow() {
@@ -44,6 +50,12 @@ public class DebugWindow extends JFrame {
         }
     }
     
+    public static void setPosition(int x, int y) {
+        if(debugWindow != null) {
+            debugWindow.setLocation(x, y);
+        }
+    }
+    
     public static void setFocus(Focus focus) {
         DebugWindow.focus = focus;
         update();
@@ -51,19 +63,20 @@ public class DebugWindow extends JFrame {
 
     public DebugWindow() {
         focus = Focus.Main;
-        Dimension dimension = new Dimension(420, 750);
-        setSize(dimension);
-        setMinimumSize(dimension);
-        setPreferredSize(dimension);
-        getContentPane().setSize(dimension);
-        getContentPane().setPreferredSize(dimension);
-        getContentPane().setMinimumSize(dimension);
+        Dimension windowSize = new Dimension(400, 750);
+        setSize(windowSize);
+        setMinimumSize(windowSize);
+        setPreferredSize(windowSize);
+        setUndecorated(true);
+        getContentPane().setSize(windowSize);
+        getContentPane().setPreferredSize(windowSize);
+        getContentPane().setMinimumSize(windowSize);
         getContentPane().setLayout(new FlowLayout());
-        dimension = new Dimension(400, 400);
+        Dimension topAreaSize = new Dimension(windowSize.width - 10, (windowSize.height / 2) - 5);
         textAreaTop = new JTextArea();
-        textAreaTop.setSize(dimension);
-        textAreaTop.setMinimumSize(dimension);
-        textAreaTop.setPreferredSize(dimension);
+        textAreaTop.setSize(topAreaSize);
+        textAreaTop.setMinimumSize(topAreaSize);
+        textAreaTop.setPreferredSize(topAreaSize);
         textAreaTop.setEditable(false);
         textAreaTop.setFont(new Font("Arial", Font.PLAIN, 20));
         textAreaTop.setEditable(false);
@@ -72,13 +85,13 @@ public class DebugWindow extends JFrame {
         textAreaTop.setWrapStyleWord(true);
         textAreaTop.setLineWrap(true);
         JScrollPane scrollPaneTop = new JScrollPane(textAreaTop);
-        scrollPaneTop.setPreferredSize(dimension);
+        scrollPaneTop.setPreferredSize(topAreaSize);
         ((DefaultCaret) textAreaTop.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         add(scrollPaneTop);
-        dimension = new Dimension(400, 300);
+        Dimension bottomAreaSize = new Dimension(windowSize.width - 10, ((windowSize.height / 2) - 5));
         textAreaBottom = new JTextArea();
         //textAreaBottom.setSize(dimension);
-        textAreaBottom.setMinimumSize(dimension);
+        textAreaBottom.setMinimumSize(bottomAreaSize);
         //textAreaBottom.setPreferredSize(dimension);
         textAreaBottom.setEditable(false);
         textAreaBottom.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -88,7 +101,7 @@ public class DebugWindow extends JFrame {
         textAreaBottom.setWrapStyleWord(true);
         textAreaBottom.setLineWrap(true);
         JScrollPane scrollPaneBottom = new JScrollPane(textAreaBottom);
-        scrollPaneBottom.setPreferredSize(dimension);
+        scrollPaneBottom.setPreferredSize(bottomAreaSize);
         ((DefaultCaret) textAreaBottom.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         add(scrollPaneBottom);
         setVisible(false);
