@@ -13,6 +13,14 @@ public class Lock {
             e.printStackTrace();
         }
     }
+
+    public synchronized void syncWait(long ms) {
+        try {
+            this.wait(ms);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     
     public synchronized void syncNotify() {
         this.notify();

@@ -73,6 +73,7 @@ public class ClientSession extends Session {
             cfgStr = cfgStr.replace(";", "");
         }
         sessionData.setCfgValues(keys.toArray(), values.toArray());
+        DebugWindow.println("[ClientSession] cfg-String parsed and sessionCfg changed");
     }
     
     ClientSession() {

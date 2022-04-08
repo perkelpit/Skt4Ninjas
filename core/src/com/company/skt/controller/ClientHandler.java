@@ -60,25 +60,24 @@ public class ClientHandler implements Runnable {
                 }
                 pong = false;
                 sendString("PING");
-                
-                hostSession.getExecutor().schedule(() -> {
-                    if (pong) {
-                        noPongCount = 0;
-                    } else {
-                        ++noPongCount;
-                        if (noPongCount == 10 || noPongCount == 20 ) {
-                            hostSession.clientConnectionWarning(ClientHandler.this);
-                        }
-                        if (noPongCount > 30) {
-                            hostSession.clientLost(ClientHandler.this);
-                            try {stopClientHandler();} catch (IOException e) {e.printStackTrace();}
-                        }
-                    }
 
-                    lock.syncNotify();
-                }, pingRate/2, TimeUnit.MILLISECONDS);
-    
-                lock.syncWait();
+                lock.syncWait((pingRate/4)*3);
+
+                if (pong) {
+                    DebugWindow.println(handlerTag + " pong-check: true");
+                    noPongCount = 0;
+                } else {
+                    DebugWindow.println(handlerTag + " pong-check: false");
+                    ++noPongCount;
+                    if (noPongCount == 10 || noPongCount == 20 ) {
+                        hostSession.clientConnectionWarning(ClientHandler.this);
+                    }
+                    if (noPongCount > 30) {
+                        hostSession.clientLost(ClientHandler.this);
+                        try {stopClientHandler();} catch (IOException e) {e.printStackTrace();}
+                    }
+                }
+
             }, 0, pingRate/2, TimeUnit.MILLISECONDS);
             
         }
@@ -172,7 +171,7 @@ public class ClientHandler implements Runnable {
                 new InputStreamReader(socket.getInputStream())), 100, this);
             in.startStreamHandler();
             DebugWindow.println(handlerTag + " opened InputStream");
-            heartBeat = new HeartBeat(200);
+            heartBeat = new HeartBeat(400);
             heartBeat.start();
             return true;
         } catch (IOException ioe) {
