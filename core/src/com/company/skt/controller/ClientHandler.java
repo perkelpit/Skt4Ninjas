@@ -64,10 +64,8 @@ public class ClientHandler implements Runnable {
                 lock.syncWait((pingRate/4)*3);
 
                 if (pong) {
-                    DebugWindow.println(handlerTag + " pong-check: true");
                     noPongCount = 0;
                 } else {
-                    DebugWindow.println(handlerTag + " pong-check: false");
                     ++noPongCount;
                     if (noPongCount == 10 || noPongCount == 20 ) {
                         hostSession.clientConnectionWarning(ClientHandler.this);

@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.model.Assets;
 import com.company.skt.view.*;
+import org.lwjgl.opengl.GL;
 
 import java.io.IOException;
 
@@ -93,9 +94,11 @@ public class Menu extends StageScreen {
         switch(eventName) {
             case "READY_FOR_LOBBY":
                 DebugWindow.println("Event: READY_FOR_LOBBY");
-                addStage(new LobbyUI("lobbyUI", true));
-                setStageActive("mainMenuUI", false);
-                ((LobbyUI)findStage("lobbyUI")).updateUI();
+                Gdx.app.postRunnable(() -> {
+                    addStage(new LobbyUI("lobbyUI", true));
+                    setStageActive("mainMenuUI", false);
+                    ((LobbyUI)findStage("lobbyUI")).updateUI();
+                });
                 DebugWindow.update();
                 break;
             case "READY_FOR_SUMMARY":

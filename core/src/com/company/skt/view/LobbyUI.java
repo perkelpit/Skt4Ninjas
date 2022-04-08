@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.company.skt.controller.Menu;
+import com.company.skt.controller.Session;
 import com.company.skt.controller.Utils;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.*;
@@ -131,6 +132,7 @@ public class LobbyUI extends UpdateStage {
     }
 
     public void updateUI(){
+        SessionData data = SessionData.get();
         // DEBUG NullPointer in "player0Name.setText(SessionData.get().getPlayer(0).getName());" ?!?!?
         DebugWindow.println("updateUI() called");
         if (data.getPlayer(0) != null) {
@@ -139,14 +141,14 @@ public class LobbyUI extends UpdateStage {
         else{
             player0Name.setText(Local.getString("lb_player_null"));
         }
-        if (SessionData.get().getPlayer(1) != null) {
-            player1Name.setText(SessionData.get().getPlayer(1).getName());
+        if (data.getPlayer(1) != null) {
+            player1Name.setText(data.getPlayer(1).getName());
         }
         else{
             player1Name.setText(Local.getString("lb_player_null"));
         }
-        if (SessionData.get().getPlayer(2) != null) {
-            player2Name.setText(SessionData.get().getPlayer(2).getName());
+        if (data.getPlayer(2) != null) {
+            player2Name.setText(data.getPlayer(2).getName());
         }
         else{
             player2Name.setText(Local.getString("lb_player_null"));
