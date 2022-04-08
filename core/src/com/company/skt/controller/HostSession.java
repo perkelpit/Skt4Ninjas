@@ -47,6 +47,7 @@ public class HostSession extends Session {
         executor = new ScheduledThreadPoolExecutor(32);
         handlerPlayer1 = new ClientHandler(HostSession.this);
         handlerPlayer2 = new ClientHandler(HostSession.this);
+        DebugWindow.println(SessionData.getCfgString());
         clientSearch();
     }
     

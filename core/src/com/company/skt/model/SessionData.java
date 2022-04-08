@@ -6,6 +6,8 @@ import com.company.skt.controller.Utils;
 import com.company.skt.lib.GameList;
 import com.company.skt.lib.Player;
 
+import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.Properties;
 
 public class SessionData {
@@ -41,9 +43,11 @@ public class SessionData {
     }
     
     public synchronized static String getCfgString() {
-        StringBuilder cfgString = new StringBuilder("CFG#");
-        for(String key : (String[])data.getSessionCfg().keySet().toArray()) {
-            cfgString.append(key).append("=").append(data.getCfgValue(key)).append(";");
+        StringBuilder cfgString = new StringBuilder("CFG>");
+        Enumeration<?> keys = data.getSessionCfg().propertyNames();
+        while(keys.hasMoreElements()) {
+            String keyStr = keys.nextElement().toString();
+            cfgString.append(keyStr).append("=").append(data.getCfgValue(keyStr)).append(";");
         }
         return cfgString.toString();
     }

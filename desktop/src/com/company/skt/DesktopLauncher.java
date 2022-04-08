@@ -16,7 +16,7 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setTitle(appCfg.getProperty("name"));
 		boolean debug = false;
-		if(arg[0] != null) {
+		if(arg.length > 0) {
 			if(arg[0].equals("debug")) {
 				debug = true;
 			}
