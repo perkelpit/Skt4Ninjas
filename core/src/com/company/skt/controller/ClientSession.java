@@ -5,10 +5,13 @@ import com.company.skt.lib.Player;
 import com.company.skt.model.SessionData;
 import com.company.skt.model.Settings;
 import com.company.skt.view.DebugWindow;
+import org.lwjgl.system.CallbackI;
 
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class ClientSession extends Session {
@@ -63,16 +66,23 @@ public class ClientSession extends Session {
     }
     
     private void parseAndChangeSessionCfg(String in) {
+        DebugWindow.println("[ClientSession] parsing cfg-String");
         String cfgStr = in;
-        Array<String> keys = new Array<>();
-        Array<String> values = new Array<>();
+        ArrayList<String> keyList = new ArrayList<>();
+        ArrayList<String> valueList = new ArrayList<>();
         while(cfgStr.length() > 0) {
-            keys.add(cfgStr.substring(0, cfgStr.indexOf('=')));
-            values.add(cfgStr.substring(cfgStr.indexOf('=') + 1, cfgStr.indexOf(';')));
+            DebugWindow.println("[ClientSession] cfgStr: " + cfgStr);
+            keyList.add(cfgStr.substring(0, cfgStr.indexOf('=')));
+            valueList.add(cfgStr.substring(cfgStr.indexOf('=') + 1, cfgStr.indexOf(';')));
             cfgStr = cfgStr.substring(cfgStr.indexOf(';'));
-            cfgStr = cfgStr.replace(";", "");
+            cfgStr = cfgStr.replaceFirst(";", "");
         }
-        sessionData.setCfgValues(keys.toArray(), values.toArray());
+        String[] keys = new String[keyList.size()];
+        String[] values = new String[valueList.size()];
+        keyList.toArray(keys);
+        valueList.toArray(values);
+        DebugWindow.println(Arrays.toString(keys) + " | " + Arrays.toString(values));
+        sessionData.setCfgValues(keys, values);
         DebugWindow.println("[ClientSession] cfg-String parsed and sessionCfg changed");
     }
     
