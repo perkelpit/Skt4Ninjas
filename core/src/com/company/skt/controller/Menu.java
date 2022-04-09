@@ -37,12 +37,10 @@ public class Menu extends StageScreen {
         switch(buttonName) {
             // *** MAIN MENU-CLICKS ***
             case "HOST":
-                DebugWindow.println("Host clicked");
                 DebugWindow.setUIFocus(DebugWindow.Focus.Lobby);
                 session = new HostSession();
                 break;
             case "JOIN":
-                DebugWindow.println("Join clicked");
                 DebugWindow.setUIFocus(DebugWindow.Focus.Lobby);
                 session = new ClientSession();
                 break;
@@ -51,7 +49,6 @@ public class Menu extends StageScreen {
                 DebugWindow.setUIFocus(DebugWindow.Focus.Archive);
                 break;
             case "SETTINGS":
-                DebugWindow.println("Settings clicked");
                 DebugWindow.setUIFocus(DebugWindow.Focus.Settings);
                 setStageActive("mainMenuUI", false);
                 setStageActive("settingsUI", true);
@@ -60,9 +57,6 @@ public class Menu extends StageScreen {
                 DebugWindow.println("Credits clicked");
                 break;
             case "EXIT":
-                DebugWindow.println("Exit clicked");
-                try {Thread.sleep(500);}
-                catch(InterruptedException e) {e.printStackTrace();}
                 if(Skt.isDebug()) {
                     Skt.getDebugWindowPositionUpdater().shutdownNow();
                 }
@@ -74,13 +68,11 @@ public class Menu extends StageScreen {
                 DebugWindow.println("Change name clicked");
                 break;
             case "QUIT_SETTINGS":
-                DebugWindow.println("Quit settings clicked");
                 DebugWindow.setUIFocus(DebugWindow.Focus.Main);
                 setStageActive("mainMenuUI", true);
                 setStageActive("settingsUI", false);
                 break;
             case "QUIT_LOBBY":
-                DebugWindow.println("Quit Lobby clicked");
                 DebugWindow.setUIFocus(DebugWindow.Focus.Main);
                 try {session.stopSession();} catch (IOException e) {e.printStackTrace();}
                 setStageActive("lobbyUI", false);

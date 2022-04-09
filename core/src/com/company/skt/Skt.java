@@ -30,6 +30,9 @@ public class Skt extends ScreenController {
 	@Override
 	public void create () {
 		super.create();
+		Local.boot("assets/local/");
+		Fonts.boot("assets/fonts/");
+		Assets.boot("assets/");
 		graphics = (Lwjgl3Graphics)Gdx.graphics;
 		displayMode = graphics.getDisplayMode();
 		window = graphics.getWindow();
@@ -47,25 +50,20 @@ public class Skt extends ScreenController {
 			public void iconified(boolean isIconified) {
 				if(!isIconified) {
 					DebugWindow.getWindow().toFront();
-					DebugWindow.getWindow().requestFocus();
 				}
 			}
 			
 			@Override
 			public void focusGained() {
 				DebugWindow.getWindow().toFront();
-				DebugWindow.getWindow().requestFocus();
 			}
 		});
 		if(debug) {
 			debugWindowPositionUpdater = Executors.newSingleThreadScheduledExecutor();
 			debugWindowPositionUpdater.scheduleAtFixedRate(() -> {
 				DebugWindow.setPosition(window.getPositionX() - 400, window.getPositionY() - 30);
-			}, 0, 1, TimeUnit.MILLISECONDS);
+			}, 0, 5, TimeUnit.MILLISECONDS);
 		}
-		Local.boot("assets/local/");
-		Fonts.boot("assets/fonts/");
-		Assets.boot("assets/");
 		DebugWindow.createDebugWindow();
 		if(debug) {
 			DebugWindow.showDebugWindow();

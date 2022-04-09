@@ -69,6 +69,7 @@ public class DebugWindow extends JFrame {
         focus = Focus.Main;
         Dimension windowSize = new Dimension(400, 750);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        setType(Type.UTILITY);
         setSize(windowSize);
         setMinimumSize(windowSize);
         setPreferredSize(windowSize);
