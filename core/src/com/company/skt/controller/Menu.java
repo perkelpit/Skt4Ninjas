@@ -5,7 +5,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.model.Assets;
 import com.company.skt.view.*;
-import org.lwjgl.opengl.GL;
 
 import java.io.IOException;
 
@@ -38,21 +37,21 @@ public class Menu extends StageScreen {
             // *** MAIN MENU-CLICKS ***
             case "HOST":
                 DebugWindow.println("Host clicked");
-                DebugWindow.setFocus(DebugWindow.Focus.Lobby);
+                DebugWindow.setUIFocus(DebugWindow.Focus.Lobby);
                 session = new HostSession();
                 break;
             case "JOIN":
                 DebugWindow.println("Join clicked");
-                DebugWindow.setFocus(DebugWindow.Focus.Lobby);
+                DebugWindow.setUIFocus(DebugWindow.Focus.Lobby);
                 session = new ClientSession();
                 break;
             case "ARCHIVE":
                 DebugWindow.println("Archive clicked");
-                DebugWindow.setFocus(DebugWindow.Focus.Archive);
+                DebugWindow.setUIFocus(DebugWindow.Focus.Archive);
                 break;
             case "SETTINGS":
                 DebugWindow.println("Settings clicked");
-                DebugWindow.setFocus(DebugWindow.Focus.Settings);
+                DebugWindow.setUIFocus(DebugWindow.Focus.Settings);
                 setStageActive("mainMenuUI", false);
                 setStageActive("settingsUI", true);
                 break;
@@ -63,7 +62,7 @@ public class Menu extends StageScreen {
                 DebugWindow.println("Exit clicked");
                 try {Thread.sleep(500);}
                 catch(InterruptedException e) {e.printStackTrace();}
-                DebugWindow.disposeTextAreaView();
+                DebugWindow.disposeDebugWindow();
                 Gdx.app.exit();
                 break;
             // *** SETTINGS MENU-CLICKS ***
@@ -72,13 +71,13 @@ public class Menu extends StageScreen {
                 break;
             case "QUIT_SETTINGS":
                 DebugWindow.println("Quit settings clicked");
-                DebugWindow.setFocus(DebugWindow.Focus.Main);
+                DebugWindow.setUIFocus(DebugWindow.Focus.Main);
                 setStageActive("mainMenuUI", true);
                 setStageActive("settingsUI", false);
                 break;
             case "QUIT_LOBBY":
                 DebugWindow.println("Quit Lobby clicked");
-                DebugWindow.setFocus(DebugWindow.Focus.Main);
+                DebugWindow.setUIFocus(DebugWindow.Focus.Main);
                 try {session.stopSession();} catch (IOException e) {e.printStackTrace();}
                 setStageActive("lobbyUI", false);
                 removeStage("lobbyUI");
@@ -123,7 +122,7 @@ public class Menu extends StageScreen {
                 break;
             case "LEAVE_LOBBY":
                 DebugWindow.println("Event: LEAVE_LOBBY");
-                DebugWindow.setFocus(DebugWindow.Focus.Main);
+                DebugWindow.setUIFocus(DebugWindow.Focus.Main);
                 setStageActive("mainMenuUI", true);
                 setStageActive("lobbyUI", false);
                 removeStage("lobbyUI");

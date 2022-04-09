@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.company.skt.controller.Menu;
 import com.company.skt.lib.ScreenController;
 import com.company.skt.model.Assets;
@@ -27,6 +28,25 @@ public class Skt extends ScreenController {
 		graphics = (Lwjgl3Graphics)Gdx.graphics;
 		displayMode = graphics.getDisplayMode();
 		window = graphics.getWindow();
+		window.setWindowListener(new Lwjgl3WindowAdapter() {
+			@Override
+			public boolean closeRequested() {
+				DebugWindow.disposeDebugWindow();
+				return true;
+			}
+			
+			@Override
+			public void iconified(boolean isIconified) {
+				if(!isIconified) {
+					DebugWindow.getWindow().requestFocus();
+				}
+			}
+			
+			@Override
+			public void focusGained() {
+				DebugWindow.getWindow().requestFocus();
+			}
+		});
 		Local.boot("assets/local/");
 		Fonts.boot("assets/fonts/");
 		Assets.boot("assets/");
@@ -41,6 +61,7 @@ public class Skt extends ScreenController {
 	public void render() {
 		super.render();
 		if(debug) {
+			
 			DebugWindow.setPosition(window.getPositionX() - 400, window.getPositionY() - 30);
 		}
 	}

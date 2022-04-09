@@ -44,7 +44,7 @@ public class DebugWindow extends JFrame {
         }
     }
 
-    public static void disposeTextAreaView() {
+    public static void disposeDebugWindow() {
         if (debugWindow != null) {
             debugWindow.dispose();
         }
@@ -56,7 +56,11 @@ public class DebugWindow extends JFrame {
         }
     }
     
-    public static void setFocus(Focus focus) {
+    public static DebugWindow getWindow() {
+        return debugWindow;
+    }
+    
+    public static void setUIFocus(Focus focus) {
         DebugWindow.focus = focus;
         update();
     }
@@ -64,6 +68,7 @@ public class DebugWindow extends JFrame {
     public DebugWindow() {
         focus = Focus.Main;
         Dimension windowSize = new Dimension(400, 750);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setSize(windowSize);
         setMinimumSize(windowSize);
         setPreferredSize(windowSize);
