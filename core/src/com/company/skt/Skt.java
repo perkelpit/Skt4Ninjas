@@ -17,14 +17,14 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Skt extends ScreenController {
-	private boolean debug;
+	private static boolean debug;
 	private Lwjgl3Graphics graphics;
 	private DisplayMode displayMode;
 	private Lwjgl3Window window;
 	private static ScheduledExecutorService debugWindowPositionUpdater;
 
 	public Skt(boolean debug) {
-		this.debug = debug;
+		Skt.debug = debug;
 	}
 	
 	@Override
@@ -75,5 +75,9 @@ public class Skt extends ScreenController {
 	
 	public static ScheduledExecutorService getDebugWindowPositionUpdater() {
 		return debugWindowPositionUpdater;
+	}
+	
+	public static boolean isDebug() {
+		return debug;
 	}
 }

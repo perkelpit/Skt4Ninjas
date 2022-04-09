@@ -63,7 +63,9 @@ public class Menu extends StageScreen {
                 DebugWindow.println("Exit clicked");
                 try {Thread.sleep(500);}
                 catch(InterruptedException e) {e.printStackTrace();}
-                Skt.getDebugWindowPositionUpdater().shutdownNow();
+                if(Skt.isDebug()) {
+                    Skt.getDebugWindowPositionUpdater().shutdownNow();
+                }
                 DebugWindow.disposeDebugWindow();
                 Gdx.app.exit();
                 break;
