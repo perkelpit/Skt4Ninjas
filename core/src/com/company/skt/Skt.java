@@ -12,11 +12,16 @@ import com.company.skt.model.Fonts;
 import com.company.skt.model.Local;
 import com.company.skt.view.DebugWindow;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class Skt extends ScreenController {
 	private boolean debug;
 	Lwjgl3Graphics graphics;
 	DisplayMode displayMode;
 	Lwjgl3Window window;
+	ScheduledExecutorService debugWindowPositionUpdater;
 
 	public Skt(boolean debug) {
 		this.debug = debug;
@@ -31,6 +36,9 @@ public class Skt extends ScreenController {
 		window.setWindowListener(new Lwjgl3WindowAdapter() {
 			@Override
 			public boolean closeRequested() {
+				if(debug) {
+					debugWindowPositionUpdater.shutdownNow();
+				}
 				DebugWindow.disposeDebugWindow();
 				return true;
 			}
@@ -43,10 +51,22 @@ public class Skt extends ScreenController {
 			}
 			
 			@Override
+			public void refreshRequested() {
+				super.refreshRequested();
+			}
+			
+			@Override
 			public void focusGained() {
 				DebugWindow.getWindow().requestFocus();
 			}
 		});
+		if(debug) {
+			// TODO only when window is actually moved
+			debugWindowPositionUpdater = Executors.newSingleThreadScheduledExecutor();
+			debugWindowPositionUpdater.scheduleAtFixedRate(() -> {
+				DebugWindow.setPosition(window.getPositionX() - 400, window.getPositionY() - 30);
+			}, 0, 1, TimeUnit.MILLISECONDS);
+		}
 		Local.boot("assets/local/");
 		Fonts.boot("assets/fonts/");
 		Assets.boot("assets/");
@@ -60,9 +80,5 @@ public class Skt extends ScreenController {
 	@Override
 	public void render() {
 		super.render();
-		if(debug) {
-			
-			DebugWindow.setPosition(window.getPositionX() - 400, window.getPositionY() - 30);
-		}
 	}
 }
