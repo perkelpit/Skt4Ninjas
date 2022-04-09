@@ -2,6 +2,7 @@ package com.company.skt.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.company.skt.Skt;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.model.Assets;
 import com.company.skt.view.*;
@@ -62,6 +63,7 @@ public class Menu extends StageScreen {
                 DebugWindow.println("Exit clicked");
                 try {Thread.sleep(500);}
                 catch(InterruptedException e) {e.printStackTrace();}
+                Skt.getDebugWindowPositionUpdater().shutdownNow();
                 DebugWindow.disposeDebugWindow();
                 Gdx.app.exit();
                 break;

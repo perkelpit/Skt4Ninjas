@@ -18,10 +18,10 @@ import java.util.concurrent.TimeUnit;
 
 public class Skt extends ScreenController {
 	private boolean debug;
-	Lwjgl3Graphics graphics;
-	DisplayMode displayMode;
-	Lwjgl3Window window;
-	ScheduledExecutorService debugWindowPositionUpdater;
+	private Lwjgl3Graphics graphics;
+	private DisplayMode displayMode;
+	private Lwjgl3Window window;
+	private static ScheduledExecutorService debugWindowPositionUpdater;
 
 	public Skt(boolean debug) {
 		this.debug = debug;
@@ -46,22 +46,18 @@ public class Skt extends ScreenController {
 			@Override
 			public void iconified(boolean isIconified) {
 				if(!isIconified) {
+					DebugWindow.getWindow().toFront();
 					DebugWindow.getWindow().requestFocus();
 				}
 			}
 			
 			@Override
-			public void refreshRequested() {
-				super.refreshRequested();
-			}
-			
-			@Override
 			public void focusGained() {
+				DebugWindow.getWindow().toFront();
 				DebugWindow.getWindow().requestFocus();
 			}
 		});
 		if(debug) {
-			// TODO only when window is actually moved
 			debugWindowPositionUpdater = Executors.newSingleThreadScheduledExecutor();
 			debugWindowPositionUpdater.scheduleAtFixedRate(() -> {
 				DebugWindow.setPosition(window.getPositionX() - 400, window.getPositionY() - 30);
@@ -77,8 +73,7 @@ public class Skt extends ScreenController {
 		setActiveScreen(new Menu());
 	}
 	
-	@Override
-	public void render() {
-		super.render();
+	public static ScheduledExecutorService getDebugWindowPositionUpdater() {
+		return debugWindowPositionUpdater;
 	}
 }
