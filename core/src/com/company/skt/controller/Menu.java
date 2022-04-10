@@ -1,17 +1,18 @@
 package com.company.skt.controller;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.company.skt.Skt;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.model.Assets;
+import com.company.skt.model.SessionData;
 import com.company.skt.view.*;
 
 import java.io.IOException;
 
 public class Menu extends StageScreen {
     
-    Session session;
+    private Session session;
+    private SessionData sessionData;
     
     @Override
     public void initialize() {
@@ -20,17 +21,12 @@ public class Menu extends StageScreen {
         addStage(new MenuBackground("menuBackground", true));
         addStage(new MainMenuUI("mainMenuUI", true));
         addStage(new SettingsUI("settingsUI"));
-
+        sessionData = SessionData.get();
     }
     
     @Override
     public void update(float dt) {
         super.update(dt);
-    }
-    
-    @Override
-    public AssetManager getAssets() {
-        return null;
     }
     
     public void buttonClicked(String buttonName) {
@@ -94,35 +90,35 @@ public class Menu extends StageScreen {
                     setStageActive("mainMenuUI", false);
                     ((LobbyUI)findStage("lobbyUI")).updateUI();
                 });
-                DebugWindow.update();
                 break;
             case "READY_FOR_SUMMARY":
                 DebugWindow.println("[Menu|Event] ready for summary");
                 // TODO open SummaryUI
                 break;
-            case "LOBBY_DATA_HAS_CHANGED":
-                DebugWindow.println("[Menu|Event] lobby data changed");
-                // TODO update lobbyUI accordingly + if(host): broadcast changes
-                DebugWindow.update();
+            case "SESSION_DATA_CHANGED":
+                DebugWindow.println("[Menu|Event] session data changed");
+                if(SessionData.isHost() && session != null) {
+                    ((HostSession)session).sendStringToAll(SessionData.getDataStringForClient());
+                }
                 if(findStage("lobbyUI") != null) {
                     ((LobbyUI)findStage("lobbyUI")).updateUI();
                 }
-                break;
-            case "CONNECTION_WARNING_PLAYER_1":
-                DebugWindow.println("[Menu|Event] connection warning player1");
-                // TODO p1
-                break;
-            case "CONNECTION_WARNING_PLAYER_2":
-                DebugWindow.println("[Menu|Event] connection warning player2");
-                // TODO p2
+                if(Skt.isDebug()) {
+                    DebugWindow.update();
+                }
                 break;
             case "LEAVE_LOBBY":
                 DebugWindow.println("[Menu|Event] leave lobby");
                 DebugWindow.setUIFocus(DebugWindow.Focus.Main);
-                setStageActive("mainMenuUI", true);
-                setStageActive("lobbyUI", false);
-                removeStage("lobbyUI");
+                Gdx.app.postRunnable(() -> {
+                    setStageActive("mainMenuUI", true);
+                    setStageActive("lobbyUI", false);
+                    removeStage("lobbyUI");
+                });
                 try {
+                    if(SessionData.isHost()) {
+                    
+                    }
                     session.stopSession();
                 } catch (IOException e) {
                     e.printStackTrace();

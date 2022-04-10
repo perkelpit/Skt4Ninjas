@@ -32,24 +32,30 @@ public class LayeredStages extends UpdateStage {
     }
 
     private void alignStages() {
-        for (UpdateStage stage : stages) {
+        UpdateStage stage = null;
+        for (int i = 0; i < stages.size; i++) {
+            stage = stages.get(i);
             if (stage instanceof AlignedStage) {
-                ((AlignedStage) stage).alignCamera();
+                ((AlignedStage)stage).alignCamera();
             }
         }
     }
 
     public void setCameraActor(MovedGroup cameraActor) {
-        for (UpdateStage stage : stages) {
+        UpdateStage stage = null;
+        for (int i = 0; i < stages.size; i++) {
+            stage = stages.get(i);
             if (stage instanceof AlignedStage) {
-                ((AlignedStage) stage).setCameraActor(cameraActor);
+                ((AlignedStage)stage).setCameraActor(cameraActor);
             }
         }
     }
 
     @Override
     public void update(float delta) {
-        for (UpdateStage stage : stages) {
+        UpdateStage stage = null;
+        for (int i = 0; i < stages.size; i++) {
+            stage = stages.get(i);
             if (stage.isActive()) {
                 stage.update(delta);
             }
@@ -59,7 +65,9 @@ public class LayeredStages extends UpdateStage {
     @Override
     public void act(float delta) {
         alignStages();
-        for (UpdateStage stage : stages) {
+        UpdateStage stage = null;
+        for (int i = 0; i < stages.size; i++) {
+            stage = stages.get(i);
             if (stage.isActive()) {
                 stage.act(delta);
             }
@@ -68,7 +76,9 @@ public class LayeredStages extends UpdateStage {
 
     @Override
     public void draw() {
-        for (UpdateStage stage : stages) {
+        UpdateStage stage = null;
+        for (int i = 0; i < stages.size; i++) {
+            stage = stages.get(i);
             if (stage.isActive()) {
                 stage.draw();
             }
@@ -78,8 +88,11 @@ public class LayeredStages extends UpdateStage {
     @Override
     public void dispose() {
         super.dispose();
-        for (UpdateStage stage : stages) {
+        UpdateStage stage = null;
+        for (int i = 0; i < stages.size; i++) {
+            stage = stages.get(i);
             stage.dispose();
+
         }
     }
 }

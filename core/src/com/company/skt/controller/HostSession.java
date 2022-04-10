@@ -37,7 +37,9 @@ public class HostSession extends Session {
         DebugWindow.println("[HostSession] starting");
         appCfg = Settings.getProperties(Settings.APP);
         sessionData = SessionData.get(true);
-        sessionData.setPlayer(new Player(appCfg.getProperty("player_name")), 0);
+        Player self = new Player(appCfg.getProperty("player_name"));
+        self.setConnectivity(1);
+        sessionData.setPlayer(self, 0);
         try {
             serverSocket = new ServerSocket(PORT);
         } catch(IOException e) {e.printStackTrace();}
@@ -93,9 +95,9 @@ public class HostSession extends Session {
                     }
                 }
             } else {
-                try {throw new TaskCompleteException();} catch(TaskCompleteException ignored) {}
                 clientSearchOngoing = false;
                 DebugWindow.println("[HostSession] clientsearch ended");
+                throw new TaskCompleteException();
             }
         }, 0, 50, TimeUnit.MILLISECONDS);
     }
@@ -119,43 +121,13 @@ public class HostSession extends Session {
         }
     }
     
-    void clientConnectionWarning(ClientHandler clientHandler) {
-        if(clientHandler.equals(handlerPlayer1)) {
-            DebugWindow.println("[HostSession] ConnectionWarning: player1");
-            ((Menu)Utils.getCurrentScreen()).event("CONNECTION_WARNING_PLAYER_1");
-        }
-        if(clientHandler.equals(handlerPlayer2)) {
-            DebugWindow.println("[HostSession] ConnectionWarning: player2");
-            ((Menu)Utils.getCurrentScreen()).event("CONNECTION_WARNING_PLAYER_2");
-        }
-    }
-    
-    void clientLost(ClientHandler clientHandler) {
-        if(clientHandler.equals(handlerPlayer1)) {
-            DebugWindow.println("[HostSession] ConnectionLost: player1");
-            handlerPlayer1 = null;
-            sessionData.setPlayer(null, 1);
-            if(!clientSearchOngoing) {
-                clientSearch();
-            }
-        }
-        if(clientHandler.equals(handlerPlayer2)) {
-            DebugWindow.println("[HostSession] ConnectionLost: player2");
-            handlerPlayer2 = null;
-            sessionData.setPlayer(null, 2);
-            if(!clientSearchOngoing) {
-                clientSearch();
-            }
-        }
-    }
-    
     void sendStringToAll(String msg) {
         DebugWindow.println("[HostSession] sending String to all clients: " +
                             (msg.length() > 8 ? msg.substring(0, 8) + "..." : msg));
-        if(handlerPlayer1 != null) {
+        if(handlerPlayer1.isConnected()) {
             handlerPlayer1.sendString(msg);
         }
-        if(handlerPlayer2 != null) {
+        if(handlerPlayer2.isConnected()) {
             handlerPlayer2.sendString(msg);
         }
     }

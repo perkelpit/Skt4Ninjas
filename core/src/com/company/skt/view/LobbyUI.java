@@ -131,7 +131,7 @@ public class LobbyUI extends UpdateStage {
         super.initialize();
     }
 
-    public void updateUI(){
+    public void updateUI() {
         SessionData data = SessionData.get();
         if (data.getPlayer(0) != null) {
             player0Name.setText(data.getPlayer(0).getName());

@@ -52,7 +52,6 @@ public class ClientHandler implements Runnable {
         
         public void start() {
             DebugWindow.println(handlerTag + " starting heartbeat");
-
             hostSession.getExecutor().scheduleAtFixedRate(() -> {
                 if(stop) {
                     DebugWindow.println(handlerTag + " stopping heartbeat");
@@ -60,23 +59,35 @@ public class ClientHandler implements Runnable {
                 }
                 pong = false;
                 sendString("PING");
-
-                lock.syncWait((pingRate/4)*3);
-
+                
+                lock.syncWait(pingRate - 50);
+                
                 if (pong) {
                     noPongCount = 0;
+                    if(player != null) {
+                        player.setConnectivity(Player.CONNECTION_OK);
+                        sessionData.setPlayer(player, playerNumber);
+                    }
                 } else {
                     ++noPongCount;
-                    if (noPongCount == 10 || noPongCount == 20 ) {
-                        hostSession.clientConnectionWarning(ClientHandler.this);
+                    if (noPongCount == 20 ) {
+                        if(player != null) {
+                            player.setConnectivity(Player.CONNECTION_WARNING);
+                            sessionData.setPlayer(player, playerNumber);
+                        }
+                        DebugWindow.println(handlerTag + " connection warning");
                     }
-                    if (noPongCount > 30) {
-                        hostSession.clientLost(ClientHandler.this);
+                    if (noPongCount > 40) {
+                        if(player != null) {
+                            player.setConnectivity(Player.CONNECTION_LOST);
+                            sessionData.setPlayer(player, playerNumber);
+                            player.setReady(false);
+                        }
+                        DebugWindow.println(handlerTag + " client lost");
                         try {stopClientHandler();} catch (IOException e) {e.printStackTrace();}
                     }
                 }
-
-            }, 0, pingRate/2, TimeUnit.MILLISECONDS);
+            }, 0, pingRate, TimeUnit.MILLISECONDS);
             
         }
         
@@ -101,12 +112,13 @@ public class ClientHandler implements Runnable {
                                         (in.length() > 8 ? in.substring(0, 8) + "..." : in));
                 }
                 if (in.startsWith("QUIT")) {
+                    DebugWindow.println(handlerTag + " client quitted");
                     stopClientHandler();
                 }
                 if (in.startsWith("PONG")) {
                     heartBeat.pong();
                 }
-                if (in.startsWith("CFG_REC")) {
+                if (in.startsWith("SDATA_REC")) {
                     sendString("QRY_PLAYER");
                 }
                 if (in.startsWith("PLAYER")) {
@@ -139,7 +151,7 @@ public class ClientHandler implements Runnable {
             try {stopClientHandler();} catch(IOException e) {e.printStackTrace();}
         } else {
             DebugWindow.println(handlerTag + " connected");
-            sendString(SessionData.getCfgString());
+            sendString(SessionData.getDataStringForClient());
         }
     }
     
@@ -167,7 +179,7 @@ public class ClientHandler implements Runnable {
                 new InputStreamReader(socket.getInputStream())), 100, this);
             in.startStreamHandler();
             DebugWindow.println(handlerTag + " opened InputStream");
-            heartBeat = new HeartBeat(400);
+            heartBeat = new HeartBeat(500);
             heartBeat.start();
             return true;
         } catch (IOException ioe) {
@@ -177,6 +189,7 @@ public class ClientHandler implements Runnable {
     }
     
     void stopClientHandler() throws IOException {
+        connected = false;
         if(heartBeat != null) {
             heartBeat.stop();
             heartBeat = null;
@@ -190,8 +203,13 @@ public class ClientHandler implements Runnable {
             in.stopStreamHandler();
             in = null;
         }
+        playerNumber = -1;
         player = null;
-        connected = false;
+        if(sessionData != null) {
+            sessionData.setPlayer(player, playerNumber);
+            sessionData = null;
+            SessionData.dispose();
+        }
         socket = null;
     }
     

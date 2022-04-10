@@ -1,14 +1,14 @@
 package com.company.skt.lib;
 
-import java.io.Serializable;
-
-public class Player implements Serializable {
+public class Player {
     
-    private static final long serialVersionUID = 684898298341945719L;
+    public static final int CONNECTION_LOST = -1;
+    public static final int CONNECTION_WARNING = 0;
+    public static final int CONNECTION_OK = 1;
     private String name;
     public Tally tally; // TODO what was that for ???
     private boolean isReady;
-    public int connectivity;
+    private int connectivity;
     
     public Player(String name) {
         this.name = name;
@@ -18,11 +18,27 @@ public class Player implements Serializable {
     
     @Override
     public String toString() {
-        return name + " | ready: " + isReady;
+        String conStr = "";
+        switch(connectivity) {
+            case 1:
+                conStr = "OK";
+                break;
+            case 0:
+                conStr = "WARNING";
+                break;
+            case -1:
+                conStr = "LOST";
+                break;
+        }
+        return name + " | ready: " + isReady + " | " + conStr;
     }
     
     public String getName() {
         return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
     }
     
     public boolean isReady() {
@@ -31,5 +47,13 @@ public class Player implements Serializable {
     
     public void setReady(boolean ready) {
         isReady = ready;
+    }
+    
+    public int getConnectivity() {
+        return connectivity;
+    }
+    
+    public void setConnectivity(int connectivity) {
+        this.connectivity = connectivity;
     }
 }

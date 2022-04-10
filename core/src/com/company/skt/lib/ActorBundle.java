@@ -30,6 +30,7 @@ public class ActorBundle<T extends Actor> extends Actor implements Initialize_Up
   }
   
   public T findActor(String name) {
+    // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
     for(T actor : actors) {
       if(actor.getName().equals(name)) {
         return actor;
@@ -39,6 +40,7 @@ public class ActorBundle<T extends Actor> extends Actor implements Initialize_Up
   }
   
   public void initialize(){
+    // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
     for(T actor : actors) {
       if(actor instanceof Initialize_Update)
         ((Initialize_Update)actor).initialize();
@@ -53,6 +55,7 @@ public class ActorBundle<T extends Actor> extends Actor implements Initialize_Up
   @Override
   public void update(float delta) {
     Initialize_Update.super.update(delta);
+    // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
     for(T actor : actors) {
       if(actor instanceof Initialize_Update)
         ((Initialize_Update)actor).update(delta);
@@ -62,6 +65,7 @@ public class ActorBundle<T extends Actor> extends Actor implements Initialize_Up
   @Override
   public void act(float delta) {
     super.act(delta);
+    // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
     for(T actor : actors) {
       actor.act(delta);
     }
@@ -71,6 +75,7 @@ public class ActorBundle<T extends Actor> extends Actor implements Initialize_Up
   public void draw(Batch batch, float parentAlpha) {
     super.draw(batch, parentAlpha);
     if (isVisible()) {
+      // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
       for(T actor : actors) {
         if (actor.isVisible()) {
           actor.draw(batch, parentAlpha);

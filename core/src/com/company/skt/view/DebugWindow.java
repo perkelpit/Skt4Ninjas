@@ -143,9 +143,9 @@ public class DebugWindow extends JFrame {
                 stringBuilder.append("        ### LOBBY ###        " + "\n");
                 stringBuilder.append("Host: " + SessionData.isHost() + "\n");
                 stringBuilder.append("-----------------------------" + "\n");
-                stringBuilder.append("Player0: " + data.getPlayer(0) + "\n");
-                stringBuilder.append("Player1: " + data.getPlayer(1) + "\n");
-                stringBuilder.append("Player2: " + data.getPlayer(2) + "\n");
+                stringBuilder.append("P0: " + data.getPlayer(0) + "\n");
+                stringBuilder.append("P1: " + data.getPlayer(1) + "\n");
+                stringBuilder.append("P2: " + data.getPlayer(2) + "\n");
                 stringBuilder.append("-----------------------------" + "\n");
                 stringBuilder.append("      Session Settings:      " + "\n");
                 for (String key : data.getSessionCfg().stringPropertyNames()) {

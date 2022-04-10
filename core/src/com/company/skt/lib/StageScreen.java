@@ -4,10 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.company.skt.model.Assets;
 import com.company.skt.controller.Utils;
+import com.company.skt.model.Assets;
 
 public abstract class StageScreen implements Screen, InputProcessor, Initialize_Update {
     
@@ -33,12 +32,11 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     public void update(float delta) {
         Initialize_Update.super.update(delta);
     }
-    
-    public abstract AssetManager getAssets();
 
     /** disposes and removes Stage by name from stagesArray */
     public void removeStage(String stageName){
         boolean found = false;
+        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
         for (UpdateStage stage : layeredStages.getStages()){
             if (stageName.equals(stage.getName())){
                 layeredStages.removeStage(stage);
@@ -73,6 +71,7 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     @Override
     public void hide() {
         inputMultiplexer.removeProcessor(this);
+        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
         for(UpdateStage stage : layeredStages.getStages()) {
             inputMultiplexer.removeProcessor(stage);
         }
@@ -115,6 +114,7 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     
     public UpdateStage findStage(String name){
         UpdateStage returnStage = null;
+        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
         for (UpdateStage stage : layeredStages.getStages()){
             if(stage.getName().equals(name)){
                 returnStage = stage;

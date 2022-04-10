@@ -35,6 +35,7 @@ public class BaseGroup extends Group implements Initialize_Update, Named {
     @Override
     public void update(float delta) {
         Initialize_Update.super.update(delta);
+        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
         for(Actor child : getAllChildren()) {
             ((Initialize_Update)child).update(delta);
         }
@@ -56,6 +57,7 @@ public class BaseGroup extends Group implements Initialize_Update, Named {
     }
     
     public BaseGroup overlaps(ActorBundle<? extends BaseGroup> actorBundle) {
+        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
         for(BaseGroup baseGroup : actorBundle.getActors()) {
             if(!(this == baseGroup)) {
                 if(overlaps(baseGroup)) {
@@ -135,12 +137,14 @@ public class BaseGroup extends Group implements Initialize_Update, Named {
     public void addActor(Actor actor) {
         super.addActor(actor);
         Vector2 size = new Vector2();
+        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
         for(Actor a : getAllChildren()) {
             size.x = Math.max(a.getWidth(), size.x);
             size.y = Math.max(a.getHeight(), size.y);
         }
         setSize(size.x, size.y);
         setOrigin(Align.center);
+        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
         for(Actor a : getAllChildren()) {
             if (a.getWidth() < getWidth()) {
                 a.setX((getWidth() - a.getWidth()) / 2f);
@@ -153,6 +157,7 @@ public class BaseGroup extends Group implements Initialize_Update, Named {
     
     private Array<Actor> createActorsList(Actor actor, Array<Actor> list){
         if(actor instanceof Group && ((Group)actor).getChildren() != null) {
+            // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
             for (Actor child : ((Group)actor).getChildren()){
                 list = createActorsList(child, list);
             }

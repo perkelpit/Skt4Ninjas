@@ -1,17 +1,20 @@
 package com.company.skt.model;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Null;
 import com.company.skt.controller.Menu;
+import com.company.skt.controller.Play;
 import com.company.skt.controller.Utils;
 import com.company.skt.lib.GameList;
 import com.company.skt.lib.Player;
-import com.company.skt.view.DebugWindow;
+import com.company.skt.lib.StageScreen;
 
-import java.util.Arrays;
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.Enumeration;
 import java.util.Properties;
 
-public class SessionData {
+public class SessionData implements Serializable {
     
     private static SessionData data;
     private static boolean isHost;
@@ -43,13 +46,31 @@ public class SessionData {
         data = null;
     }
     
-    public synchronized static String getCfgString() {
-        StringBuilder cfgString = new StringBuilder("CFG>");
+    public synchronized static String getDataStringForClient() {
+        StringBuilder cfgString = new StringBuilder("SDATA>");
+        /* ### gameCfg ### */
+        cfgString.append("CFG{"); // begin gameCfg
         Enumeration<?> keys = data.getSessionCfg().propertyNames();
         while(keys.hasMoreElements()) {
             String keyStr = keys.nextElement().toString();
             cfgString.append(keyStr).append("=").append(data.getCfgValue(keyStr)).append(";");
         }
+        cfgString.append("}"); // end gameCfg
+        /* ### players ### */
+        cfgString.append("PLAYERS{"); // begin players
+        for(int i = 0; i < 3; i++) {
+            cfgString.append(i + "{"); // begin player(i)
+            Player player = data.getPlayer(i);
+            if(player != null) {
+                cfgString.append(player.getName()).append(";");
+                cfgString.append(player.isReady()).append(";");
+                cfgString.append(player.getConnectivity()).append(";");
+            } else {
+                cfgString.append("null");
+            }
+            cfgString.append("}"); // end player(i)
+        }
+        cfgString.append("}"); // end players
         return cfgString.toString();
     }
     
@@ -149,7 +170,29 @@ public class SessionData {
     }
     
     private static void changed() {
-        ((Menu)Utils.getCurrentScreen()).event("LOBBY_DATA_HAS_CHANGED");
+        StageScreen screen = Utils.getCurrentScreen();
+        if(screen instanceof Menu) {
+            ((Menu)Utils.getCurrentScreen()).event("SESSION_DATA_CHANGED");
+        }
+        if(screen instanceof Play) {
+            ((Play)Utils.getCurrentScreen()).event("SESSION_DATA_CHANGED");
+        }
+    }
+    
+    public static void save(String path) {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path))) {
+            out.writeObject(data);
+        } catch (IOException e) {e.printStackTrace();}
+    }
+    
+    public static SessionData load(String path) {
+        SessionData loadedData = null;
+        if (new File(path).exists()) {
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(path))) {
+                loadedData = (SessionData)in.readObject();
+            } catch (IOException | ClassNotFoundException e) {e.printStackTrace();}
+        }
+        return loadedData;
     }
     
 }

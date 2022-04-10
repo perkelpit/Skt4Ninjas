@@ -1,7 +1,6 @@
 package com.company.skt;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics.*;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Window;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
@@ -12,14 +11,16 @@ import com.company.skt.model.Fonts;
 import com.company.skt.model.Local;
 import com.company.skt.view.DebugWindow;
 
+import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Skt extends ScreenController {
+	
+	private static String basePath;
 	private static boolean debug;
 	private Lwjgl3Graphics graphics;
-	private DisplayMode displayMode;
 	private Lwjgl3Window window;
 	private static ScheduledExecutorService debugWindowPositionUpdater;
 
@@ -30,12 +31,12 @@ public class Skt extends ScreenController {
 	@Override
 	public void create () {
 		super.create();
+		basePath = new File("assets/").exists() ? "assets/" : "";
 		graphics = (Lwjgl3Graphics)Gdx.graphics;
-		displayMode = graphics.getDisplayMode();
 		window = graphics.getWindow();
-		Local.boot("assets/local/");
-		Fonts.boot("assets/fonts/");
-		Assets.boot("assets/");
+		Local.boot(basePath + "local/");
+		Fonts.boot(basePath + "fonts/");
+		Assets.boot(basePath);
 		DebugWindow.createDebugWindow("assets/logs/");
 		if(debug) {
 			DebugWindow.showDebugWindow();
@@ -73,4 +74,9 @@ public class Skt extends ScreenController {
 	public static boolean isDebug() {
 		return debug;
 	}
+	
+	public static String getBasePath() {
+		return basePath;
+	}
+	
 }

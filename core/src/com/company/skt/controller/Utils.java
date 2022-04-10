@@ -134,11 +134,6 @@ public abstract class Utils {
         return Math.random() < 0.5;
     }
     
-    
-    public static AssetManager getCurrentAssets() {
-        return currentScreen.getAssets();
-    }
-    
     public static StageScreen getCurrentScreen() {
         return currentScreen;
     }
