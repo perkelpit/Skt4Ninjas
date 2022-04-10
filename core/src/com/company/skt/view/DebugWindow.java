@@ -77,6 +77,7 @@ public class DebugWindow extends JFrame {
     }
 
     public static void println(String string) {
+        log(string);
         if (textAreaBottom != null) {
             textAreaBottom.append(string + "\n");
             try {
@@ -85,7 +86,6 @@ public class DebugWindow extends JFrame {
                 e.printStackTrace();
             }
         }
-        log(string);
     }
     
     private static void prepareLogging() throws IOException {
