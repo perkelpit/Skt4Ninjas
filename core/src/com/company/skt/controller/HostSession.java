@@ -39,6 +39,7 @@ public class HostSession extends Session {
         sessionData = SessionData.get(true);
         Player self = new Player(appCfg.getProperty("player_name"));
         self.setConnectivity(1);
+        self.setReady(true);
         sessionData.setPlayer(self, 0);
         try {
             serverSocket = new ServerSocket(PORT);

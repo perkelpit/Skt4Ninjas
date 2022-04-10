@@ -68,8 +68,9 @@ public class ClientHandler implements Runnable {
                     noPongCount = 0;
                     if(player != null) {
                         if(player.getConnectivity() != Player.CONNECTION_OK) {
+                            System.out.println(handlerTag + " setConnectivity -> OK");
                             player.setConnectivity(Player.CONNECTION_OK);
-                            sessionData.setPlayer(player, playerNumber);
+                            SessionData.changed();
                         }
                     }
                 } else {
@@ -77,7 +78,7 @@ public class ClientHandler implements Runnable {
                     if (noPongCount == 20 ) {
                         if(player != null) {
                             player.setConnectivity(Player.CONNECTION_WARNING);
-                            sessionData.setPlayer(player, playerNumber);
+                            SessionData.changed();
                         }
                         DebugWindow.println(handlerTag + " connection warning");
                     }
@@ -85,8 +86,8 @@ public class ClientHandler implements Runnable {
                         if(player != null) {
                             if(player.getConnectivity() != Player.CONNECTION_LOST) {
                                 player.setConnectivity(Player.CONNECTION_LOST);
-                                sessionData.setPlayer(player, playerNumber);
                                 player.setReady(false);
+                                SessionData.changed();
                             }
                         }
                         DebugWindow.println(handlerTag + " client lost");
@@ -229,7 +230,8 @@ public class ClientHandler implements Runnable {
     
     void parseAndSetPlayer(String playerString) {
         String name = playerString.substring(playerString.indexOf('>') + 1);
-        SessionData.get().setPlayer(new Player(name), playerNumber);
+        player = new Player(name);
+        SessionData.get().setPlayer(player, playerNumber);
     }
     
 }

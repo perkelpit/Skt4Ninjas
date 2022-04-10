@@ -166,7 +166,7 @@ public class SessionData implements Serializable {
         return gameList;
     }
     
-    private static void changed() {
+    public static void changed() {
         StageScreen screen = Utils.getCurrentScreen();
         if(screen instanceof Menu) {
             ((Menu)Utils.getCurrentScreen()).event("SESSION_DATA_CHANGED");
