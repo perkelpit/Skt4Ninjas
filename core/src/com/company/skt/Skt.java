@@ -33,6 +33,10 @@ public class Skt extends ScreenController {
 		Local.boot("assets/local/");
 		Fonts.boot("assets/fonts/");
 		Assets.boot("assets/");
+		DebugWindow.createDebugWindow("assets/logs/");
+		if(debug) {
+			DebugWindow.showDebugWindow();
+		}
 		graphics = (Lwjgl3Graphics)Gdx.graphics;
 		displayMode = graphics.getDisplayMode();
 		window = graphics.getWindow();
@@ -63,10 +67,6 @@ public class Skt extends ScreenController {
 			debugWindowPositionUpdater.scheduleAtFixedRate(() -> {
 				DebugWindow.setPosition(window.getPositionX() - 400, window.getPositionY() - 30);
 			}, 0, 5, TimeUnit.MILLISECONDS);
-		}
-		DebugWindow.createDebugWindow();
-		if(debug) {
-			DebugWindow.showDebugWindow();
 		}
 		setActiveScreen(new Menu());
 	}

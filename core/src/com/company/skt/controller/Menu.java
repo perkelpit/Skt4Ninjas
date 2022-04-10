@@ -45,7 +45,7 @@ public class Menu extends StageScreen {
                 session = new ClientSession();
                 break;
             case "ARCHIVE":
-                DebugWindow.println("Archive clicked");
+                DebugWindow.println("[MainMenu] archive clicked");
                 DebugWindow.setUIFocus(DebugWindow.Focus.Archive);
                 break;
             case "SETTINGS":
@@ -54,7 +54,7 @@ public class Menu extends StageScreen {
                 setStageActive("settingsUI", true);
                 break;
             case "CREDITS":
-                DebugWindow.println("Credits clicked");
+                DebugWindow.println("[MainMenu] credits clicked");
                 break;
             case "EXIT":
                 if(Skt.isDebug()) {
@@ -65,7 +65,7 @@ public class Menu extends StageScreen {
                 break;
             // *** SETTINGS MENU-CLICKS ***
             case "CHANGE_NAME":
-                DebugWindow.println("Change name clicked");
+                DebugWindow.println("[Settings] change name clicked");
                 break;
             case "QUIT_SETTINGS":
                 DebugWindow.setUIFocus(DebugWindow.Focus.Main);
@@ -88,7 +88,7 @@ public class Menu extends StageScreen {
     public void event(String eventName) {
         switch(eventName) {
             case "READY_FOR_LOBBY":
-                DebugWindow.println("Event: READY_FOR_LOBBY");
+                DebugWindow.println("[Menu|Event] ready for lobby");
                 Gdx.app.postRunnable(() -> {
                     addStage(new LobbyUI("lobbyUI", true));
                     setStageActive("mainMenuUI", false);
@@ -97,11 +97,11 @@ public class Menu extends StageScreen {
                 DebugWindow.update();
                 break;
             case "READY_FOR_SUMMARY":
-                DebugWindow.println("Event: READY_FOR_SUMMARY");
+                DebugWindow.println("[Menu|Event] ready for summary");
                 // TODO open SummaryUI
                 break;
             case "LOBBY_DATA_HAS_CHANGED":
-                DebugWindow.println("Event: LOBBY_DATA_HAS_CHANGED");
+                DebugWindow.println("[Menu|Event] lobby data changed");
                 // TODO update lobbyUI accordingly + if(host): broadcast changes
                 DebugWindow.update();
                 if(findStage("lobbyUI") != null) {
@@ -109,15 +109,15 @@ public class Menu extends StageScreen {
                 }
                 break;
             case "CONNECTION_WARNING_PLAYER_1":
-                DebugWindow.println("Event: CONNECTION_WARNING_PLAYER_1");
+                DebugWindow.println("[Menu|Event] connection warning player1");
                 // TODO p1
                 break;
             case "CONNECTION_WARNING_PLAYER_2":
-                DebugWindow.println("Event: CONNECTION_WARNING_PLAYER_2");
+                DebugWindow.println("[Menu|Event] connection warning player2");
                 // TODO p2
                 break;
             case "LEAVE_LOBBY":
-                DebugWindow.println("Event: LEAVE_LOBBY");
+                DebugWindow.println("[Menu|Event] leave lobby");
                 DebugWindow.setUIFocus(DebugWindow.Focus.Main);
                 setStageActive("mainMenuUI", true);
                 setStageActive("lobbyUI", false);

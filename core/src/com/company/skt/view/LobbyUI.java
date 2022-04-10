@@ -133,8 +133,6 @@ public class LobbyUI extends UpdateStage {
 
     public void updateUI(){
         SessionData data = SessionData.get();
-        // DEBUG NullPointer in "player0Name.setText(SessionData.get().getPlayer(0).getName());" ?!?!?
-        DebugWindow.println("updateUI() called");
         if (data.getPlayer(0) != null) {
             player0Name.setText(data.getPlayer(0).getName());
         }

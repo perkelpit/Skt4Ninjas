@@ -1,14 +1,21 @@
 package com.company.skt.view;
 
 import com.company.skt.model.SessionData;
+import org.lwjgl.system.CallbackI;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DebugWindow extends JFrame {
-
+    
     public enum Focus {
         Main, Settings, Archive, Lobby, Summary, Game
     }
@@ -22,11 +29,15 @@ public class DebugWindow extends JFrame {
     private static String archiveData;
     private static String summaryData;
     private static String gameData;
+    private static File logFolder;
+    private static File logFile;
     private static Focus focus;
+    private static DateTimeFormatter dateTimeFormatter;
+    private static LocalDateTime now;
 
-    public static void createDebugWindow() {
+    public static void createDebugWindow(String logPath) {
         if (debugWindow == null) {
-            debugWindow = new DebugWindow();
+            debugWindow = new DebugWindow(logPath);
         }
         debugWindow.setVisible(false);
         update();
@@ -65,55 +76,6 @@ public class DebugWindow extends JFrame {
         update();
     }
 
-    public DebugWindow() {
-        focus = Focus.Main;
-        Dimension windowSize = new Dimension(400, 750);
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        setType(Type.UTILITY);
-        setSize(windowSize);
-        setMinimumSize(windowSize);
-        setPreferredSize(windowSize);
-        setUndecorated(true);
-        getContentPane().setSize(windowSize);
-        getContentPane().setPreferredSize(windowSize);
-        getContentPane().setMinimumSize(windowSize);
-        getContentPane().setLayout(new FlowLayout());
-        Dimension topAreaSize = new Dimension(windowSize.width - 10, (windowSize.height / 2) - 5);
-        textAreaTop = new JTextArea();
-        textAreaTop.setSize(topAreaSize);
-        textAreaTop.setMinimumSize(topAreaSize);
-        textAreaTop.setPreferredSize(topAreaSize);
-        textAreaTop.setEditable(false);
-        textAreaTop.setFont(new Font("Arial", Font.PLAIN, 20));
-        textAreaTop.setEditable(false);
-        textAreaTop.setBackground(new Color(43, 49, 47));
-        textAreaTop.setForeground(new Color(95, 201, 197));
-        textAreaTop.setWrapStyleWord(true);
-        textAreaTop.setLineWrap(true);
-        JScrollPane scrollPaneTop = new JScrollPane(textAreaTop);
-        scrollPaneTop.setPreferredSize(topAreaSize);
-        ((DefaultCaret) textAreaTop.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        add(scrollPaneTop);
-        Dimension bottomAreaSize = new Dimension(windowSize.width - 10, ((windowSize.height / 2) - 5));
-        textAreaBottom = new JTextArea();
-        //textAreaBottom.setSize(dimension);
-        textAreaBottom.setMinimumSize(bottomAreaSize);
-        //textAreaBottom.setPreferredSize(dimension);
-        textAreaBottom.setEditable(false);
-        textAreaBottom.setFont(new Font("Arial", Font.PLAIN, 20));
-        textAreaBottom.setEditable(false);
-        textAreaBottom.setBackground(new Color(43, 49, 47));
-        textAreaBottom.setForeground(new Color(95, 201, 197));
-        textAreaBottom.setWrapStyleWord(true);
-        textAreaBottom.setLineWrap(true);
-        JScrollPane scrollPaneBottom = new JScrollPane(textAreaBottom);
-        scrollPaneBottom.setPreferredSize(bottomAreaSize);
-        ((DefaultCaret) textAreaBottom.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        add(scrollPaneBottom);
-        setVisible(false);
-        pack();
-    }
-
     public static void println(String string) {
         if (textAreaBottom != null) {
             textAreaBottom.append(string + "\n");
@@ -123,6 +85,26 @@ public class DebugWindow extends JFrame {
                 e.printStackTrace();
             }
         }
+        log(string);
+    }
+    
+    private static void prepareLogging() throws IOException {
+        if(!(logFolder.exists())) {
+            if(!logFolder.mkdir()) throw new IOException();
+        }
+        if(logFile.exists()) {
+            if(!logFile.delete()) throw new IOException();
+        }
+        if(!logFile.createNewFile()) throw new IOException();
+    }
+    
+    private static void log(String string) {
+        now = LocalDateTime.now();
+        dateTimeFormatter.format(now);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile, true))) {
+            writer.write("[" + now + "]" + string);
+            writer.newLine();
+        } catch(Exception e) {e.printStackTrace();}
     }
     
     public static void update() {
@@ -202,6 +184,59 @@ public class DebugWindow extends JFrame {
                 archiveData = stringBuilder.toString();
                 break;
         }
+    }
+    
+    public DebugWindow(String logPath) {
+        logFolder = new File(logPath);
+        logFile = new File(logPath + "lastLog.txt");
+        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
+        focus = Focus.Main;
+        try {prepareLogging();} catch(IOException e) {e.printStackTrace();}
+        Dimension windowSize = new Dimension(400, 750);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        setType(Type.UTILITY);
+        setSize(windowSize);
+        setMinimumSize(windowSize);
+        setPreferredSize(windowSize);
+        setUndecorated(true);
+        getContentPane().setSize(windowSize);
+        getContentPane().setPreferredSize(windowSize);
+        getContentPane().setMinimumSize(windowSize);
+        getContentPane().setLayout(new FlowLayout());
+        Dimension topAreaSize = new Dimension(windowSize.width - 10, (windowSize.height / 2) - 5);
+        textAreaTop = new JTextArea();
+        //textAreaTop.setSize(topAreaSize);
+        textAreaTop.setMinimumSize(topAreaSize);
+        //textAreaTop.setPreferredSize(topAreaSize);
+        textAreaTop.setEditable(false);
+        textAreaTop.setFont(new Font("Arial", Font.PLAIN, 20));
+        textAreaTop.setEditable(false);
+        textAreaTop.setBackground(new Color(43, 49, 47));
+        textAreaTop.setForeground(new Color(95, 201, 197));
+        textAreaTop.setWrapStyleWord(true);
+        textAreaTop.setLineWrap(true);
+        JScrollPane scrollPaneTop = new JScrollPane(textAreaTop);
+        scrollPaneTop.setPreferredSize(topAreaSize);
+        ((DefaultCaret) textAreaTop.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        add(scrollPaneTop);
+        Dimension bottomAreaSize = new Dimension(windowSize.width - 10, ((windowSize.height / 2) - 5));
+        textAreaBottom = new JTextArea();
+        //textAreaBottom.setSize(dimension);
+        textAreaBottom.setMinimumSize(bottomAreaSize);
+        //textAreaBottom.setPreferredSize(dimension);
+        textAreaBottom.setEditable(false);
+        textAreaBottom.setFont(new Font("Arial", Font.PLAIN, 20));
+        textAreaBottom.setEditable(false);
+        textAreaBottom.setBackground(new Color(43, 49, 47));
+        textAreaBottom.setForeground(new Color(95, 201, 197));
+        textAreaBottom.setWrapStyleWord(true);
+        textAreaBottom.setLineWrap(true);
+        JScrollPane scrollPaneBottom = new JScrollPane(textAreaBottom);
+        scrollPaneBottom.setPreferredSize(bottomAreaSize);
+        ((DefaultCaret) textAreaBottom.getCaret()).setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        add(scrollPaneBottom);
+        setVisible(false);
+        pack();
     }
     
 }

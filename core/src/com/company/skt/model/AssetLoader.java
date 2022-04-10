@@ -41,6 +41,7 @@ class AssetLoader {
         this.screenName = screenName;
         refResPngPath = basePath + screenName + "/" + "art/";
         audioPath = basePath + screenName + "/" + "audio/";
+        DebugWindow.println("[AssetLoader] processing resolution settings");
         currentResStr = appCfg.getProperty("resolution_x") + "x" +
                                appCfg.getProperty("resolution_y");
         if(currentResStr.equals(appCfg.getProperty("ref_res"))) {
@@ -73,6 +74,7 @@ class AssetLoader {
     }
     
     void finishLoading() {
+        DebugWindow.println("[AssetLoader] loading all assets at once");
         aM.finishLoading();
     }
     
@@ -100,10 +102,14 @@ class AssetLoader {
         pngList.clear();
         soundList.clear();
         musicList.clear();
-        DebugWindow.println("listFiles()"); // DEBUG
+
         if(!pngPath.equals(refResPngPath)) {
+            DebugWindow.println("[AssetLoader] not std-resolution -> analyzing assets");
             scaleAndCache();
+        } else {
+            DebugWindow.println("[AssetLoader] std-resolution detected");
         }
+        DebugWindow.println("[AssetLoader] listing asset files");
         for(File file : new File(pngPath).listFiles()) {
             if(file.isFile()) {
                 if(file.getName().endsWith("png")) {
@@ -124,7 +130,6 @@ class AssetLoader {
     }
     
     private void scaleAndCache() {
-        DebugWindow.println("scaleAndCache()"); // DEBUG
         Array<String> refPngList = new Array<>();
         for(File file : new File(refResPngPath).listFiles()) {
             if(file.isFile()) {
@@ -135,13 +140,11 @@ class AssetLoader {
         }
         boolean filesOk = false;
         File cacheFolder = new File(pngPath);
-        DebugWindow.println("CacheFolder:" + cacheFolder.getPath()); // DEBUG
         File cacheCfg = new File(pngPath + "cache.cfg");
-        DebugWindow.println(cacheCfg.getPath()); // DEBUG
         
         // cache folder does not exist : create new folder and cfg, write cache-resolution to cfg
         if(!(cacheFolder.exists())) {
-            DebugWindow.println("Cache-Folder does not exist"); // DEBUG
+            DebugWindow.println("[AssetLoader] cache folder does not exist");
             if(!cacheFolder.mkdir()) ioError();
             try {
                 if(!cacheCfg.createNewFile()) ioError();
@@ -151,26 +154,28 @@ class AssetLoader {
             } catch(Exception e) {ioError();}
         // cache folder exists
         } else {
-            DebugWindow.println("Cache-Folder exists"); // DEBUG
+            DebugWindow.println("[AssetLoader] cache folder exists");
             // cache folder exists, but cacheCfg does not exist
             if(!(cacheCfg.exists())) {
-                DebugWindow.println("Cache-Cfg does not exist"); // DEBUG
+                DebugWindow.println("[AssetLoader] cache cfg does not exist");
                 // create new cacheCfg
                 try {
                     if(!cacheCfg.createNewFile()) ioError();
-                    DebugWindow.println("Cache-Cfg created @" + cacheCfg.getPath()); // DEBUG
+                    DebugWindow.println("cache cfg created @" + cacheCfg.getPath());
                 } catch(Exception ignored) {}
                 try(BufferedWriter writer = new BufferedWriter(new FileWriter(cacheCfg))) {
                     writer.write(currentResStr + "\n");
                 } catch(Exception e) {ioError();}
             // cacheCfg exists
             } else {
+                DebugWindow.println("[AssetLoader] cache cfg exists -> reading");
                 String cacheResStr = "";
                 try(BufferedReader reader = new BufferedReader(new FileReader(cacheCfg))) {
                     cacheResStr = reader.readLine();
                 } catch (Exception e) {ioError();}
                 if(cacheResStr.equals(currentResStr)) {
                     filesOk = true;
+                    DebugWindow.println("[AssetLoader] checking assets files in cache");
                     for(String fileName : refPngList) {
                         if(!(new File(pngPath + fileName).exists())) {
                             filesOk = false;
@@ -181,6 +186,8 @@ class AssetLoader {
         }
         
         if(!filesOk) {
+            DebugWindow.println("[AssetLoader] cached assets need some work");
+            DebugWindow.println("[AssetLoader] scaling and caching assets");
             // delete all files in folder
             for(File file : cacheFolder.listFiles()) {
                 if(!file.getPath().endsWith("cfg")) {
@@ -201,11 +208,13 @@ class AssetLoader {
                 Utils.scaleAndCachePng(refResPngPath + pngName, pngPath + pngName,
                                        scaleFactorX, scaleFactorY, Pixmap.Filter.BiLinear);
             }
+        } else {
+            DebugWindow.println("[AssetLoader] cached assets ok");
         }
     }
     
     private void ioError() {
-        JOptionPane.showConfirmDialog(null, "FileIO-Error! App closed! \n"
+        JOptionPane.showConfirmDialog(null, "FileIO error! App closed! \n"
                                          + "Ensure correct permission levels for app folder!",
                                       "Error", JOptionPane.DEFAULT_OPTION);
         Gdx.app.exit();

@@ -139,8 +139,6 @@ public class ClientHandler implements Runnable {
             try {stopClientHandler();} catch(IOException e) {e.printStackTrace();}
         } else {
             DebugWindow.println(handlerTag + " connected");
-            //sendString("CFG>amount_games=6;time_limit=0;lost_factor=-2;ramsch=true;"); // DEBUG
-            //TODO DEBUG why the heck causes the following line the calling thread to freeze?!?(seems so)
             sendString(SessionData.getCfgString());
         }
     }
