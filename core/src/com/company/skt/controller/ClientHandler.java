@@ -53,6 +53,7 @@ public class ClientHandler implements Runnable {
         public void start() {
             DebugWindow.println(handlerTag + " starting heartbeat");
             hostSession.getExecutor().scheduleAtFixedRate(() -> {
+                System.out.println(handlerTag + "heartbeat-loop");
                 if(stop) {
                     DebugWindow.println(handlerTag + " stopping heartbeat");
                     throw new TaskCompleteException();

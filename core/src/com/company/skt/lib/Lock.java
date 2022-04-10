@@ -9,17 +9,13 @@ public class Lock {
     public synchronized void syncWait() {
         try {
             this.wait();
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        } catch(InterruptedException ignored) {}
     }
 
     public synchronized void syncWait(long ms) {
         try {
             this.wait(ms);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        } catch(InterruptedException ignored) {}
     }
     
     public synchronized void syncNotify() {
