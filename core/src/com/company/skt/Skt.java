@@ -30,39 +30,34 @@ public class Skt extends ScreenController {
 	@Override
 	public void create () {
 		super.create();
+		graphics = (Lwjgl3Graphics)Gdx.graphics;
+		displayMode = graphics.getDisplayMode();
+		window = graphics.getWindow();
 		Local.boot("assets/local/");
 		Fonts.boot("assets/fonts/");
 		Assets.boot("assets/");
 		DebugWindow.createDebugWindow("assets/logs/");
 		if(debug) {
 			DebugWindow.showDebugWindow();
-		}
-		graphics = (Lwjgl3Graphics)Gdx.graphics;
-		displayMode = graphics.getDisplayMode();
-		window = graphics.getWindow();
-		window.setWindowListener(new Lwjgl3WindowAdapter() {
-			@Override
-			public boolean closeRequested() {
-				if(debug) {
-					debugWindowPositionUpdater.shutdownNow();
+			window.setWindowListener(new Lwjgl3WindowAdapter() {
+				@Override
+				public boolean closeRequested() {
+					DebugWindow.disposeDebugWindow();
+					return true;
 				}
-				DebugWindow.disposeDebugWindow();
-				return true;
-			}
-			
-			@Override
-			public void iconified(boolean isIconified) {
-				if(!isIconified) {
+				
+				@Override
+				public void iconified(boolean isIconified) {
+					if(!isIconified) {
+						DebugWindow.getWindow().toFront();
+					}
+				}
+				
+				@Override
+				public void focusGained() {
 					DebugWindow.getWindow().toFront();
 				}
-			}
-			
-			@Override
-			public void focusGained() {
-				DebugWindow.getWindow().toFront();
-			}
-		});
-		if(debug) {
+			});
 			debugWindowPositionUpdater = Executors.newSingleThreadScheduledExecutor();
 			debugWindowPositionUpdater.scheduleAtFixedRate(() -> {
 				DebugWindow.setPosition(window.getPositionX() - 400, window.getPositionY() - 30);
