@@ -53,21 +53,24 @@ public class ClientHandler implements Runnable {
         public void start() {
             DebugWindow.println(handlerTag + " starting heartbeat");
             hostSession.getExecutor().scheduleAtFixedRate(() -> {
-                System.out.println(handlerTag + "heartbeat-loop");
                 if(stop) {
                     DebugWindow.println(handlerTag + " stopping heartbeat");
                     throw new TaskCompleteException();
                 }
                 pong = false;
                 sendString("PING");
+                System.out.println(handlerTag + " ping sended");
                 
                 lock.syncWait(pingRate - 50);
                 
                 if (pong) {
+                    System.out.println(handlerTag + " pong == true");
                     noPongCount = 0;
                     if(player != null) {
-                        player.setConnectivity(Player.CONNECTION_OK);
-                        sessionData.setPlayer(player, playerNumber);
+                        if(player.getConnectivity() != Player.CONNECTION_OK) {
+                            player.setConnectivity(Player.CONNECTION_OK);
+                            sessionData.setPlayer(player, playerNumber);
+                        }
                     }
                 } else {
                     ++noPongCount;
@@ -80,9 +83,11 @@ public class ClientHandler implements Runnable {
                     }
                     if (noPongCount > 40) {
                         if(player != null) {
-                            player.setConnectivity(Player.CONNECTION_LOST);
-                            sessionData.setPlayer(player, playerNumber);
-                            player.setReady(false);
+                            if(player.getConnectivity() != Player.CONNECTION_LOST) {
+                                player.setConnectivity(Player.CONNECTION_LOST);
+                                sessionData.setPlayer(player, playerNumber);
+                                player.setReady(false);
+                            }
                         }
                         DebugWindow.println(handlerTag + " client lost");
                         try {stopClientHandler();} catch (IOException e) {e.printStackTrace();}

@@ -78,17 +78,14 @@ public class SessionData implements Serializable {
         if((playerNumber >= 0) && (playerNumber < 3)) {
             switch(playerNumber) {
                 case 0:
-                    if(player0 != player) {
-                        player0 = player;
-                    } break;
+                    player0 = player;
+                    break;
                 case 1:
-                    if(player1 != player) {
-                        player1 = player;
-                    } break;
+                    player1 = player;
+                    break;
                 case 2:
-                    if(player2 != player) {
-                        player2 = player;
-                    } break;
+                    player2 = player;
+                    break;
             }
         }
         changed();
