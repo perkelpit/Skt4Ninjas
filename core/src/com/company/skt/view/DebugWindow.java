@@ -187,8 +187,14 @@ public class DebugWindow extends JFrame {
     }
     
     public DebugWindow(String logPath) {
+        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
         logFolder = new File(logPath);
-        logFile = new File(logPath + "lastLog.txt");
+        now = LocalDateTime.now();
+        dateTimeFormatter.format(now);
+        String nowStr = now.toString();
+        nowStr = nowStr.replace(":","-");
+        nowStr = nowStr.replace("T","_");
+        logFile = new File(logPath + nowStr + ".log");
         dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
         focus = Focus.Main;
         try {prepareLogging();} catch(IOException e) {e.printStackTrace();}
