@@ -5,6 +5,7 @@ import com.company.skt.Skt;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.model.Assets;
 import com.company.skt.model.SessionData;
+import com.company.skt.model.Settings;
 import com.company.skt.view.*;
 
 import java.io.IOException;
@@ -75,6 +76,17 @@ public class Menu extends StageScreen {
                 setStageActive("lobbyUI", false);
                 removeStage("lobbyUI");
                 setStageActive("mainMenuUI", true);
+                break;
+            case "GAME_SETTINGS_CHANGED":
+                // overwrite game.txt with lobby ui values
+                Settings.setProperty(Settings.GAME, "amount_games",
+                        ((LobbyUI)findStage("lobbyUI")).numberOfGamesSelectBox.getSelected());
+                Settings.setProperty(Settings.GAME, "time_limit",
+                        ((LobbyUI)findStage("lobbyUI")).timeLimitSelectBox.getSelected());
+                Settings.setProperty(Settings.GAME, "lost_factor",
+                        ((LobbyUI)findStage("lobbyUI")).lostFactorSelectBox.getSelected());
+                Settings.setProperty(Settings.GAME, "ramsch",
+                        String.valueOf(((LobbyUI)findStage("lobbyUI")).junkCheckbox.isChecked()));
                 break;
             default :
                 DebugWindow.println("buttonName " + buttonName + " in " +

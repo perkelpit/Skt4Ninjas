@@ -1,5 +1,5 @@
-#Fri Oct 01 23:10:33 CEST 2021
-amount_games=6
-time_limit=0
-lost_factor=-2
-ramsch=true
+#Mon Apr 11 19:15:26 CEST 2022
+lost_factor=-1
+ramsch=false
+amount_games=18
+time_limit=Kein Zeitlimit
