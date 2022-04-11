@@ -37,8 +37,8 @@ public class Skt extends ScreenController {
 		Local.boot(basePath + "local/");
 		Fonts.boot(basePath + "fonts/");
 		Assets.boot(basePath);
-		DebugWindow.createDebugWindow("assets/logs/");
 		if(debug) {
+			DebugWindow.createDebugWindow("assets/logs/");
 			DebugWindow.showDebugWindow();
 			window.setWindowListener(new Lwjgl3WindowAdapter() {
 				@Override

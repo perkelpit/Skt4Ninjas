@@ -1,5 +1,6 @@
 package com.company.skt.view;
 
+import com.company.skt.Skt;
 import com.company.skt.model.SessionData;
 import org.lwjgl.system.CallbackI;
 
@@ -72,18 +73,22 @@ public class DebugWindow extends JFrame {
     }
     
     public static void setUIFocus(Focus focus) {
-        DebugWindow.focus = focus;
-        update();
+        if(Skt.isDebug()) {
+            DebugWindow.focus = focus;
+            update();
+        }
     }
 
     public static void println(String string) {
-        log(string);
-        if (textAreaBottom != null) {
-            textAreaBottom.append(string + "\n");
-            try {
-                textAreaBottom.setCaretPosition(textAreaBottom.getLineStartOffset(textAreaBottom.getLineCount() - 1));
-            } catch (BadLocationException e) {
-                e.printStackTrace();
+        if(Skt.isDebug()) {
+            log(string);
+            if (textAreaBottom != null) {
+                textAreaBottom.append(string + "\n");
+                try {
+                    textAreaBottom.setCaretPosition(textAreaBottom.getLineStartOffset(textAreaBottom.getLineCount() - 1));
+                } catch (BadLocationException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -108,27 +113,29 @@ public class DebugWindow extends JFrame {
     }
     
     public static void update() {
-        updateData();
-        if (textAreaTop != null) {
-            switch(focus) {
-                case Lobby:
-                    textAreaTop.setText(lobbyData);
-                    break;
-                case Main:
-                    textAreaTop.setText(mainData);
-                    break;
-                case Settings:
-                    textAreaTop.setText(settingsData);
-                    break;
-                case Archive:
-                    textAreaTop.setText(archiveData);
-                    break;
-                case Summary:
-                    textAreaTop.setText(summaryData);
-                    break;
-                case Game:
-                    textAreaTop.setText(gameData);
-                    break;
+        if(Skt.isDebug()) {
+            updateData();
+            if (textAreaTop != null) {
+                switch(focus) {
+                    case Lobby:
+                        textAreaTop.setText(lobbyData);
+                        break;
+                    case Main:
+                        textAreaTop.setText(mainData);
+                        break;
+                    case Settings:
+                        textAreaTop.setText(settingsData);
+                        break;
+                    case Archive:
+                        textAreaTop.setText(archiveData);
+                        break;
+                    case Summary:
+                        textAreaTop.setText(summaryData);
+                        break;
+                    case Game:
+                        textAreaTop.setText(gameData);
+                        break;
+                }
             }
         }
     }
@@ -186,7 +193,7 @@ public class DebugWindow extends JFrame {
         }
     }
     
-    public DebugWindow(String logPath) {
+    private DebugWindow(String logPath) {
         dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
         logFolder = new File(logPath);
         now = LocalDateTime.now();
@@ -244,5 +251,4 @@ public class DebugWindow extends JFrame {
         setVisible(false);
         pack();
     }
-    
 }
