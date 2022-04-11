@@ -27,7 +27,7 @@ public class TextureActor extends BaseActor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         batch.setColor(getColor());
-        if(isVisible()) { // TODO if(isVisible()) needed? (Stage does this on its own?)
+        if(isVisible()) {
             batch.draw(texture, getX(), getY(),
                        getOriginX(), getOriginY(), getWidth(), getHeight(),
                        getScaleX(), getScaleY(), getRotation());

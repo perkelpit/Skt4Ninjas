@@ -36,8 +36,9 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     /** disposes and removes Stage by name from stagesArray */
     public void removeStage(String stageName){
         boolean found = false;
-        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
-        for (UpdateStage stage : layeredStages.getStages()){
+        UpdateStage stage;
+        for (int i = 0; i < layeredStages.getStages().size; i++) {
+            stage = layeredStages.getStages().get(i);
             if (stageName.equals(stage.getName())){
                 layeredStages.removeStage(stage);
                 found = true;
@@ -71,8 +72,9 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     @Override
     public void hide() {
         inputMultiplexer.removeProcessor(this);
-        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
-        for(UpdateStage stage : layeredStages.getStages()) {
+        UpdateStage stage;
+        for (int i = 0; i < layeredStages.getStages().size; i++) {
+            stage = layeredStages.getStages().get(i);
             inputMultiplexer.removeProcessor(stage);
         }
         inputMultiplexer = null;
@@ -105,22 +107,22 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
                 stage.setActive(false);
                 inputMultiplexer.removeProcessor(stage);
             }
-        } else {
-            System.out.println("\u001B[31m" +
-                               "ERROR: No such stage in " + this.getClass().getSimpleName() + ": " + name +
-                               "\u001B[0m");
         }
     }
     
     public UpdateStage findStage(String name){
-        UpdateStage returnStage = null;
-        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
-        for (UpdateStage stage : layeredStages.getStages()){
+        UpdateStage stage;
+        for (int i = 0; i < layeredStages.getStages().size; i++) {
+            stage = layeredStages.getStages().get(i);
             if(stage.getName().equals(name)){
-                returnStage = stage;
+                return stage;
             }
         }
-        return returnStage;
+        System.out.println(
+            "\u001B[31m" + "ERROR: No such stage in " +
+            this.getClass().getSimpleName() + ": " +
+            name + "\u001B[0m");
+        return null;
     }
 
     @Override

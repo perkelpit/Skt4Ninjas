@@ -34,6 +34,7 @@ public class Menu extends StageScreen {
             // *** MAIN MENU-CLICKS ***
             case "HOST":
                 DebugWindow.setUIFocus(DebugWindow.Focus.Lobby);
+                // TODO possibility to choose wether to start a new session or to load an saved one
                 session = new HostSession();
                 break;
             case "JOIN":
@@ -118,7 +119,7 @@ public class Menu extends StageScreen {
                 });
                 try {
                     if(SessionData.isHost()) {
-                    
+                        // TODO prompt to save Session
                     }
                     session.stopSession();
                 } catch (IOException e) {

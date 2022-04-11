@@ -35,8 +35,9 @@ public class BaseGroup extends Group implements Initialize_Update, Named {
     @Override
     public void update(float delta) {
         Initialize_Update.super.update(delta);
-        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
-        for(Actor child : getAllChildren()) {
+        Actor child;
+        for(int i = 0; i < getAllChildren().size; i++) {
+            child = getAllChildren().get(i);
             ((Initialize_Update)child).update(delta);
         }
     }
@@ -57,8 +58,9 @@ public class BaseGroup extends Group implements Initialize_Update, Named {
     }
     
     public BaseGroup overlaps(ActorBundle<? extends BaseGroup> actorBundle) {
-        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
-        for(BaseGroup baseGroup : actorBundle.getActors()) {
+        BaseGroup baseGroup;
+        for(int i = 0; i < actorBundle.getActors().size; i++) {
+            baseGroup = actorBundle.getActors().get(i);
             if(!(this == baseGroup)) {
                 if(overlaps(baseGroup)) {
                     return baseGroup;
@@ -137,28 +139,30 @@ public class BaseGroup extends Group implements Initialize_Update, Named {
     public void addActor(Actor actor) {
         super.addActor(actor);
         Vector2 size = new Vector2();
-        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
-        for(Actor a : getAllChildren()) {
-            size.x = Math.max(a.getWidth(), size.x);
-            size.y = Math.max(a.getHeight(), size.y);
+        Actor child;
+        for(int i = 0; i < getAllChildren().size; i++) {
+            child = getAllChildren().get(i);
+            size.x = Math.max(child.getWidth(), size.x);
+            size.y = Math.max(child.getHeight(), size.y);
         }
         setSize(size.x, size.y);
         setOrigin(Align.center);
-        // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
-        for(Actor a : getAllChildren()) {
-            if (a.getWidth() < getWidth()) {
-                a.setX((getWidth() - a.getWidth()) / 2f);
+        for(int i = 0; i < getAllChildren().size; i++) {
+            child = getAllChildren().get(i);
+            if (child.getWidth() < getWidth()) {
+                child.setX((getWidth() - child.getWidth()) / 2f);
             }
-            if (a.getHeight() < getHeight()) {
-                a.setY((getHeight() - a.getHeight()) / 2f);
+            if (child.getHeight() < getHeight()) {
+                child.setY((getHeight() - child.getHeight()) / 2f);
             }
         }
     }
     
     private Array<Actor> createActorsList(Actor actor, Array<Actor> list){
         if(actor instanceof Group && ((Group)actor).getChildren() != null) {
-            // TODO Change to std-for-loop -> can cause GdxRuntimeException: #iterator() cannot be used nested
-            for (Actor child : ((Group)actor).getChildren()){
+            Actor child;
+            for(int i = 0; i < ((Group)actor).getChildren().size; i++) {
+                child = ((Group)actor).getChildren().get(i);
                 list = createActorsList(child, list);
             }
         }
@@ -167,11 +171,11 @@ public class BaseGroup extends Group implements Initialize_Update, Named {
     }
     
     public Array<Actor> getAllActors() {
-        return createActorsList(this, new Array<Actor>());
+        return createActorsList(this, new Array<>());
     }
     
     public Array<Actor> getAllChildren() {
-        Array<Actor> list = createActorsList(this, new Array<Actor>());
+        Array<Actor> list = createActorsList(this, new Array<>());
         list.removeValue(this, true);
         return list;
     }

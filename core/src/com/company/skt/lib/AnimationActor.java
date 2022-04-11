@@ -50,7 +50,6 @@ public class AnimationActor extends BaseActor {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         batch.setColor(getColor());
-        // TODO if(isVisible()) needed? (Stage does this on its own?)
         if(isVisible()) {
             batch.draw(animation.getKeyFrame(elapsedTime), getX(), getY(),
                        getOriginX(), getOriginY(), getWidth(), getHeight(),

@@ -1,8 +1,5 @@
 package com.company.skt.lib;
 
-import com.company.skt.lib.Hand;
-import com.company.skt.lib.TrickStack;
-
 public class PlayerData {
     public Hand startHand;
     public Hand currentHand;
