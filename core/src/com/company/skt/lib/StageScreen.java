@@ -49,6 +49,10 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
         }
     }
     
+    public void removeStage(UpdateStage stage){
+        layeredStages.removeStage(stage);
+    }
+    
     public void addStage(UpdateStage stage) {
         layeredStages.addStage(stage);
         if(stage.isActive()) {
@@ -98,6 +102,10 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
 
     public void setStageActive(String name, boolean active) {
         UpdateStage stage = findStage(name);
+        setStageActive(stage, active);
+    }
+    
+    public void setStageActive(UpdateStage stage, boolean active) {
         if(stage != null) {
             if(active && !stage.isActive()) {
                 stage.setActive(true);

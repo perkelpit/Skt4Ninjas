@@ -62,6 +62,9 @@ public class Menu extends StageScreen {
                 break;
             case "CREDITS":
                 DebugWindow.println("[MainMenu] credits clicked");
+                DialogUI.newOkMessage(findStage("mainMenuUI"), "Test: a title, for god´s sake", // DEBUG TEST
+                                      "You are leaving the game now, you faggot!", null,
+                                      findStage("mainMenuUI"));
                 break;
             case "EXIT":
                 if(Skt.isDebug()) {

@@ -2,7 +2,6 @@ package com.company.skt.view;
 
 import com.company.skt.Skt;
 import com.company.skt.model.SessionData;
-import org.lwjgl.system.CallbackI;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;

@@ -13,7 +13,9 @@ public abstract class Fonts {
     
     static String path;
     static HashMap<String, BitmapFont> FontsMap;
-    static private FreeTypeFontParameter fontParametersWelcome, fontParametersButton;
+    static private FreeTypeFontParameter fontParametersWelcome;
+    static private FreeTypeFontParameter fontParametersButton;
+    static private FreeTypeFontParameter fontParametersMessage;
     
     public static void boot(String path) {
         Fonts.path = path;
@@ -42,6 +44,18 @@ public abstract class Fonts {
         FontsMap.put("PirataOne-Regular_Button",
                      new FreeTypeFontGenerator(
                          Gdx.files.internal(path + "PirataOne-Regular.ttf")).generateFont(fontParametersButton));
+    
+        fontParametersMessage = new FreeTypeFontParameter();
+        fontParametersMessage.size = 24;
+        fontParametersMessage.color = Color.BLACK;
+        fontParametersMessage.borderWidth = 2;
+        fontParametersMessage.borderColor = Color.WHITE;
+        fontParametersMessage.borderStraight = true;
+        fontParametersMessage.minFilter = Texture.TextureFilter.Linear;
+        fontParametersMessage.magFilter = Texture.TextureFilter.Linear;
+        FontsMap.put("PirataOne-Regular_Message",
+                     new FreeTypeFontGenerator(
+                         Gdx.files.internal(path + "PirataOne-Regular.ttf")).generateFont(fontParametersMessage));
     }
     
     public static BitmapFont getFont(String fontName){
