@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.company.skt.controller.Menu;
-import com.company.skt.controller.Session;
 import com.company.skt.controller.Utils;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.*;
@@ -33,7 +32,7 @@ public class LobbyUI extends UpdateStage {
 
     // *** TOP RIGHT TABLE ***
     private Table topRightTable;
-    public SelectBox<String> numberOfGamesSelectBox, timeLimitSelectBox, lostFactorSelectBox;
+    public SelectBox<String> amountGamesSelectBox, timeLimitSelectBox, lostFactorSelectBox;
     private Label numberOfGamesLabel, timeLimitLabel, lostFactorLabel;
     public CheckBox junkCheckbox;
 
@@ -98,7 +97,7 @@ public class LobbyUI extends UpdateStage {
         kickPlayer1Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("KICK_PLAYER1");
+                ((Menu) Utils.getCurrentScreen()).buttonClicked("KICK_PLAYER#1");
             }
         });
         topLeftTable.add(kickPlayer1Button);
@@ -114,7 +113,7 @@ public class LobbyUI extends UpdateStage {
         kickPlayer2Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("KICK_PLAYER2");
+                ((Menu) Utils.getCurrentScreen()).buttonClicked("KICK_PLAYER#2");
             }
         });
         topLeftTable.add(kickPlayer2Button);
@@ -138,18 +137,18 @@ public class LobbyUI extends UpdateStage {
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
         topRightTable.add(numberOfGamesLabel).padRight(10 * scaleX).align(Align.left);
 
-        numberOfGamesSelectBox = new SelectBox<>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
+        amountGamesSelectBox = new SelectBox<>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
                 null, new ScrollPane.ScrollPaneStyle(), new List.ListStyle(buttonFont, Color.ORANGE,
                 Color.WHITE, new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png")))));
-        numberOfGamesSelectBox.setItems("1", "3", "6", "9", "18", "36");
-        numberOfGamesSelectBox.addListener(new ChangeListener() {
+        amountGamesSelectBox.setItems("1", "3", "6", "9", "18", "36");
+        amountGamesSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("GAME_SETTINGS_CHANGED");
+                ((Menu) Utils.getCurrentScreen()).buttonClicked("GAME_SETTINGS_CLICKED#AMOUNT_GAMES");
             }
         });
 
-        topRightTable.add(numberOfGamesSelectBox).align(Align.left);
+        topRightTable.add(amountGamesSelectBox).align(Align.left);
         topRightTable.row();
 
         lostFactorLabel = new Label(Local.getString("lb_lost_factor") + ": ",
@@ -163,7 +162,7 @@ public class LobbyUI extends UpdateStage {
         lostFactorSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("GAME_SETTINGS_CHANGED");
+                ((Menu) Utils.getCurrentScreen()).buttonClicked("GAME_SETTINGS_CLICKED#LOST_FACTOR");
             }
         });
         topRightTable.add(lostFactorSelectBox).align(Align.left);
@@ -176,11 +175,18 @@ public class LobbyUI extends UpdateStage {
         timeLimitSelectBox = new SelectBox<String>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
                 null, new ScrollPane.ScrollPaneStyle(), new List.ListStyle(buttonFont, Color.ORANGE,
                 Color.WHITE, new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png")))));
-        timeLimitSelectBox.setItems(Local.getString("lb_tl_opt_no-tl"), "30sec", "1 min.", "2 min.", "3 min.", "5 min.", "10 min.");
+        timeLimitSelectBox.setItems(
+                Local.getString("lb_tl_opt_no-tl"),
+                "30" + Local.getString("abr_second"),
+                "1" + Local.getString("abr_minute"),
+                "2" + Local.getString("abr_minute"),
+                "3" + Local.getString("abr_minute"),
+                "5" + Local.getString("abr_minute"),
+                "10" + Local.getString("abr_minute"));
         timeLimitSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("GAME_SETTINGS_CHANGED");
+                ((Menu) Utils.getCurrentScreen()).buttonClicked("GAME_SETTINGS_CLICKED#TIME_LIMIT");
             }
         });
         topRightTable.add(timeLimitSelectBox).align(Align.left);
@@ -195,7 +201,7 @@ public class LobbyUI extends UpdateStage {
         junkCheckbox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("GAME_SETTINGS_CHANGED");
+                ((Menu) Utils.getCurrentScreen()).buttonClicked("GAME_SETTINGS_CLICKED#RAMSCH");
             }
         });
         topRightTable.add(junkCheckbox).align(Align.left);
@@ -211,6 +217,7 @@ public class LobbyUI extends UpdateStage {
 
 
         addActor(bottomLeftTable);
+
 
         // ****** BOTTOM RIGHT TABLE ******
         bottomRightTable = new Table();
@@ -280,9 +287,32 @@ public class LobbyUI extends UpdateStage {
         }
 
         // *** SETTINGS ***
-        numberOfGamesSelectBox.setSelected(data.getCfgValue("amount_games"));
-        timeLimitSelectBox.setSelected(data.getCfgValue("time_limit"));
+        amountGamesSelectBox.setSelected(data.getCfgValue("amount_games"));
         lostFactorSelectBox.setSelected(data.getCfgValue("lost_factor"));
         junkCheckbox.setChecked(Boolean.parseBoolean(data.getCfgValue("ramsch")));
+
+        switch(data.getCfgValue("time_limit")) {
+            case "0":
+                timeLimitSelectBox.setSelectedIndex(0);
+                break;
+            case "30":
+                timeLimitSelectBox.setSelectedIndex(1);
+                break;
+            case "60":
+                timeLimitSelectBox.setSelectedIndex(2);
+                break;
+            case "120":
+                timeLimitSelectBox.setSelectedIndex(3);
+                break;
+            case "180":
+                timeLimitSelectBox.setSelectedIndex(4);
+                break;
+            case "300":
+                timeLimitSelectBox.setSelectedIndex(5);
+                break;
+            case "600":
+                timeLimitSelectBox.setSelectedIndex(6);
+                break;
+        }
     }
 }

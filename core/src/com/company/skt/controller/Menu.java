@@ -5,7 +5,6 @@ import com.company.skt.Skt;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.model.Assets;
 import com.company.skt.model.SessionData;
-import com.company.skt.model.Settings;
 import com.company.skt.view.*;
 
 import java.io.IOException;
@@ -30,8 +29,18 @@ public class Menu extends StageScreen {
         super.update(dt);
     }
     
-    public void buttonClicked(String buttonName) {
-        switch(buttonName) {
+    public void buttonClicked(String clickCategories) {
+        String category;
+        String subCategory = "";
+        if (clickCategories.contains("#")){
+            category = clickCategories.substring(0, clickCategories.indexOf("#"));
+            subCategory = clickCategories.substring(clickCategories.indexOf("#") + 1);
+        }
+        else{
+            category = clickCategories;
+        }
+
+        switch(category) {
             // *** MAIN MENU-CLICKS ***
             case "HOST":
                 DebugWindow.setUIFocus(DebugWindow.Focus.Lobby);
@@ -77,31 +86,71 @@ public class Menu extends StageScreen {
                 removeStage("lobbyUI");
                 setStageActive("mainMenuUI", true);
                 break;
-            case "GAME_SETTINGS_CHANGED":
-                // overwrite game.txt with lobby ui values
-                data.setCfgValues(new String[]{"lost_factor", "ramsch", "amount_games", "time_limit"},
-                        new String[]{((LobbyUI)findStage("lobbyUI")).lostFactorSelectBox.getSelected(),
-                                String.valueOf(((LobbyUI)findStage("lobbyUI")).junkCheckbox.isChecked()),
-                                ((LobbyUI)findStage("lobbyUI")).numberOfGamesSelectBox.getSelected(),
-                                ((LobbyUI)findStage("lobbyUI")).timeLimitSelectBox.getSelected()});
-                break;
+            case "GAME_SETTINGS_CLICKED":
+                switch (subCategory){
+                    case "LOST_FACTOR":
+                    data.setCfgValue("lost_factor", ((LobbyUI)findStage("lobbyUI")).lostFactorSelectBox.getSelected());
+                        break;
+                    case "RAMSCH":
+                    data.setCfgValue("ramsch", String.valueOf(((LobbyUI)findStage("lobbyUI")).junkCheckbox.isChecked()));
+                        break;
+                    case "AMOUNT_GAMES":
+                    data.setCfgValue("amount_games", ((LobbyUI)findStage("lobbyUI")).amountGamesSelectBox.getSelected());
+                        break;
+                    case "TIME_LIMIT":
+                        switch(((LobbyUI)findStage("lobbyUI")).timeLimitSelectBox.getSelectedIndex()) {
+                            case 0:
+                                data.setCfgValue("time_limit", "0");
+                                break;
+                            case 1:
+                                data.setCfgValue("time_limit", "30");
+                                break;
+                            case 2:
+                                data.setCfgValue("time_limit", "60");
+                                break;
+                            case 3:
+                                data.setCfgValue("time_limit", "120");
+                                break;
+                            case 4:
+                                data.setCfgValue("time_limit", "180");
+                                break;
+                            case 5:
+                                data.setCfgValue("time_limit", "300");
+                                break;
+                            case 6:
+                                data.setCfgValue("time_limit", "600");
+                                break;
+                        }
+                }
             case "READY":
                 // TODO getbuttonpressed
                 break;
-            case "KICK_PLAYER1":
-                // TODO KICKERIKII(player1)
-                break;
-            case "KICK_PLAYER2":
-                // TODO KICKERIKII(player2)
+            case "KICK_PLAYER":
+
+                switch (subCategory){
+                    case "1":
+                        // TODO KICKERIKII(player1)
+                    case "2":
+                        // TODO KICKERIKII(player2)
+                }
                 break;
             default :
-                DebugWindow.println("buttonName " + buttonName + " in " +
+                DebugWindow.println("buttonName " + clickCategories + " in " +
                                    this.getClass().getSimpleName() +  " not found");
         }
     }
 
-    public void event(String eventName) {
-        switch(eventName) {
+    public void event(String eventCategories) {
+        String category = "";
+        String subCategory = "";
+        if (eventCategories.contains("#")){
+            category = eventCategories.substring(0, eventCategories.indexOf("#"));
+            subCategory = eventCategories.substring(eventCategories.indexOf("#") + 1);
+        }
+        else{
+            category = eventCategories;
+        }
+        switch(category) {
             case "READY_FOR_LOBBY":
                 DebugWindow.println("[Menu|Event] ready for lobby");
                 Gdx.app.postRunnable(() -> {

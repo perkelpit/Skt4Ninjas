@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.company.skt.lib.StageScreen;
+import com.company.skt.model.Local;
 import com.company.skt.model.Settings;
 
 import java.util.HashMap;
@@ -20,11 +21,13 @@ public abstract class Utils {
      * lib.LibUtils(with methods used by lib-classes) */
     private static HashMap<String, HashMap<String, float[]>> vMaps;
     private static StageScreen currentScreen;
+
     
     static {
         vMaps = new HashMap<>();
     }
-    
+
+
     public static void scaleAndCachePng(String scourceFile, String targetFile,
                                   float scaleFactorX, float scaleFactorY, Pixmap.Filter filter) {
         System.out.println("scaleAndCachePng()");
