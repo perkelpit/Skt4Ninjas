@@ -13,7 +13,7 @@ import java.io.IOException;
 public class Menu extends StageScreen {
     
     private Session session;
-    private SessionData sessionData;
+    private SessionData data;
     
     @Override
     public void initialize() {
@@ -22,7 +22,7 @@ public class Menu extends StageScreen {
         addStage(new MenuBackground("menuBackground", true));
         addStage(new MainMenuUI("mainMenuUI", true));
         addStage(new SettingsUI("settingsUI"));
-        sessionData = SessionData.get();
+        data = SessionData.get();
     }
     
     @Override
@@ -79,14 +79,20 @@ public class Menu extends StageScreen {
                 break;
             case "GAME_SETTINGS_CHANGED":
                 // overwrite game.txt with lobby ui values
-                Settings.setProperty(Settings.GAME, "amount_games",
-                        ((LobbyUI)findStage("lobbyUI")).numberOfGamesSelectBox.getSelected());
-                Settings.setProperty(Settings.GAME, "time_limit",
-                        ((LobbyUI)findStage("lobbyUI")).timeLimitSelectBox.getSelected());
-                Settings.setProperty(Settings.GAME, "lost_factor",
-                        ((LobbyUI)findStage("lobbyUI")).lostFactorSelectBox.getSelected());
-                Settings.setProperty(Settings.GAME, "ramsch",
-                        String.valueOf(((LobbyUI)findStage("lobbyUI")).junkCheckbox.isChecked()));
+                data.setCfgValues(new String[]{"lost_factor", "ramsch", "amount_games", "time_limit"},
+                        new String[]{((LobbyUI)findStage("lobbyUI")).lostFactorSelectBox.getSelected(),
+                                String.valueOf(((LobbyUI)findStage("lobbyUI")).junkCheckbox.isChecked()),
+                                ((LobbyUI)findStage("lobbyUI")).numberOfGamesSelectBox.getSelected(),
+                                ((LobbyUI)findStage("lobbyUI")).timeLimitSelectBox.getSelected()});
+                break;
+            case "READY":
+                // TODO getbuttonpressed
+                break;
+            case "KICK_PLAYER1":
+                // TODO KICKERIKII(player1)
+                break;
+            case "KICK_PLAYER2":
+                // TODO KICKERIKII(player2)
                 break;
             default :
                 DebugWindow.println("buttonName " + buttonName + " in " +

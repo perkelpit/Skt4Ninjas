@@ -21,17 +21,14 @@ import java.util.Properties;
 public class LobbyUI extends UpdateStage {
 
     // *** RESOURCES ***
-    private TextureRegionDrawable buttonDrawable, buttonPressedDrawable;
+    private TextureRegionDrawable buttonDrawable, buttonPressedDrawable, buttonCheckedDrawable;
     private BitmapFont buttonFont;
     private Properties appCfg;
 
     // *** TOP LEFT TABLE ***
     private Table topLeftTable;
     private Label player0Name, player1Name, player2Name;
-    private TextField chatField;
-    private TextArea chatArea;
-    private ImageTextButton readyButton, quitButton;
-
+    private ImageTextButton kickPlayer1Button, kickPlayer2Button;
     private Float scaleX, scaleY;
 
     // *** TOP RIGHT TABLE ***
@@ -40,6 +37,14 @@ public class LobbyUI extends UpdateStage {
     private Label numberOfGamesLabel, timeLimitLabel, lostFactorLabel;
     public CheckBox junkCheckbox;
 
+    // *** BOTTOM LEFT TABLE ***
+    private Table bottomLeftTable;
+    private TextField chatField;
+    private TextArea chatArea;
+
+    // *** BOTTOM RIGHT TABLE ***
+    private Table bottomRightTable;
+    private ImageTextButton readyButton, quitButton;
 
 
     {
@@ -48,6 +53,7 @@ public class LobbyUI extends UpdateStage {
         buttonFont = Fonts.getFont("PirataOne-Regular_Button");
         buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
         buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
+        buttonCheckedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTextureChecked.png"));
 
         scaleX = Utils.getScaleFactorX();
         scaleY = Utils.getScaleFactorY();
@@ -65,56 +71,69 @@ public class LobbyUI extends UpdateStage {
 
     private void build() {
 
-        // *** TOP LEFT TABLE ***
+        // ****** TOP LEFT TABLE ******
         topLeftTable = new Table().padTop(50 * scaleY);
-        topLeftTable.setWidth((Float.parseFloat(appCfg.getProperty("resolution_x")) / 2f) * scaleX);
-        topLeftTable.setHeight((Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f) * scaleY);
+        topLeftTable.setWidth((Float.parseFloat(appCfg.getProperty("resolution_x")) / 2f));
+        topLeftTable.setHeight((Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f));
         topLeftTable.setPosition(0,
-                (Float.parseFloat(appCfg.getProperty("resolution_y"))) * scaleY,
+                (Float.parseFloat(appCfg.getProperty("resolution_y"))) - topLeftTable.getHeight(),
                 Align.bottomLeft);
 
-        // *** PLAYER LABELS ***
+        // **** PLAYER ****
+
+        // *** PLAYER0 ***
         player0Name = new Label(Local.getString("lb_player_null"),
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
         topLeftTable.add(player0Name);
         topLeftTable.row();
 
+        // *** PLAYER1 ***
         player1Name = new Label(Local.getString("lb_player_null"),
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
-        topLeftTable.add(player1Name);
-        topLeftTable.row();
+        topLeftTable.add(player1Name).align(Align.left);
 
-        player2Name = new Label(Local.getString("lb_player_null"),
-                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
-        topLeftTable.add(player2Name);
-        topLeftTable.row();
-
-        // *** QUIT BUTTON ***
-        quitButton = new ImageTextButton(
-                Local.getString("quit"), new ImageTextButton.ImageTextButtonStyle(
-                buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")
-        ));
-        quitButton.addListener(new ClickListener() {
+        kickPlayer1Button = new ImageTextButton(
+                Local.getString("lb_kick"), new ImageTextButton.ImageTextButtonStyle(
+                buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")));
+        kickPlayer1Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("QUIT_LOBBY");
+                ((Menu) Utils.getCurrentScreen()).buttonClicked("KICK_PLAYER1");
             }
         });
-
-        topLeftTable.add(quitButton);
+        topLeftTable.add(kickPlayer1Button);
         topLeftTable.row();
+
+        // *** PLAYER2 ***
+        player2Name = new Label(Local.getString("lb_player_null"),
+                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+        topLeftTable.add(player2Name).align(Align.left);
+        kickPlayer2Button = new ImageTextButton(
+                Local.getString("lb_kick"), new ImageTextButton.ImageTextButtonStyle(
+                buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")));
+        kickPlayer2Button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                ((Menu) Utils.getCurrentScreen()).buttonClicked("KICK_PLAYER2");
+            }
+        });
+        topLeftTable.add(kickPlayer2Button);
+        topLeftTable.row();
+
+
 
         addActor(topLeftTable);
 
-        // *** TOP RIGHT TABLE ***
+        // ****** TOP RIGHT TABLE ******
         topRightTable = new Table().padTop(50 * scaleY);
-        topRightTable.setWidth((Float.parseFloat(appCfg.getProperty("resolution_x")) / 2f) * scaleX);
-        topRightTable.setHeight((Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f) * scaleY);
+        topRightTable.setWidth((Float.parseFloat(appCfg.getProperty("resolution_x")) / 2f));
+        topRightTable.setHeight((Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f));
         topRightTable.setPosition(
-                Float.parseFloat(appCfg.getProperty("resolution_x")) * scaleX,
-                (Float.parseFloat(appCfg.getProperty("resolution_y"))) * scaleY,
+                Float.parseFloat(appCfg.getProperty("resolution_x")) - topRightTable.getWidth(),
+                Float.parseFloat(appCfg.getProperty("resolution_y")) - topRightTable.getHeight(),
                 Align.bottomLeft);
 
+        // *** GAME SETTINGS ***
         numberOfGamesLabel = new Label(Local.getString("lb_no-of-games") + ": ",
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
         topRightTable.add(numberOfGamesLabel).padRight(10 * scaleX).align(Align.left);
@@ -183,6 +202,52 @@ public class LobbyUI extends UpdateStage {
         topRightTable.row();
 
         addActor(topRightTable);
+
+        // ****** BOTTOM LEFT TABLE ******
+        bottomLeftTable = new Table();
+        bottomLeftTable.setWidth(Float.parseFloat(appCfg.getProperty("resolution_x")) / 2f);
+        bottomLeftTable.setHeight(Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f);
+        bottomLeftTable.setPosition(0, 0, Align.bottomLeft);
+
+
+        addActor(bottomLeftTable);
+
+        // ****** BOTTOM RIGHT TABLE ******
+        bottomRightTable = new Table();
+        bottomRightTable.setWidth(Float.parseFloat(appCfg.getProperty("resolution_x")) / 2f);
+        bottomRightTable.setHeight(Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f);
+        bottomRightTable.setPosition(
+                Float.parseFloat(appCfg.getProperty("resolution_x")) - bottomRightTable.getWidth(),
+                0, Align.bottomLeft);
+
+        // *** READY BUTTON ***
+        readyButton = new ImageTextButton(
+                Local.getString("lb_ready"), new ImageTextButton.ImageTextButtonStyle(
+                buttonDrawable, buttonPressedDrawable, buttonCheckedDrawable, Fonts.getFont("PirataOne-Regular_Button")));
+        readyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                ((Menu) Utils.getCurrentScreen()).buttonClicked("READY");
+            }
+        });
+        bottomRightTable.add(readyButton);
+        bottomRightTable.row();
+
+
+        // *** QUIT BUTTON ***
+        quitButton = new ImageTextButton(
+                Local.getString("quit"), new ImageTextButton.ImageTextButtonStyle(
+                buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")));
+        quitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                ((Menu) Utils.getCurrentScreen()).buttonClicked("QUIT_LOBBY");
+            }
+        });
+        bottomRightTable.add(quitButton).padTop(10f * scaleY);
+        bottomRightTable.row();
+
+        addActor(bottomRightTable);
     }
 
     @Override
@@ -215,10 +280,9 @@ public class LobbyUI extends UpdateStage {
         }
 
         // *** SETTINGS ***
-        numberOfGamesSelectBox.setSelected(Settings.getProperties(Settings.GAME).getProperty("amount_games"));
-        timeLimitSelectBox.setSelected(Settings.getProperties(Settings.GAME).getProperty("time_limit"));
-        lostFactorSelectBox.setSelected(Settings.getProperties(Settings.GAME).getProperty("lost_factor"));
-        junkCheckbox.setChecked(Boolean.parseBoolean(Settings.getProperties(Settings.GAME).getProperty("ramsch")));
+        numberOfGamesSelectBox.setSelected(data.getCfgValue("amount_games"));
+        timeLimitSelectBox.setSelected(data.getCfgValue("time_limit"));
+        lostFactorSelectBox.setSelected(data.getCfgValue("lost_factor"));
+        junkCheckbox.setChecked(Boolean.parseBoolean(data.getCfgValue("ramsch")));
     }
-
 }
