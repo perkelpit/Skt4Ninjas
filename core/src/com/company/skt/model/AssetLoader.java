@@ -214,8 +214,11 @@ class AssetLoader {
     }
     
     private void ioError() {
-        JOptionPane.showConfirmDialog(null, "FileIO error! App closed! \n"
-                                         + "Ensure correct permission levels for app folder!",
+        JFrame jFrame = new JFrame();
+        jFrame.setLocation(Gdx.graphics.getDisplayMode().height/2,
+                           Gdx.graphics.getDisplayMode().width/2);
+        JOptionPane.showConfirmDialog(jFrame, "FileIO error! App closed! \n" +
+              "Ensure correct permission levels for app folder!",
                                       "Error", JOptionPane.DEFAULT_OPTION);
         Gdx.app.exit();
     }
