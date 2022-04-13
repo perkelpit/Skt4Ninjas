@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.company.skt.Skt;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.model.Assets;
+import com.company.skt.model.Local;
 import com.company.skt.model.SessionData;
 import com.company.skt.view.*;
 
@@ -62,16 +63,18 @@ public class Menu extends StageScreen {
                 break;
             case "CREDITS":
                 DebugWindow.println("[MainMenu] credits clicked");
-                DialogUI.newOkMessage(findStage("mainMenuUI"), "Test: a title, for god´s sake", // DEBUG TEST
-                                      "You are leaving the game now, you faggot!", null,
-                                      findStage("mainMenuUI"));
                 break;
             case "EXIT":
-                if(Skt.isDebug()) {
-                    Skt.getDebugWindowPositionUpdater().shutdownNow();
-                }
-                DebugWindow.disposeDebugWindow();
-                Gdx.app.exit();
+                DialogUI.newYesNoQuestion(
+                    findStage("mainMenuUI"), Local.getString("dialog_question_quit"),
+                    null , null, null, findStage("mainMenuUI"), findStage("mainMenuUI"),
+                    () -> {
+                        if(Skt.isDebug()) {
+                            Skt.getDebugWindowPositionUpdater().shutdownNow();
+                        }
+                        DebugWindow.disposeDebugWindow();
+                        Gdx.app.exit();
+                    }, null);
                 break;
             // *** SETTINGS MENU-CLICKS ***
             case "CHANGE_NAME":

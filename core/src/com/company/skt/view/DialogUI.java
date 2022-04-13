@@ -23,13 +23,13 @@ import com.company.skt.model.Assets;
 import com.company.skt.model.Fonts;
 import com.company.skt.model.Local;
 
+import java.util.List;
+
+import static java.util.Arrays.asList;
+
 public class DialogUI extends UpdateStage {
     
-    public enum DialogType {
-        OK_MESSAGE, TRIGGER_MESSAGE, TRIGGER_CANCEL_MESSAGE,
-        YES_NO_QUESTION, YES_NO_CANCEL_QUESTION, INPUT_DIALOG
-    }
-    
+    private StageScreen screen;
     private Table table;
     private Label titleLable;
     private Label messageLable;
@@ -41,111 +41,154 @@ public class DialogUI extends UpdateStage {
     private TextureRegionDrawable buttonDrawable;
     private TextureRegionDrawable buttonPressedDrawable;
     
-    private float scaleX;
-    private float scaleY;
+    private static float scaleX;
+    private static float scaleY;
     
-    {
-        table = new Table();
+    static {
         scaleX = Utils.getScaleFactorX();
         scaleY = Utils.getScaleFactorY();
     }
     
-    private DialogUI(UpdateStage callingUI, @Null String title, String message) {
-        super("dialogUI", true);
-        buttons = new Array<>();
-        /* ### TABLE ### */
+    {
+        screen = Utils.getCurrentScreen();
+        table = new Table();
         table.setSize(1200 * scaleX, 800 * scaleY);
         table.setPosition(360 * scaleX, 140 * scaleY, Align.bottomLeft);
         table.align(Align.top);
-
-        /* ### TITLE LABLE ### */
-        if(title != null) {
-            labelStyleTitle = new LabelStyle();
-            labelStyleTitle.font = Fonts.getFont("PirataOne-Regular_Button");
-            titleLable = new Label(title, labelStyleTitle);
-            table.add(titleLable);
-        }
+    }
     
-        /* ### MESSAGE LABLE ### */
-        labelStyleMessage = new LabelStyle();
-        labelStyleMessage.font = Fonts.getFont("PirataOne-Regular_Message");
-        messageLable = new Label(message, labelStyleMessage);
-        table.row();
-        table.add(messageLable);
+    private DialogUI() {
+        super("dialogUI", true);
     }
     
     public static void newOkMessage(UpdateStage callingUI,
-                             @Null String title, String message,
+                             @Null String title, @Null String message,
                              @Null String okButtonText,
-                             UpdateStage nextUI) {
-        StageScreen screen = Utils.getCurrentScreen();
-        DialogUI dialog = new DialogUI(callingUI, title, message);
-        dialog.prepareButtonTexturesAndFont();
-        dialog.buttons.add(new ImageTextButton(
-            (okButtonText != null ? okButtonText : Local.getString("ok")),
-            new ImageTextButtonStyle(
-                dialog.buttonDrawable, dialog.buttonPressedDrawable, null, dialog.buttonFont)));
-        dialog.buttons.get(0).addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                screen.setStageActive(dialog, false);
-                screen.removeStage(dialog);
-                screen.setStageActive(nextUI, true);
-            }
-        });
-        dialog.table.row();
-        dialog.table.add(dialog.buttons.get(0));
-        dialog.addActor(dialog.table);
-        screen.setStageActive(callingUI, false);
-        screen.addStage(dialog);
-        screen.setStageActive(dialog, true);
+                             UpdateStage nextUI, @Null Runnable okRunnable) {
+        
+        DialogUI dialog = prepareDialog(callingUI, title, message);
+        addButtons(dialog, asList(okButtonText), asList("ok"), asList(nextUI), asList(okRunnable));
+        finalizeDialog(dialog, callingUI);
     }
     
     public static String newInputDialog(UpdateStage callingUI,
-                                 @Null String title, String message,
+                                 @Null String title, @Null String message,
                                  @Null String okButtonText,
-                                 UpdateStage nextUI) {
+                                 UpdateStage nextUI, @Null Runnable okRunnable) {
         String input = null;
-        
-        // TODO correct constructor
+        DialogUI dialog = prepareDialog(callingUI, title, message);
+        dialog.table.row();
+        // TODO TextField textField = new TextField()
+        addButtons(dialog, asList(okButtonText), asList("ok"), asList(nextUI), asList(okRunnable));
+        finalizeDialog(dialog, callingUI);
         return input;
     }
     
     public static void newYesNoQuestion(UpdateStage callingUI,
-                                 @Null String title, String message,
+                                 @Null String title, @Null String message,
                                  @Null String yesButtonText, @Null String noButtonText,
-                                 UpdateStage yesUI, UpdateStage noUI) {
-        // TODO correct constructor
+                                 UpdateStage yesUI, UpdateStage noUI,
+                                 @Null Runnable yesRunnable, @Null Runnable noRunnable) {
+        
+        DialogUI dialog = prepareDialog(callingUI, title, message);
+        addButtons(dialog, asList(yesButtonText, noButtonText), asList("confirm", "reject"),
+                   asList(yesUI, noUI), asList(yesRunnable, noRunnable));
+        finalizeDialog(dialog, callingUI);
     }
     
     public static void newYesNoCancelQuestion(UpdateStage callingUI,
-                                       @Null String title, String message,
+                                       @Null String title, @Null String message,
                                        @Null String yesButtonText, @Null String noButtonText,
                                        @Null String cancelButtonText,
-                                       UpdateStage yesUI, UpdateStage noUI, UpdateStage cancelUI) {
-        // TODO correct constructor
+                                       UpdateStage yesUI, UpdateStage noUI, UpdateStage cancelUI,
+                                       @Null Runnable yesRunnable, @Null Runnable noRunnable,
+                                       @Null Runnable cancelRunnable) {
+        DialogUI dialog = prepareDialog(callingUI, title, message);
+        addButtons(dialog, asList(yesButtonText, noButtonText, cancelButtonText),
+                   asList("confirm", "reject", "cancel"), asList(yesUI, noUI, cancelUI),
+                   asList(yesRunnable, noRunnable, cancelRunnable));
+        finalizeDialog(dialog, callingUI);
     }
     
     public static void newTriggerMessage(UpdateStage callingUI,
-                                  @Null String title, String message,
+                                  @Null String title, @Null String message,
                                   @Null Animation<TextureRegion> waitingAnimation,
+                                  @Null String cancelButtonText,
                                   UpdateStage triggeredUI, UpdateStage fallbackUI,
+                                  @Null Runnable triggerRunnable, @Null Runnable cancelRunnable,
                                   boolean volatileTrigger, int timeOutMs) {
         // TODO correct constructor
     }
     
     public static void newTriggerCancelMessage(UpdateStage callingUI,
-                                        @Null String title, String message,
+                                        @Null String title, @Null String message,
                                         @Null Animation<TextureRegion> waitingAnimation,
                                         UpdateStage triggeredUI, UpdateStage fallbackUI,
                                         boolean volatileTrigger) {
         // TODO correct constructor
     }
     
-    private void prepareButtonTexturesAndFont() {
-        buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
-        buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
-        buttonFont = Fonts.getFont("PirataOne-Regular_Button");
+    private static DialogUI prepareDialog(UpdateStage callingUI, String title, String message) {
+        DialogUI dialog = new DialogUI();
+        
+        /* ### TITLE LABLE ### */
+        if(title != null) {
+            dialog.labelStyleTitle = new LabelStyle();
+            dialog.labelStyleTitle.font = Fonts.getFont("PirataOne-Regular_Button");
+            dialog.titleLable = new Label(title, dialog.labelStyleTitle);
+            dialog.table.add(dialog.titleLable);
+        }
+    
+        /* ### MESSAGE LABLE ### */
+        if(message != null) {
+            dialog.labelStyleMessage = new LabelStyle();
+            dialog.labelStyleMessage.font = Fonts.getFont("PirataOne-Regular_Message");
+            dialog.messageLable = new Label(message, dialog.labelStyleMessage);
+            dialog.table.row();
+            dialog.table.add(dialog.messageLable);
+        }
+        
+        return dialog;
+    }
+    
+    private static void addButtons(DialogUI dialog, List<String> buttonTexts,
+                                   List<String> stdButtonTextLocalStrings,
+                                   List<UpdateStage> nextUIs, List<Runnable> buttonRunnables) {
+        
+        dialog.buttons = new Array<>();
+        dialog.buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
+        dialog.buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
+        dialog.buttonFont = Fonts.getFont("PirataOne-Regular_Button");
+        dialog.table.row();
+        
+        for(int i = 0; i < buttonTexts.size(); i++) {
+            dialog.buttons.add(new ImageTextButton(
+                (buttonTexts.get(i) != null ?
+                 buttonTexts.get(i) : Local.getString(stdButtonTextLocalStrings.get(i))),
+                new ImageTextButtonStyle(
+                    dialog.buttonDrawable, dialog.buttonPressedDrawable, null, dialog.buttonFont)));
+            int finalI = i;
+            dialog.buttons.get(i).addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    dialog.screen.setStageActive(dialog, false);
+                    dialog.screen.removeStage(dialog);
+                    dialog.screen.setStageActive(nextUIs.get(finalI), true);
+                    if(buttonRunnables.get(finalI) != null) {
+                        new Thread(buttonRunnables.get(finalI)).start();
+                    }
+                }
+            });
+            dialog.table.add(dialog.buttons.get(i));
+        }
+    }
+    
+    
+    private static void finalizeDialog(DialogUI dialog, UpdateStage callingUI) {
+        dialog.addActor(dialog.table);
+        dialog.screen.setStageActive(callingUI, false);
+        dialog.screen.addStage(dialog);
+        dialog.screen.setStageActive(dialog, true);
     }
     
 }
