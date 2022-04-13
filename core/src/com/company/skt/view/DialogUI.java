@@ -1,15 +1,14 @@
 package com.company.skt.view;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.*;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -65,13 +64,13 @@ public class DialogUI extends UpdateStage {
             labelStyleTitle.font = Fonts.getFont("PirataOne-Regular_Button");
             titleLable = new Label(title, labelStyleTitle);
             table.add(titleLable);
-            table.row();
         }
     
         /* ### MESSAGE LABLE ### */
         labelStyleMessage = new LabelStyle();
         labelStyleMessage.font = Fonts.getFont("PirataOne-Regular_Message");
         messageLable = new Label(message, labelStyleMessage);
+        table.row();
         table.add(messageLable);
     }
     
