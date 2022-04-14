@@ -1,5 +1,6 @@
 package com.company.skt.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -11,12 +12,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
+import com.badlogic.gdx.utils.Predicate;
 import com.company.skt.controller.Utils;
+import com.company.skt.lib.Lock;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.Assets;
@@ -41,6 +46,7 @@ public class DialogUI extends UpdateStage {
     private TextureRegionDrawable buttonDrawable;
     private TextureRegionDrawable buttonPressedDrawable;
     
+    private static volatile String input;
     private static float scaleX;
     private static float scaleY;
     
@@ -71,17 +77,54 @@ public class DialogUI extends UpdateStage {
         finalizeDialog(dialog, callingUI);
     }
     
-    public static String newInputDialog(UpdateStage callingUI,
+    public static void newInputDialog(UpdateStage callingUI,
+                                 String input, @Null String defaultInput,
                                  @Null String title, @Null String message,
-                                 @Null String okButtonText,
-                                 UpdateStage nextUI, @Null Runnable okRunnable) {
-        String input = null;
-        DialogUI dialog = prepareDialog(callingUI, title, message);
-        dialog.table.row();
-        // TODO TextField textField = new TextField()
-        addButtons(dialog, asList(okButtonText), asList("ok"), asList(nextUI), asList(okRunnable));
-        finalizeDialog(dialog, callingUI);
-        return input;
+                                 @Null String okButtonText, @Null String cancelButtonText,
+                                 UpdateStage nextUI, UpdateStage fallbackUI,
+                                 @Null Predicate<String> predicate, @Null Runnable cancelRunnable) {
+        
+        /* TODO
+        solve the puzzles, dumb perkel!
+        How to predicate, eh?
+        And how to pass input... ugly with parameter like above?!?
+        Does this even work out?
+        There has to be a good way (without blocking the calling thread and by this freezing the app
+        due to preventing it from drawing and acting) */
+        
+        setInputString("");
+        new Thread(() -> {
+            Lock lock = new Lock(); // idea: use this to let this thread wait until an input is availiable?
+            Gdx.app.postRunnable(() -> {
+                DialogUI dialog = prepareDialog(callingUI, title, message);
+                TextFieldStyle textFieldStyle = new TextFieldStyle();
+                textFieldStyle.font = Fonts.getFont("pirata_16p_black_bord1white");
+                TextField textField = new TextField(defaultInput, textFieldStyle);
+                textField.setWidth(800 * scaleX);
+
+                textField.setTextFieldListener(new TextFieldListener() {
+                    @Override
+                    public void keyTyped(TextField textField, char c) {
+                        if(c == '\r' || c == '\n' ) {
+                            setInputString(textField.getText());
+                            dialog.screen.setStageActive(dialog, false);
+                            dialog.screen.removeStage(dialog);
+                            dialog.screen.setStageActive(nextUI, true);
+                        }
+                    }
+                });
+                dialog.table.row();
+                dialog.table.add(textField);
+                addButtons(dialog, asList(okButtonText), asList("ok"), asList(nextUI),
+                           asList(() -> {
+                               setInputString(textField.getText());
+                               dialog.screen.setStageActive(dialog, false);
+                               dialog.screen.removeStage(dialog);
+                               dialog.screen.setStageActive(nextUI, true);
+                           }));
+                finalizeDialog(dialog, callingUI);
+            });
+        }).start();
     }
     
     public static void newYesNoQuestion(UpdateStage callingUI,
@@ -189,6 +232,14 @@ public class DialogUI extends UpdateStage {
         dialog.screen.setStageActive(callingUI, false);
         dialog.screen.addStage(dialog);
         dialog.screen.setStageActive(dialog, true);
+    }
+    
+    private static synchronized void setInputString(String input) {
+        DialogUI.input = input;
+    }
+    
+    private static synchronized String getInputString() {
+        return input;
     }
     
 }

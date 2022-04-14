@@ -16,6 +16,7 @@ public abstract class Fonts {
     static private FreeTypeFontParameter fontParametersWelcome;
     static private FreeTypeFontParameter fontParametersButton;
     static private FreeTypeFontParameter fontParametersMessage;
+    static private FreeTypeFontParameter fP_pirata_16p_black_bord1white;
     
     public static void boot(String path) {
         Fonts.path = path;
@@ -56,6 +57,18 @@ public abstract class Fonts {
         FontsMap.put("PirataOne-Regular_Message",
                      new FreeTypeFontGenerator(
                          Gdx.files.internal(path + "PirataOne-Regular.ttf")).generateFont(fontParametersMessage));
+    
+        fP_pirata_16p_black_bord1white = new FreeTypeFontParameter();
+        fP_pirata_16p_black_bord1white.size = 16;
+        fP_pirata_16p_black_bord1white.color = Color.BLACK;
+        fP_pirata_16p_black_bord1white.borderWidth = 1;
+        fP_pirata_16p_black_bord1white.borderColor = Color.WHITE;
+        fP_pirata_16p_black_bord1white.borderStraight = true;
+        fP_pirata_16p_black_bord1white.minFilter = Texture.TextureFilter.Linear;
+        fP_pirata_16p_black_bord1white.magFilter = Texture.TextureFilter.Linear;
+        FontsMap.put("pirata_16p_black_bord1white",
+                     new FreeTypeFontGenerator(
+                         Gdx.files.internal(path + "PirataOne-Regular.ttf")).generateFont(fP_pirata_16p_black_bord1white));
     }
     
     public static BitmapFont getFont(String fontName){
