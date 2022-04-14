@@ -201,6 +201,8 @@ public class Menu extends StageScreen {
                     e.printStackTrace();
                 }
                 break;
+            case "DIALOG_INPUT_STRING_READY":
+                break;
         }
     }
 }

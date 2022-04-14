@@ -136,6 +136,7 @@ public class DialogUI extends UpdateStage {
                             // false -> stay in inputDialog, wait for next input
                             // true -> pass input and switch to okUI
                             setInputString(textField.getText());
+                            dialog.screen.event("DIALOG_INPUT_STRING_READY");
                             dialog.screen.setStageActive(dialog, false);
                             dialog.screen.removeStage(dialog);
                             dialog.screen.setStageActive(okUI, true);
