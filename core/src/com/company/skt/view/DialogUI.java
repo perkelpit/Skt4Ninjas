@@ -70,10 +70,10 @@ public class DialogUI extends UpdateStage {
     public static void newOkMessage(UpdateStage callingUI,
                              @Null String title, @Null String message,
                              @Null String okButtonText,
-                             UpdateStage nextUI, @Null Runnable okRunnable) {
+                             UpdateStage okUI, @Null Runnable okRunnable) {
         
         DialogUI dialog = prepareDialog(callingUI, title, message);
-        addButtons(dialog, asList(okButtonText), asList("ok"), asList(nextUI), asList(okRunnable));
+        addButtons(dialog, asList(okButtonText), asList("ok"), asList(okUI), asList(okRunnable));
         finalizeDialog(dialog, callingUI);
     }
     
@@ -81,7 +81,7 @@ public class DialogUI extends UpdateStage {
                                  String input, @Null String defaultInput,
                                  @Null String title, @Null String message,
                                  @Null String okButtonText, @Null String cancelButtonText,
-                                 UpdateStage nextUI, UpdateStage fallbackUI,
+                                 UpdateStage okUI, UpdateStage cancelUI,
                                  @Null Predicate<String> predicate, @Null Runnable cancelRunnable) {
         
         /* TODO
@@ -94,7 +94,7 @@ public class DialogUI extends UpdateStage {
         
         setInputString("");
         new Thread(() -> {
-            Lock lock = new Lock(); // idea: use this to let this thread wait until an input is availiable?
+            Lock lock = new Lock(); // idea: maybe use this to let this thread wait until an input is availiable?
             Gdx.app.postRunnable(() -> {
                 DialogUI dialog = prepareDialog(callingUI, title, message);
                 TextFieldStyle textFieldStyle = new TextFieldStyle();
@@ -106,22 +106,29 @@ public class DialogUI extends UpdateStage {
                     @Override
                     public void keyTyped(TextField textField, char c) {
                         if(c == '\r' || c == '\n' ) {
+                            // TODO check with predicate
+                            // false -> stay in inputDialog, wait for next input
+                            // true -> pass input and switch to okUI
                             setInputString(textField.getText());
                             dialog.screen.setStageActive(dialog, false);
                             dialog.screen.removeStage(dialog);
-                            dialog.screen.setStageActive(nextUI, true);
+                            dialog.screen.setStageActive(okUI, true);
                         }
                     }
                 });
                 dialog.table.row();
                 dialog.table.add(textField);
-                addButtons(dialog, asList(okButtonText), asList("ok"), asList(nextUI),
+                addButtons(dialog, asList(okButtonText, cancelButtonText), asList("ok", "cancel"),
+                           asList(okUI, cancelUI),
                            asList(() -> {
+                               // TODO check with predicate
+                               // false -> stay in inputDialog, wait for next input
+                               // true -> pass input and switch to okUI
                                setInputString(textField.getText());
                                dialog.screen.setStageActive(dialog, false);
                                dialog.screen.removeStage(dialog);
-                               dialog.screen.setStageActive(nextUI, true);
-                           }));
+                               dialog.screen.setStageActive(okUI, true);
+                           }, cancelRunnable));
                 finalizeDialog(dialog, callingUI);
             });
         }).start();
