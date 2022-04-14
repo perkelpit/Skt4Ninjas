@@ -3,6 +3,7 @@ package com.company.skt.controller;
 import com.badlogic.gdx.Gdx;
 import com.company.skt.Skt;
 import com.company.skt.lib.StageScreen;
+import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.Assets;
 import com.company.skt.model.Local;
 import com.company.skt.model.SessionData;
@@ -65,9 +66,10 @@ public class Menu extends StageScreen {
                 DebugWindow.println("[MainMenu] credits clicked");
                 break;
             case "EXIT":
+                UpdateStage mainMenuUI = findStage("mainMenuUI");
                 DialogUI.newYesNoQuestion(
-                    findStage("mainMenuUI"), Local.getString("dialog_question_quit"),
-                    null , null, null, findStage("mainMenuUI"), findStage("mainMenuUI"),
+                    mainMenuUI, Local.getString("dialog_question_quit"),
+                    null, null, null, mainMenuUI, mainMenuUI,
                     () -> {
                         if(Skt.isDebug()) {
                             Skt.getDebugWindowPositionUpdater().shutdownNow();
