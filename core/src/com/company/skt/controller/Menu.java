@@ -31,15 +31,15 @@ public class Menu extends StageScreen {
         super.update(dt);
     }
     
-    public void buttonClicked(String clickCategories) {
+    public void buttonClicked(String click) {
         String category;
         String subCategory = "";
-        if (clickCategories.contains("#")){
-            category = clickCategories.substring(0, clickCategories.indexOf("#"));
-            subCategory = clickCategories.substring(clickCategories.indexOf("#") + 1);
+        if (click.contains("#")){
+            category = click.substring(0, click.indexOf("#"));
+            subCategory = click.substring(click.indexOf("#") + 1);
         }
         else{
-            category = clickCategories;
+            category = click;
         }
 
         switch(category) {
@@ -143,7 +143,7 @@ public class Menu extends StageScreen {
                 }
                 break;
             default :
-                DebugWindow.println("buttonName " + clickCategories + " in " +
+                DebugWindow.println("buttonName " + click + " in " +
                                    this.getClass().getSimpleName() +  " not found");
         }
     }
