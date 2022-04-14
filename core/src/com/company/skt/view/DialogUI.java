@@ -129,7 +129,6 @@ public class DialogUI extends UpdateStage {
                 textFieldStyle.font = Fonts.getFont("pirata_16p_black_bord1white");
                 TextField textField = new TextField(defaultInput, textFieldStyle);
                 textField.setWidth(800 * scaleX);
-                
                 textField.setTextFieldListener(new TextFieldListener() {
                     @Override
                     public void keyTyped(TextField textField, char c) {
