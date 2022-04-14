@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.company.skt.controller.Utils;
 import com.company.skt.model.Assets;
 
-public abstract class StageScreen implements Screen, InputProcessor, Initialize_Update {
+public abstract class StageScreen implements Screen, InputProcessor, Initialize_Update, EventClickHandler {
     
     private LayeredStages layeredStages;
     private InputMultiplexer inputMultiplexer;
@@ -131,6 +131,16 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
             this.getClass().getSimpleName() + ": " +
             name + "\u001B[0m");
         return null;
+    }
+    
+    @Override
+    public void buttonClicked(String click) {
+    
+    }
+    
+    @Override
+    public void event(String event) {
+    
     }
 
     @Override

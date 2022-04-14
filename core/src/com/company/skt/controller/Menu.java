@@ -148,15 +148,15 @@ public class Menu extends StageScreen {
         }
     }
 
-    public void event(String eventCategories) {
+    public void event(String event) {
         String category = "";
         String subCategory = "";
-        if (eventCategories.contains("#")){
-            category = eventCategories.substring(0, eventCategories.indexOf("#"));
-            subCategory = eventCategories.substring(eventCategories.indexOf("#") + 1);
+        if (event.contains("#")){
+            category = event.substring(0, event.indexOf("#"));
+            subCategory = event.substring(event.indexOf("#") + 1);
         }
         else{
-            category = eventCategories;
+            category = event;
         }
         switch(category) {
             case "READY_FOR_LOBBY":

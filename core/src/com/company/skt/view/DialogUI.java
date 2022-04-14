@@ -105,8 +105,7 @@ public class DialogUI extends UpdateStage {
         finalizeDialog(dialog, callingUI);
     }
     
-    public static void newInputDialog(UpdateStage callingUI,
-                                      String input, @Null String defaultInput,
+    public static void newInputDialog(UpdateStage callingUI, @Null String defaultInput,
                                       @Null String title, @Null String message,
                                       @Null String okButtonText, @Null String cancelButtonText,
                                       UpdateStage okUI, UpdateStage cancelUI,
