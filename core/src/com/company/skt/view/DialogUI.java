@@ -77,12 +77,40 @@ public class DialogUI extends UpdateStage {
         finalizeDialog(dialog, callingUI);
     }
     
-    public static void newInputDialog(UpdateStage callingUI,
-                                 String input, @Null String defaultInput,
+    
+    public static void newYesNoQuestion(UpdateStage callingUI,
                                  @Null String title, @Null String message,
-                                 @Null String okButtonText, @Null String cancelButtonText,
-                                 UpdateStage okUI, UpdateStage cancelUI,
-                                 @Null Predicate<String> predicate, @Null Runnable cancelRunnable) {
+                                 @Null String yesButtonText, @Null String noButtonText,
+                                 UpdateStage yesUI, UpdateStage noUI,
+                                 @Null Runnable yesRunnable, @Null Runnable noRunnable) {
+        
+        DialogUI dialog = prepareDialog(callingUI, title, message);
+        addButtons(dialog, asList(yesButtonText, noButtonText), asList("confirm", "reject"),
+                   asList(yesUI, noUI), asList(yesRunnable, noRunnable));
+        finalizeDialog(dialog, callingUI);
+    }
+    
+    public static void newYesNoCancelQuestion(UpdateStage callingUI,
+                                       @Null String title, @Null String message,
+                                       @Null String yesButtonText, @Null String noButtonText,
+                                       @Null String cancelButtonText,
+                                       UpdateStage yesUI, UpdateStage noUI, UpdateStage cancelUI,
+                                       @Null Runnable yesRunnable, @Null Runnable noRunnable,
+                                       @Null Runnable cancelRunnable) {
+        
+        DialogUI dialog = prepareDialog(callingUI, title, message);
+        addButtons(dialog, asList(yesButtonText, noButtonText, cancelButtonText),
+                   asList("confirm", "reject", "cancel"), asList(yesUI, noUI, cancelUI),
+                   asList(yesRunnable, noRunnable, cancelRunnable));
+        finalizeDialog(dialog, callingUI);
+    }
+    
+    public static void newInputDialog(UpdateStage callingUI,
+                                      String input, @Null String defaultInput,
+                                      @Null String title, @Null String message,
+                                      @Null String okButtonText, @Null String cancelButtonText,
+                                      UpdateStage okUI, UpdateStage cancelUI,
+                                      @Null Predicate<String> predicate, @Null Runnable cancelRunnable) {
         
         /* TODO
         solve the puzzles, dumb perkel!
@@ -101,7 +129,7 @@ public class DialogUI extends UpdateStage {
                 textFieldStyle.font = Fonts.getFont("pirata_16p_black_bord1white");
                 TextField textField = new TextField(defaultInput, textFieldStyle);
                 textField.setWidth(800 * scaleX);
-
+                
                 textField.setTextFieldListener(new TextFieldListener() {
                     @Override
                     public void keyTyped(TextField textField, char c) {
@@ -134,32 +162,6 @@ public class DialogUI extends UpdateStage {
         }).start();
     }
     
-    public static void newYesNoQuestion(UpdateStage callingUI,
-                                 @Null String title, @Null String message,
-                                 @Null String yesButtonText, @Null String noButtonText,
-                                 UpdateStage yesUI, UpdateStage noUI,
-                                 @Null Runnable yesRunnable, @Null Runnable noRunnable) {
-        
-        DialogUI dialog = prepareDialog(callingUI, title, message);
-        addButtons(dialog, asList(yesButtonText, noButtonText), asList("confirm", "reject"),
-                   asList(yesUI, noUI), asList(yesRunnable, noRunnable));
-        finalizeDialog(dialog, callingUI);
-    }
-    
-    public static void newYesNoCancelQuestion(UpdateStage callingUI,
-                                       @Null String title, @Null String message,
-                                       @Null String yesButtonText, @Null String noButtonText,
-                                       @Null String cancelButtonText,
-                                       UpdateStage yesUI, UpdateStage noUI, UpdateStage cancelUI,
-                                       @Null Runnable yesRunnable, @Null Runnable noRunnable,
-                                       @Null Runnable cancelRunnable) {
-        DialogUI dialog = prepareDialog(callingUI, title, message);
-        addButtons(dialog, asList(yesButtonText, noButtonText, cancelButtonText),
-                   asList("confirm", "reject", "cancel"), asList(yesUI, noUI, cancelUI),
-                   asList(yesRunnable, noRunnable, cancelRunnable));
-        finalizeDialog(dialog, callingUI);
-    }
-    
     public static void newTriggerMessage(UpdateStage callingUI,
                                   @Null String title, @Null String message,
                                   @Null Animation<TextureRegion> waitingAnimation,
@@ -167,7 +169,8 @@ public class DialogUI extends UpdateStage {
                                   UpdateStage triggeredUI, UpdateStage fallbackUI,
                                   @Null Runnable triggerRunnable, @Null Runnable cancelRunnable,
                                   boolean volatileTrigger, int timeOutMs) {
-        // TODO correct constructor
+        
+        // TODO
     }
     
     public static void newTriggerCancelMessage(UpdateStage callingUI,
@@ -175,7 +178,8 @@ public class DialogUI extends UpdateStage {
                                         @Null Animation<TextureRegion> waitingAnimation,
                                         UpdateStage triggeredUI, UpdateStage fallbackUI,
                                         boolean volatileTrigger) {
-        // TODO correct constructor
+        
+        // TODO
     }
     
     private static DialogUI prepareDialog(UpdateStage callingUI, String title, String message) {
