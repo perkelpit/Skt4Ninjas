@@ -1,4 +1,4 @@
-#Fri Apr 15 01:33:39 CEST 2022
+#Fri Apr 15 01:50:36 CEST 2022
 lost_factor=-1
 ramsch=true
 amount_games=36

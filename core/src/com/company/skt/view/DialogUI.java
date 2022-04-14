@@ -126,12 +126,10 @@ public class DialogUI extends UpdateStage {
                 }
                 if(pass) {
                     setInputString(textField.getText());
-                    Gdx.app.postRunnable(() -> {
-                        dialog.screen.event("DIALOG_INPUT_READY#" + eventSubcategory);
-                        dialog.screen.setStageActive(dialog, false);
-                        dialog.screen.removeStage(dialog);
-                        dialog.screen.setStageActive(okUI, true);
-                    });
+                    dialog.screen.event("DIALOG_INPUT_READY#" + eventSubcategory);
+                    dialog.screen.setStageActive(dialog, false);
+                    dialog.screen.removeStage(dialog);
+                    dialog.screen.setStageActive(okUI, true);
                 }
             }
         });
@@ -156,12 +154,10 @@ public class DialogUI extends UpdateStage {
                 }
                 if(pass) {
                     setInputString(inputField.getText());
-                    Gdx.app.postRunnable(() -> {
-                        dialog.screen.event("DIALOG_INPUT_READY#" + eventSubcategory);
-                        dialog.screen.setStageActive(dialog, false);
-                        dialog.screen.removeStage(dialog);
-                        dialog.screen.setStageActive(okUI, true);
-                    });
+                    dialog.screen.event("DIALOG_INPUT_READY#" + eventSubcategory);
+                    dialog.screen.setStageActive(dialog, false);
+                    dialog.screen.removeStage(dialog);
+                    dialog.screen.setStageActive(okUI, true);
                 }
             }
         });
@@ -174,14 +170,12 @@ public class DialogUI extends UpdateStage {
         dialog.buttons.get(1).addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.postRunnable(() -> {
-                    dialog.screen.setStageActive(dialog, false);
-                    dialog.screen.removeStage(dialog);
-                    dialog.screen.setStageActive(cancelUI, true);
-                    if(cancelRunnable != null) {
-                        new Thread(cancelRunnable).start();
-                    }
-                });
+                dialog.screen.setStageActive(dialog, false);
+                dialog.screen.removeStage(dialog);
+                dialog.screen.setStageActive(cancelUI, true);
+                if(cancelRunnable != null) {
+                    new Thread(cancelRunnable).start();
+                }
             }
         });
         dialog.table.add(dialog.buttons.get(1));
@@ -204,11 +198,9 @@ public class DialogUI extends UpdateStage {
         final ScheduledExecutorService triggerChecker = Executors.newSingleThreadScheduledExecutor();
         addButtons(dialog, asList(cancelButtonText), asList("cancel"), asList(fallbackUI),
                    asList(() -> {
-                       Gdx.app.postRunnable(() -> {
-                           dialog.screen.setStageActive(dialog, false);
-                           dialog.screen.removeStage(dialog);
-                           dialog.screen.setStageActive(fallbackUI, true);
-                       });
+                       dialog.screen.setStageActive(dialog, false);
+                       dialog.screen.removeStage(dialog);
+                       dialog.screen.setStageActive(fallbackUI, true);
                    }));
         finalizeDialog(dialog, callingUI);
         final long startTime = TimeUtils.millis();
@@ -282,14 +274,12 @@ public class DialogUI extends UpdateStage {
             dialog.buttons.get(i).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    Gdx.app.postRunnable(() -> {
-                        dialog.screen.setStageActive(dialog, false);
-                        dialog.screen.removeStage(dialog);
-                        dialog.screen.setStageActive(nextUIs.get(finalI), true);
-                        if(buttonRunnables.get(finalI) != null) {
-                            new Thread(buttonRunnables.get(finalI)).start();
-                        }
-                    });
+                    dialog.screen.setStageActive(dialog, false);
+                    dialog.screen.removeStage(dialog);
+                    dialog.screen.setStageActive(nextUIs.get(finalI), true);
+                    if(buttonRunnables.get(finalI) != null) {
+                        new Thread(buttonRunnables.get(finalI)).start();
+                    }
                 }
             });
             dialog.table.add(dialog.buttons.get(i));
@@ -298,12 +288,10 @@ public class DialogUI extends UpdateStage {
     
     
     private static void finalizeDialog(DialogUI dialog, UpdateStage callingUI) {
-        Gdx.app.postRunnable(() -> {
-            dialog.addActor(dialog.table);
-            dialog.screen.setStageActive(callingUI, false);
-            dialog.screen.addStage(dialog);
-            dialog.screen.setStageActive(dialog, true);
-        });
+        dialog.addActor(dialog.table);
+        dialog.screen.setStageActive(callingUI, false);
+        dialog.screen.addStage(dialog);
+        dialog.screen.setStageActive(dialog, true);
     }
     
     private static synchronized void setInputString(String input) {
