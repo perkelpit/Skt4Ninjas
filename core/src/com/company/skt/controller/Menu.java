@@ -15,6 +15,7 @@ public class Menu extends StageScreen {
     
     private Session session;
     private SessionData data;
+    private volatile Boolean clientSessionReadyForLobby;
     
     @Override
     public void initialize() {
@@ -24,6 +25,7 @@ public class Menu extends StageScreen {
         addStage(new MainMenuUI("mainMenuUI", true));
         addStage(new SettingsUI("settingsUI"));
         data = SessionData.get();
+        clientSessionReadyForLobby = Boolean.TRUE;
     }
     
     @Override
@@ -50,8 +52,31 @@ public class Menu extends StageScreen {
                 session = new HostSession();
                 break;
             case "JOIN":
-                DebugWindow.setUIFocus(DebugWindow.Focus.Lobby);
-                session = new ClientSession();
+                DialogUI.newInputDialog(
+                    findStage("mainMenuUI"), "IP", "localhost",
+                    Local.getString("dialog_title_ip"), Local.getString("dialog_prompt_ip"),
+                    null, null, findStage("mainMenuUI"), findStage("mainMenuUI"),
+                    arg0 -> {
+                        if (arg0 == null || arg0.isEmpty()) {
+                            return false;
+                        }
+                        if(arg0.equals("localhost")) {
+                            return true;
+                        } else {
+                            String[] parts = arg0.split("\\.");
+                            if (parts.length != 4) {
+                                return false;
+                            }
+                            for (String part : parts) {
+                                int i = Integer.parseInt(part);
+                                if (i < 0 || i > 255) {
+                                    return false;
+                                }
+                            }
+                            return !arg0.endsWith(".");
+                        }
+                    },
+                    null);
                 break;
             case "ARCHIVE":
                 DebugWindow.println("[MainMenu] archive clicked");
@@ -89,10 +114,15 @@ public class Menu extends StageScreen {
                 break;
             case "QUIT_LOBBY":
                 DebugWindow.setUIFocus(DebugWindow.Focus.Main);
-                try {session.stopSession();} catch (IOException e) {e.printStackTrace();}
-                setStageActive("lobbyUI", false);
-                removeStage("lobbyUI");
-                setStageActive("mainMenuUI", true);
+                Gdx.app.postRunnable(() -> {
+                    DialogUI.newYesNoQuestion(
+                        findStage("lobbyUI"),
+                        (SessionData.isHost() ? Local.getString("lb_q_end") : Local.getString("lb_q_quit")),
+                        null, null, null, findStage("mainMenuUI"), findStage("lobbyUI"),
+                        () -> {
+                            try {session.stopSession();} catch (IOException e) {e.printStackTrace();}
+                        }, null);
+                });
                 break;
             case "GAME_SETTINGS_CLICKED":
                 switch (subCategory){
@@ -149,7 +179,7 @@ public class Menu extends StageScreen {
     }
 
     public void event(String event) {
-        String category = "";
+        String category;
         String subCategory = "";
         if (event.contains("#")){
             category = event.substring(0, event.indexOf("#"));
@@ -161,11 +191,16 @@ public class Menu extends StageScreen {
         switch(category) {
             case "READY_FOR_LOBBY":
                 DebugWindow.println("[Menu|Event] ready for lobby");
-                Gdx.app.postRunnable(() -> {
-                    addStage(new LobbyUI("lobbyUI", true));
-                    setStageActive("mainMenuUI", false);
-                    ((LobbyUI)findStage("lobbyUI")).updateUI();
-                });
+                if(!SessionData.isHost()) {
+                    clientSessionReadyForLobby = true;
+                } else {
+                    Gdx.app.postRunnable(() -> {
+                        addStage(new LobbyUI("lobbyUI", true));
+                        setStageActive("mainMenuUI", false);
+                        ((LobbyUI)findStage("lobbyUI")).updateUI();
+                    });
+                }
+                DebugWindow.setUIFocus(DebugWindow.Focus.Lobby);
                 break;
             case "READY_FOR_SUMMARY":
                 DebugWindow.println("[Menu|Event] ready for summary");
@@ -192,16 +227,34 @@ public class Menu extends StageScreen {
                     setStageActive("lobbyUI", false);
                     removeStage("lobbyUI");
                 });
-                try {
-                    if(SessionData.isHost()) {
-                        // TODO prompt to save Session
-                    }
-                    session.stopSession();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                break;
+            case "DIALOG_INPUT_READY":
+                switch(subCategory) {
+                    case "IP":
+                        session = new ClientSession(DialogUI.getInputString());
+                        break;
+                    case "PLAYER_NAME":
+                        // TODO
+                        break;
                 }
                 break;
-            case "DIALOG_INPUT_STRING_READY":
+            case "CLIENT_SERVER_FOUND":
+                Gdx.app.postRunnable(() -> {
+                    addStage(new LobbyUI("lobbyUI"));
+                    ((LobbyUI)findStage("lobbyUI")).updateUI();
+                    DialogUI.newTriggerMessage(
+                        findStage("mainMenuUI"), null,
+                        Local.getString("dialog_msg_server_found_trying_to_join_lobby"),
+                        null, null, findStage("lobbyUI"), findStage("mainMenuUI"),
+                        null, null, clientSessionReadyForLobby, 20000);
+                });
+                break;
+            case "CLIENT_NO_SERVER_FOUND":
+                Gdx.app.postRunnable(() -> {
+                    DialogUI.newOkMessage(
+                        findStage("mainMenuUI"), Local.getString("error") + "!",
+                        Local.getString("no_server_found") + ".", null, findStage("mainMenuUI"), null);
+                });
                 break;
         }
     }

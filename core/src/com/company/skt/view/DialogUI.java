@@ -1,6 +1,7 @@
 package com.company.skt.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,22 +14,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Null;
-import com.badlogic.gdx.utils.Predicate;
+import com.badlogic.gdx.utils.*;
 import com.company.skt.controller.Utils;
-import com.company.skt.lib.Lock;
+import com.company.skt.lib.AnimationActor;
 import com.company.skt.lib.StageScreen;
+import com.company.skt.lib.TaskCompleteException;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.Assets;
 import com.company.skt.model.Fonts;
 import com.company.skt.model.Local;
 
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Arrays.asList;
 
@@ -40,7 +41,6 @@ public class DialogUI extends UpdateStage {
     private Label messageLable;
     private LabelStyle labelStyleTitle;
     private LabelStyle labelStyleMessage;
-    private TextField inputField;
     private Array<ImageTextButton> buttons;
     private BitmapFont buttonFont;
     private TextureRegionDrawable buttonDrawable;
@@ -72,7 +72,7 @@ public class DialogUI extends UpdateStage {
                              @Null String okButtonText,
                              UpdateStage okUI, @Null Runnable okRunnable) {
         
-        DialogUI dialog = prepareDialog(callingUI, title, message);
+        DialogUI dialog = prepareDialog(title, message);
         addButtons(dialog, asList(okButtonText), asList("ok"), asList(okUI), asList(okRunnable));
         finalizeDialog(dialog, callingUI);
     }
@@ -84,7 +84,7 @@ public class DialogUI extends UpdateStage {
                                  UpdateStage yesUI, UpdateStage noUI,
                                  @Null Runnable yesRunnable, @Null Runnable noRunnable) {
         
-        DialogUI dialog = prepareDialog(callingUI, title, message);
+        DialogUI dialog = prepareDialog(title, message);
         addButtons(dialog, asList(yesButtonText, noButtonText), asList("confirm", "reject"),
                    asList(yesUI, noUI), asList(yesRunnable, noRunnable));
         finalizeDialog(dialog, callingUI);
@@ -98,67 +98,94 @@ public class DialogUI extends UpdateStage {
                                        @Null Runnable yesRunnable, @Null Runnable noRunnable,
                                        @Null Runnable cancelRunnable) {
         
-        DialogUI dialog = prepareDialog(callingUI, title, message);
+        DialogUI dialog = prepareDialog(title, message);
         addButtons(dialog, asList(yesButtonText, noButtonText, cancelButtonText),
                    asList("confirm", "reject", "cancel"), asList(yesUI, noUI, cancelUI),
                    asList(yesRunnable, noRunnable, cancelRunnable));
         finalizeDialog(dialog, callingUI);
     }
     
-    public static void newInputDialog(UpdateStage callingUI, @Null String defaultInput,
+    public static void newInputDialog(UpdateStage callingUI, String eventSubcategory, @Null String defaultInput,
                                       @Null String title, @Null String message,
                                       @Null String okButtonText, @Null String cancelButtonText,
                                       UpdateStage okUI, UpdateStage cancelUI,
                                       @Null Predicate<String> predicate, @Null Runnable cancelRunnable) {
         
-        /* TODO
-        solve the puzzles, dumb perkel!
-        How to predicate, eh?
-        And how to pass input... ugly with parameter like above?!?
-        Does this even work out?
-        There has to be a good way (without blocking the calling thread and by this freezing the app
-        due to preventing it from drawing and acting) */
-        
         setInputString("");
-        new Thread(() -> {
-            Lock lock = new Lock(); // idea: maybe use this to let this thread wait until an input is availiable?
-            Gdx.app.postRunnable(() -> {
-                DialogUI dialog = prepareDialog(callingUI, title, message);
-                TextFieldStyle textFieldStyle = new TextFieldStyle();
-                textFieldStyle.font = Fonts.getFont("pirata_16p_black_bord1white");
-                TextField textField = new TextField(defaultInput, textFieldStyle);
-                textField.setWidth(800 * scaleX);
-                textField.setTextFieldListener(new TextFieldListener() {
-                    @Override
-                    public void keyTyped(TextField textField, char c) {
-                        if(c == '\r' || c == '\n' ) {
-                            // TODO check with predicate
-                            // false -> stay in inputDialog, wait for next input
-                            // true -> pass input and switch to okUI
-                            setInputString(textField.getText());
-                            dialog.screen.event("DIALOG_INPUT_STRING_READY");
-                            dialog.screen.setStageActive(dialog, false);
-                            dialog.screen.removeStage(dialog);
-                            dialog.screen.setStageActive(okUI, true);
-                        }
+        DialogUI dialog = prepareDialog(title, message);
+        TextFieldStyle textFieldStyle = new TextFieldStyle();
+        textFieldStyle.font = Fonts.getFont("pirata_16p_black_bord1white");
+        textFieldStyle.fontColor = Color.WHITE;
+        TextField inputField = new TextField(defaultInput, textFieldStyle);
+        inputField.setWidth(800 * scaleX);
+        inputField.setTextFieldListener((textField, c) -> {
+            if(c == '\r' || c == '\n' ) {
+                boolean pass = true;
+                if(predicate != null) {
+                    pass = predicate.evaluate(textField.getText());
+                }
+                if(pass) {
+                    setInputString(textField.getText());
+                    Gdx.app.postRunnable(() -> {
+                        dialog.screen.event("DIALOG_INPUT_READY#" + eventSubcategory);
+                        dialog.screen.setStageActive(dialog, false);
+                        dialog.screen.removeStage(dialog);
+                        dialog.screen.setStageActive(okUI, true);
+                    });
+                }
+            }
+        });
+        dialog.table.row();
+        dialog.table.add(inputField);
+        dialog.table.row();
+        dialog.buttons = new Array<>();
+        dialog.buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
+        dialog.buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
+        dialog.buttonFont = Fonts.getFont("PirataOne-Regular_Button");
+        dialog.buttons.add(new ImageTextButton(
+            (okButtonText != null ?
+             okButtonText : Local.getString("ok")),
+            new ImageTextButtonStyle(
+                dialog.buttonDrawable, dialog.buttonPressedDrawable, null, dialog.buttonFont)));
+        dialog.buttons.get(0).addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                boolean pass = true;
+                if(predicate != null) {
+                    pass = predicate.evaluate(inputField.getText());
+                }
+                if(pass) {
+                    setInputString(inputField.getText());
+                    Gdx.app.postRunnable(() -> {
+                        dialog.screen.event("DIALOG_INPUT_READY#" + eventSubcategory);
+                        dialog.screen.setStageActive(dialog, false);
+                        dialog.screen.removeStage(dialog);
+                        dialog.screen.setStageActive(okUI, true);
+                    });
+                }
+            }
+        });
+        dialog.table.add(dialog.buttons.get(0));
+        dialog.buttons.add(new ImageTextButton(
+            (cancelButtonText != null ?
+             cancelButtonText : Local.getString("cancel")),
+            new ImageTextButtonStyle(
+                dialog.buttonDrawable, dialog.buttonPressedDrawable, null, dialog.buttonFont)));
+        dialog.buttons.get(1).addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.postRunnable(() -> {
+                    dialog.screen.setStageActive(dialog, false);
+                    dialog.screen.removeStage(dialog);
+                    dialog.screen.setStageActive(cancelUI, true);
+                    if(cancelRunnable != null) {
+                        new Thread(cancelRunnable).start();
                     }
                 });
-                dialog.table.row();
-                dialog.table.add(textField);
-                addButtons(dialog, asList(okButtonText, cancelButtonText), asList("ok", "cancel"),
-                           asList(okUI, cancelUI),
-                           asList(() -> {
-                               // TODO check with predicate
-                               // false -> stay in inputDialog, wait for next input
-                               // true -> pass input and switch to okUI
-                               setInputString(textField.getText());
-                               dialog.screen.setStageActive(dialog, false);
-                               dialog.screen.removeStage(dialog);
-                               dialog.screen.setStageActive(okUI, true);
-                           }, cancelRunnable));
-                finalizeDialog(dialog, callingUI);
-            });
-        }).start();
+            }
+        });
+        dialog.table.add(dialog.buttons.get(1));
+        finalizeDialog(dialog, callingUI);
     }
     
     public static void newTriggerMessage(UpdateStage callingUI,
@@ -166,22 +193,53 @@ public class DialogUI extends UpdateStage {
                                   @Null Animation<TextureRegion> waitingAnimation,
                                   @Null String cancelButtonText,
                                   UpdateStage triggeredUI, UpdateStage fallbackUI,
-                                  @Null Runnable triggerRunnable, @Null Runnable cancelRunnable,
-                                  boolean volatileTrigger, int timeOutMs) {
-        
-        // TODO
+                                  @Null final Runnable triggerRunnable, @Null final Runnable timeoutRunnable,
+                                  boolean volatileTrigger, final int timeoutMs) {
+    
+        DialogUI dialog = prepareDialog(title, message);
+        if(waitingAnimation != null) {
+            dialog.table.row();
+            dialog.table.add(new AnimationActor("waitingAnimation", waitingAnimation));
+        }
+        final ScheduledExecutorService triggerChecker = Executors.newSingleThreadScheduledExecutor();
+        addButtons(dialog, asList(cancelButtonText), asList("cancel"), asList(fallbackUI),
+                   asList(() -> {
+                       Gdx.app.postRunnable(() -> {
+                           dialog.screen.setStageActive(dialog, false);
+                           dialog.screen.removeStage(dialog);
+                           dialog.screen.setStageActive(fallbackUI, true);
+                       });
+                   }));
+        finalizeDialog(dialog, callingUI);
+        final long startTime = TimeUtils.millis();
+        triggerChecker.scheduleAtFixedRate(() -> {
+            if(volatileTrigger) {
+                Gdx.app.postRunnable(() -> {
+                    dialog.screen.setStageActive(dialog, false);
+                    dialog.screen.removeStage(dialog);
+                    dialog.screen.setStageActive(triggeredUI, true);
+                    if(triggerRunnable != null) {
+                        new Thread(triggerRunnable).start();
+                    }
+                });
+                throw new TaskCompleteException();
+            }
+            if(TimeUtils.timeSinceMillis(startTime) > timeoutMs) {
+                Gdx.app.postRunnable(() -> {
+                    dialog.screen.setStageActive(dialog, false);
+                    dialog.screen.removeStage(dialog);
+                    dialog.screen.setStageActive(fallbackUI, true);
+                    if(timeoutRunnable != null) {
+                        new Thread(timeoutRunnable).start();
+                    }
+                });
+                throw new TaskCompleteException();
+            }
+        }, 2000, 10, TimeUnit.MILLISECONDS);
     }
     
-    public static void newTriggerCancelMessage(UpdateStage callingUI,
-                                        @Null String title, @Null String message,
-                                        @Null Animation<TextureRegion> waitingAnimation,
-                                        UpdateStage triggeredUI, UpdateStage fallbackUI,
-                                        boolean volatileTrigger) {
-        
-        // TODO
-    }
     
-    private static DialogUI prepareDialog(UpdateStage callingUI, String title, String message) {
+    private static DialogUI prepareDialog(String title, String message) {
         DialogUI dialog = new DialogUI();
         
         /* ### TITLE LABLE ### */
@@ -224,12 +282,14 @@ public class DialogUI extends UpdateStage {
             dialog.buttons.get(i).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    dialog.screen.setStageActive(dialog, false);
-                    dialog.screen.removeStage(dialog);
-                    dialog.screen.setStageActive(nextUIs.get(finalI), true);
-                    if(buttonRunnables.get(finalI) != null) {
-                        new Thread(buttonRunnables.get(finalI)).start();
-                    }
+                    Gdx.app.postRunnable(() -> {
+                        dialog.screen.setStageActive(dialog, false);
+                        dialog.screen.removeStage(dialog);
+                        dialog.screen.setStageActive(nextUIs.get(finalI), true);
+                        if(buttonRunnables.get(finalI) != null) {
+                            new Thread(buttonRunnables.get(finalI)).start();
+                        }
+                    });
                 }
             });
             dialog.table.add(dialog.buttons.get(i));
@@ -238,17 +298,19 @@ public class DialogUI extends UpdateStage {
     
     
     private static void finalizeDialog(DialogUI dialog, UpdateStage callingUI) {
-        dialog.addActor(dialog.table);
-        dialog.screen.setStageActive(callingUI, false);
-        dialog.screen.addStage(dialog);
-        dialog.screen.setStageActive(dialog, true);
+        Gdx.app.postRunnable(() -> {
+            dialog.addActor(dialog.table);
+            dialog.screen.setStageActive(callingUI, false);
+            dialog.screen.addStage(dialog);
+            dialog.screen.setStageActive(dialog, true);
+        });
     }
     
     private static synchronized void setInputString(String input) {
         DialogUI.input = input;
     }
     
-    private static synchronized String getInputString() {
+    public static synchronized String getInputString() {
         return input;
     }
     

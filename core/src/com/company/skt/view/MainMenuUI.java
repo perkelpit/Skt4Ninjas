@@ -73,7 +73,7 @@ public class MainMenuUI extends UpdateStage {
         hostButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Menu)Utils.getCurrentScreen()).buttonClicked("HOST");
+                Utils.getCurrentScreen().buttonClicked("HOST");
             }
         });
         menuTable.add(hostButton);
@@ -86,7 +86,7 @@ public class MainMenuUI extends UpdateStage {
         joinButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Menu)Utils.getCurrentScreen()).buttonClicked("JOIN");
+                Utils.getCurrentScreen().buttonClicked("JOIN");
             }
         });
         menuTable.add(joinButton);
@@ -99,7 +99,7 @@ public class MainMenuUI extends UpdateStage {
         archiveButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Menu)Utils.getCurrentScreen()).buttonClicked("ARCHIVE");
+                Utils.getCurrentScreen().buttonClicked("ARCHIVE");
             }
         });
         menuTable.add(archiveButton);
@@ -112,7 +112,7 @@ public class MainMenuUI extends UpdateStage {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Menu)Utils.getCurrentScreen()).buttonClicked("SETTINGS");
+                Utils.getCurrentScreen().buttonClicked("SETTINGS");
             }
         });
         menuTable.add(settingsButton);
@@ -125,7 +125,7 @@ public class MainMenuUI extends UpdateStage {
         creditsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Menu)Utils.getCurrentScreen()).buttonClicked("CREDITS");
+                Utils.getCurrentScreen().buttonClicked("CREDITS");
             }
         });
         menuTable.add(creditsButton);
@@ -138,7 +138,7 @@ public class MainMenuUI extends UpdateStage {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Menu)Utils.getCurrentScreen()).buttonClicked("EXIT");
+                Utils.getCurrentScreen().buttonClicked("EXIT");
             }
         });
         menuTable.add(exitButton);

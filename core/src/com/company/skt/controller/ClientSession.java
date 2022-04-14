@@ -139,14 +139,10 @@ public class ClientSession extends Session {
                dataStr.substring(dataStr.indexOf('}') + 1) : "";
     }
     
-    ClientSession() {
+    ClientSession(String serverIP) {
+        DebugWindow.println("[ClientSession] got IP: " + serverIP);
+        this.serverIP = serverIP;
         startSession();
-    }
-    
-    ClientSession(boolean start) {
-        if (start) {
-           startSession();
-        }
     }
     
     private String fetchPlayerName() {
@@ -162,55 +158,22 @@ public class ClientSession extends Session {
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 null,
-                null
-                                                            );
+                null);
         }
         return playerName;
     }
     
-    private void fetchServerIpAndLogin() {
-        boolean abort = false;
-        String prompt = "Enter Server-IP: ";
-        do {
-            /*
-            // DEBUG turned off cause Dialog does not show properly
-            // TODO better fitting UI-element to enter serverIP
-            serverIP = (String)JOptionPane.showInputDialog(
-                null,
-                prompt,
-                "Server-IP Input",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                null,
-                "localhost");
-                */
-            serverIP = "localhost";
-            if (serverIP != null) {
-                try {
-                    connected = logIn();
-                } catch (Exception e) {
-                    prompt = "ERROR: Enter valid server-IP!";
-                }
-            } else { // (serverIP == null) -> "Cancel" was selected in Dialog
-                abort = true;
-                try {
-                    stopSession();
-                } catch (IOException e) {e.printStackTrace();}
-                // TODO any action if input of serverIP was aborted?
-            }
-        
-        } while (!connected && !abort);
-    }
-    
-    private boolean logIn() {
+    private boolean connect() {
         try {
             socket = new Socket(serverIP, PORT);
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new ClientStringStreamHandler(new BufferedReader(new InputStreamReader(socket.getInputStream())), 100);
             in.startStreamHandler();
+            Utils.getCurrentScreen().event("CLIENT_SERVER_FOUND");
             return true;
         } catch (IOException e) {
             e.printStackTrace();
+            Utils.getCurrentScreen().event("CLIENT_NO_SERVER_FOUND");
             return false;
         }
     }
@@ -229,9 +192,20 @@ public class ClientSession extends Session {
     
     @Override
     void startSession() {
+        DebugWindow.println("[ClientSession] starting...");
         sessionData = SessionData.get();
         thisPlayer = new Player(fetchPlayerName());
-        fetchServerIpAndLogin();
+        // TODO move to triggeredDialog
+        DebugWindow.println("[ClientSession] trying to connect...");
+        connected = connect();
+        if(!connected) {
+            DebugWindow.println("[ClientSession] connecting failed. stopping session.");
+            try {
+                stopSession();
+            } catch (IOException e) {e.printStackTrace();}
+        } else {
+            DebugWindow.println("[ClientSession] connection ok.");
+        }
     }
     
     void stopSession() throws IOException {

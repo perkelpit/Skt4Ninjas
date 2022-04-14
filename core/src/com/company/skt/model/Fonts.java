@@ -66,9 +66,10 @@ public abstract class Fonts {
         fP_pirata_16p_black_bord1white.borderStraight = true;
         fP_pirata_16p_black_bord1white.minFilter = Texture.TextureFilter.Linear;
         fP_pirata_16p_black_bord1white.magFilter = Texture.TextureFilter.Linear;
-        FontsMap.put("pirata_16p_black_bord1white",
-                     new FreeTypeFontGenerator(
-                         Gdx.files.internal(path + "PirataOne-Regular.ttf")).generateFont(fP_pirata_16p_black_bord1white));
+        FontsMap.put(
+            "pirata_16p_black_bord1white",
+            new FreeTypeFontGenerator(
+                Gdx.files.internal(path + "PirataOne-Regular.ttf")).generateFont(fP_pirata_16p_black_bord1white));
     }
     
     public static BitmapFont getFont(String fontName){

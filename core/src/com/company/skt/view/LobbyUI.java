@@ -97,7 +97,7 @@ public class LobbyUI extends UpdateStage {
         kickPlayer1Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("KICK_PLAYER#1");
+                Utils.getCurrentScreen().buttonClicked("KICK_PLAYER#1");
             }
         });
         topLeftTable.add(kickPlayer1Button);
@@ -113,7 +113,7 @@ public class LobbyUI extends UpdateStage {
         kickPlayer2Button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("KICK_PLAYER#2");
+                Utils.getCurrentScreen().buttonClicked("KICK_PLAYER#2");
             }
         });
         topLeftTable.add(kickPlayer2Button);
@@ -144,7 +144,7 @@ public class LobbyUI extends UpdateStage {
         amountGamesSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("GAME_SETTINGS_CLICKED#AMOUNT_GAMES");
+                Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#AMOUNT_GAMES");
             }
         });
 
@@ -162,7 +162,7 @@ public class LobbyUI extends UpdateStage {
         lostFactorSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("GAME_SETTINGS_CLICKED#LOST_FACTOR");
+                Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#LOST_FACTOR");
             }
         });
         topRightTable.add(lostFactorSelectBox).align(Align.left);
@@ -186,7 +186,7 @@ public class LobbyUI extends UpdateStage {
         timeLimitSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("GAME_SETTINGS_CLICKED#TIME_LIMIT");
+                Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#TIME_LIMIT");
             }
         });
         topRightTable.add(timeLimitSelectBox).align(Align.left);
@@ -201,7 +201,7 @@ public class LobbyUI extends UpdateStage {
         junkCheckbox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("GAME_SETTINGS_CLICKED#RAMSCH");
+                Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#RAMSCH");
             }
         });
         topRightTable.add(junkCheckbox).align(Align.left);
@@ -234,7 +234,7 @@ public class LobbyUI extends UpdateStage {
         readyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("READY");
+                Utils.getCurrentScreen().buttonClicked("READY");
             }
         });
         bottomRightTable.add(readyButton);
@@ -248,7 +248,7 @@ public class LobbyUI extends UpdateStage {
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("QUIT_LOBBY");
+                Utils.getCurrentScreen().buttonClicked("QUIT_LOBBY");
             }
         });
         bottomRightTable.add(quitButton).padTop(10f * scaleY);

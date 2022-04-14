@@ -1,5 +1,5 @@
-#Wed Apr 13 15:19:41 CEST 2022
-lost_factor=-4
+#Fri Apr 15 01:33:39 CEST 2022
+lost_factor=-1
 ramsch=true
-amount_games=18
-time_limit=120
+amount_games=36
+time_limit=0

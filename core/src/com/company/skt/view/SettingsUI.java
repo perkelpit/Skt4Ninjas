@@ -68,7 +68,7 @@ public class SettingsUI extends UpdateStage {
         gameTabButton.addListener(new ClickListener() {
            @Override
            public void clicked(InputEvent event, float x, float y){
-               ((Menu) Utils.getCurrentScreen()).buttonClicked("TAB_GAME");
+               Utils.getCurrentScreen().buttonClicked("TAB_GAME");
            }
         });
         tabTable.add(gameTabButton);
@@ -82,7 +82,7 @@ public class SettingsUI extends UpdateStage {
         videoTabButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("TAB_VIDEO");
+                Utils.getCurrentScreen().buttonClicked("TAB_VIDEO");
             }
         });
         tabTable.add(videoTabButton);
@@ -96,7 +96,7 @@ public class SettingsUI extends UpdateStage {
         audioTabButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("TAB_AUDIO");
+                Utils.getCurrentScreen().buttonClicked("TAB_AUDIO");
             }
         });
         tabTable.add(audioTabButton);
@@ -110,7 +110,7 @@ public class SettingsUI extends UpdateStage {
         quitSettingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("QUIT_SETTINGS");
+                Utils.getCurrentScreen().buttonClicked("QUIT_SETTINGS");
             }
         });
         tabTable.add(quitSettingsButton);
@@ -141,7 +141,7 @@ public class SettingsUI extends UpdateStage {
         changeNameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                ((Menu) Utils.getCurrentScreen()).buttonClicked("CHANGE_NAME");
+                Utils.getCurrentScreen().buttonClicked("CHANGE_NAME");
             }
         });
         gameTable.add(changeNameButton);

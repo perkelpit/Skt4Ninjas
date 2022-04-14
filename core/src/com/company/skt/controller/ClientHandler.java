@@ -120,6 +120,7 @@ public class ClientHandler implements Runnable {
                 }
                 if (in.startsWith("QUIT")) {
                     DebugWindow.println(handlerTag + " client quitted");
+                    sessionData.setPlayer(null, playerNumber);
                     stopClientHandler();
                 }
                 if (in.startsWith("PONG")) {
