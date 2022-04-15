@@ -126,10 +126,6 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
                 return stage;
             }
         }
-        System.out.println(
-            "\u001B[31m" + "ERROR: No such stage in " +
-            this.getClass().getSimpleName() + ": " +
-            name + "\u001B[0m");
         return null;
     }
     

@@ -8,16 +8,16 @@ import com.company.skt.view.DebugWindow;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.Properties;
 import java.util.concurrent.*;
 
 public class HostSession extends Session {
+    
+    private static int lastHandlerListening;
     
     private final int PORT = 2152;
     private boolean clientSearchOngoing;
     private ScheduledThreadPoolExecutor executor;
     private SessionData sessionData;
-    private Properties appCfg;
     private ServerSocket serverSocket;
     private ClientHandler handlerPlayer1;
     private ClientHandler handlerPlayer2;
@@ -35,21 +35,27 @@ public class HostSession extends Session {
     @Override
     void startSession() throws IOException {
         DebugWindow.println("[HostSession] starting");
-        appCfg = Settings.getProperties(Settings.APP);
+        
         sessionData = SessionData.get(true);
-        Player self = new Player(appCfg.getProperty("player_name"));
+        
+        /* TODO seems a bad solution:
+         * better wrap singleThreadScheduled araund a CachedThreadPool */
+        executor = new ScheduledThreadPoolExecutor(32);
+        
+        handlerPlayer1 = new ClientHandler(HostSession.this);
+        handlerPlayer2 = new ClientHandler(HostSession.this);
+
+        Player self = new Player(Settings.getProperties(Settings.APP).getProperty("player_name"));
         self.setConnectivity(1);
         self.setReady(true);
         sessionData.setPlayer(self, 0);
+        
         try {
             serverSocket = new ServerSocket(PORT);
+            serverSocket.setSoTimeout(1000);
         } catch(IOException e) {e.printStackTrace();}
         ((Menu)Utils.getCurrentScreen()).event("READY_FOR_LOBBY");
-        Executors.newCachedThreadPool();
-            // TODO seems a bad solution: better wrap singleThreadScheduled araund a CachedThreadPool
-        executor = new ScheduledThreadPoolExecutor(32);
-        handlerPlayer1 = new ClientHandler(HostSession.this);
-        handlerPlayer2 = new ClientHandler(HostSession.this);
+
         clientSearch();
     }
     
@@ -80,7 +86,10 @@ public class HostSession extends Session {
         executor.scheduleAtFixedRate(() -> {
             if(!handlerPlayer1.hasSocket() || !handlerPlayer2.hasSocket()) {
                 if(!handlerPlayer1.hasSocket()) {
-                    DebugWindow.println("[HostSession] listening @port for player1");
+                    if(HostSession.lastHandlerListening != 1) {
+                        HostSession.lastHandlerListening = 1;
+                        DebugWindow.println("[HostSession] Handler(1) listening @port for player");
+                    }
                     handlerPlayer1.listenAtPort();
                     if(handlerPlayer1.hasSocket()) {
                         DebugWindow.println("[HostSession] starting handlerPlayer1");
@@ -88,7 +97,10 @@ public class HostSession extends Session {
                     }
                 }
                 if(handlerPlayer1.hasSocket() && !handlerPlayer2.hasSocket()) {
-                    DebugWindow.println("[HostSession] listening @port for player2");
+                    if(HostSession.lastHandlerListening != 2) {
+                        HostSession.lastHandlerListening = 2;
+                        DebugWindow.println("[HostSession] Handler(2) listening @port for player");
+                    }
                     handlerPlayer2.listenAtPort();
                     if(handlerPlayer2.hasSocket()) {
                         DebugWindow.println("[HostSession] starting handlerPlayer2");
@@ -97,6 +109,7 @@ public class HostSession extends Session {
                 }
             } else {
                 clientSearchOngoing = false;
+                HostSession.lastHandlerListening = 0;
                 DebugWindow.println("[HostSession] clientsearch ended");
                 throw new TaskCompleteException();
             }
@@ -123,12 +136,10 @@ public class HostSession extends Session {
     }
     
     void sendStringToAll(String msg) {
-        DebugWindow.println("[HostSession] sending String to all clients: " +
-                            (msg.length() > 8 ? msg.substring(0, 8) + "..." : msg));
-        if(handlerPlayer1.isConnected()) {
+        if(handlerPlayer1 != null && handlerPlayer1.isConnected()) {
             handlerPlayer1.sendString(msg);
         }
-        if(handlerPlayer2.isConnected()) {
+        if(handlerPlayer2 != null && handlerPlayer2.isConnected()) {
             handlerPlayer2.sendString(msg);
         }
     }

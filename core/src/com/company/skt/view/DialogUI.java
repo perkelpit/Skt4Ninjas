@@ -119,6 +119,7 @@ public class DialogUI extends UpdateStage {
         textFieldStyle.fontColor = Color.WHITE;
         TextField inputField = new TextField(defaultInput, textFieldStyle);
         inputField.setWidth(800 * scaleX);
+        inputField.setDisabled(false);
         inputField.setTextFieldListener((textField, c) -> {
             if(c == '\r' || c == '\n' ) {
                 boolean pass = true;

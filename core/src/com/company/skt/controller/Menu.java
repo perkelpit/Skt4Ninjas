@@ -209,7 +209,6 @@ public class Menu extends StageScreen {
             case "SESSION_DATA_CHANGED":
                 DebugWindow.println("[Menu|Event] session data changed");
                 if(SessionData.isHost() && session != null) {
-                    System.out.println(SessionData.getDataStringForClient());
                     ((HostSession)session).sendStringToAll(SessionData.getDataStringForClient());
                 }
                 if(findStage("lobbyUI") != null) {
