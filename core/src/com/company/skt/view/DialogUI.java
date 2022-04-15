@@ -46,6 +46,7 @@ public class DialogUI extends UpdateStage {
     private TextureRegionDrawable buttonDrawable;
     private TextureRegionDrawable buttonPressedDrawable;
     
+    private static ScheduledExecutorService triggerChecker;
     private static volatile String input;
     private static float scaleX;
     private static float scaleY;
@@ -190,12 +191,12 @@ public class DialogUI extends UpdateStage {
                                   @Null final Runnable triggerRunnable, @Null final Runnable timeoutRunnable,
                                   boolean volatileTrigger, final int timeoutMs) {
     
+        triggerChecker = Executors.newSingleThreadScheduledExecutor();
         DialogUI dialog = prepareDialog(title, message);
         if(waitingAnimation != null) {
             dialog.table.row();
             dialog.table.add(new AnimationActor("waitingAnimation", waitingAnimation));
         }
-        final ScheduledExecutorService triggerChecker = Executors.newSingleThreadScheduledExecutor();
         addButtons(dialog, asList(cancelButtonText), asList("cancel"), asList(fallbackUI),
                    asList(() -> {
                        dialog.screen.setStageActive(dialog, false);
@@ -214,6 +215,7 @@ public class DialogUI extends UpdateStage {
                         new Thread(triggerRunnable).start();
                     }
                 });
+                triggerChecker.shutdownNow();
                 throw new TaskCompleteException();
             }
             if(TimeUtils.timeSinceMillis(startTime) > timeoutMs) {
@@ -225,6 +227,7 @@ public class DialogUI extends UpdateStage {
                         new Thread(timeoutRunnable).start();
                     }
                 });
+                triggerChecker.shutdownNow();
                 throw new TaskCompleteException();
             }
         }, 2000, 10, TimeUnit.MILLISECONDS);
