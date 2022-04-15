@@ -216,6 +216,7 @@ public class DialogUI extends UpdateStage {
                     }
                 });
                 triggerChecker.shutdownNow();
+                triggerChecker = null;
                 throw new TaskCompleteException();
             }
             if(TimeUtils.timeSinceMillis(startTime) > timeoutMs) {
@@ -228,6 +229,7 @@ public class DialogUI extends UpdateStage {
                     }
                 });
                 triggerChecker.shutdownNow();
+                triggerChecker = null;
                 throw new TaskCompleteException();
             }
         }, 2000, 10, TimeUnit.MILLISECONDS);
