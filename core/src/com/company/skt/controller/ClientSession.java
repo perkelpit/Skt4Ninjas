@@ -1,6 +1,7 @@
 package com.company.skt.controller;
 
 import com.badlogic.gdx.Gdx;
+import com.company.skt.lib.HasSession;
 import com.company.skt.lib.Player;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.model.Local;
@@ -49,11 +50,9 @@ public class ClientSession extends Session {
                 if (in.startsWith("PING")) {
                     sendString("PONG");
                 }
-                if (in.startsWith("LOGGEDIN")) {
-                    Utils.getCurrentScreen().event("READY_FOR_LOBBY");
-                }
-                if (in.startsWith("SUMMARY")) {
-                    Utils.getCurrentScreen().event("READY_FOR_SUMMARY");
+                if (in.startsWith("REJECTED")) {
+                    Utils.getCurrentScreen().event("CONNECTION_REJECTED");
+                    rejected = true;
                 }
                 if (in.startsWith("SDATA>")) {
                     processSessionDataString(in.substring(in.indexOf('>') + 1));
@@ -65,11 +64,17 @@ public class ClientSession extends Session {
                 if (in.startsWith("QRY_PLAYER")) {
                     sendString("PLAYER>" + thisPlayer.getName());
                 }
+                if (in.startsWith("LOGGEDIN")) {
+                    Utils.getCurrentScreen().event("READY_FOR_LOBBY");
+                }
                 if (in.startsWith("KICK")) {
                     sessionLeft(true);
                 }
                 if (in.startsWith("END") && !rejected) {
                     sessionLeft(false);
+                }
+                if (in.startsWith("SUMMARY")) {
+                    Utils.getCurrentScreen().event("READY_FOR_SUMMARY");
                 }
             }
         }
@@ -240,6 +245,8 @@ public class ClientSession extends Session {
         in.stopStreamHandler();
         out.close();
         socket.close();
+        SessionData.dispose();
+        ((HasSession)Utils.getCurrentScreen()).setSessionToNull();
     }
     
     

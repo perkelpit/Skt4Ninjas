@@ -15,7 +15,7 @@ public class ClientHandler implements Runnable {
     
     /* ### [CLIENT HANDLER]: FIELDS */
     
-    private String handlerTag;
+    protected String handlerTag;
     private HostSession hostSession;
     private SessionData sessionData;
     private Socket socket;
@@ -24,7 +24,7 @@ public class ClientHandler implements Runnable {
     private PrintWriter out;
     private HostStringStreamHandler in;
     private HeartBeat heartBeat;
-    private volatile boolean connected;
+    protected volatile boolean connected;
     
     
     /* ### [INNER CLASS]: HEARTBEAT ### */
@@ -150,9 +150,9 @@ public class ClientHandler implements Runnable {
     
     @Override
     public void run() {
-        sessionData = SessionData.get();
         playerNumber = (ClientHandler.this == hostSession.getHandler(1)) ? 1 : 2;
         handlerTag = "[ClientHandler(" + playerNumber + ")]";
+        sessionData = SessionData.get();
         DebugWindow.println(handlerTag + " initializing connection");
         connected = connectToClient();
         if (!connected) {
@@ -183,7 +183,7 @@ public class ClientHandler implements Runnable {
         catch(IOException ignored) {}
     }
     
-    private boolean connectToClient() {
+    protected boolean connectToClient() {
         try {
             out = new PrintWriter(socket.getOutputStream(), true);
             DebugWindow.println(handlerTag + " opened OutputStream");
@@ -222,9 +222,7 @@ public class ClientHandler implements Runnable {
         }
         player = null;
         if(sessionData != null) {
-            sessionData.setPlayer(player, playerNumber);
             sessionData = null;
-            SessionData.dispose();
         }
         socket = null;
     }

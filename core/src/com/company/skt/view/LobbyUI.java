@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Align;
 import com.company.skt.controller.Utils;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.*;
+import com.badlogic.gdx.Gdx;
 
 import java.util.Properties;
 
@@ -148,6 +149,10 @@ public class LobbyUI extends UpdateStage {
         amountGamesSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                /* // TODO works too good - find better way
+                if(amountGamesSelectBox.hit(Gdx.input.getX(), Gdx.input.getY(), true) != null) {
+
+                }*/
                 Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#AMOUNT_GAMES");
             }
         });
@@ -168,6 +173,10 @@ public class LobbyUI extends UpdateStage {
         lostFactorSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                /* // TODO works too good - find better way
+                if(lostFactorSelectBox.hit(Gdx.input.getX(), Gdx.input.getY(), true) != null) {
+
+                }*/
                 Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#LOST_FACTOR");
             }
         });
@@ -195,6 +204,10 @@ public class LobbyUI extends UpdateStage {
         timeLimitSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                /* // TODO works too good - find better way
+                if(timeLimitSelectBox.hit(Gdx.input.getX(), Gdx.input.getY(), true) != null) {
+
+                }*/
                 Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#TIME_LIMIT");
             }
         });
