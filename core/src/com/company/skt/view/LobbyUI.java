@@ -229,6 +229,27 @@ public class LobbyUI extends UpdateStage {
         bottomLeftTable.setHeight(Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f);
         bottomLeftTable.setPosition(0, 0, Align.bottomLeft);
 
+        chatArea = new TextArea(
+                "testArea",
+                new TextField.TextFieldStyle(
+                        Fonts.getFont("PirataOne-Regular_Button"),
+                        Color.WHITE,
+                        null,
+                        null,
+                        new TextureRegionDrawable(Assets.<Texture>get("TextfieldTexture.png"))));
+        chatArea.setDisabled(false);
+        bottomLeftTable.add(chatArea);
+        bottomLeftTable.row();
+
+        chatField = new TextField("testField",
+                new TextField.TextFieldStyle(
+                        Fonts.getFont("PirataOne-Regular_Button"),
+                        Color.WHITE,
+                        null,
+                        null,
+                        new TextureRegionDrawable(Assets.<Texture>get("TextfieldTexture.png"))));
+
+        bottomLeftTable.add(chatField);
 
         addActor(bottomLeftTable);
 
