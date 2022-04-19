@@ -17,7 +17,12 @@ import java.util.Properties;
 public class SessionData implements Serializable {
     
     private static SessionData data;
-    private static boolean isHost;
+    private static int ownPlayerNumber;
+    
+    static {
+        ownPlayerNumber = -1;
+    }
+    
     private Player player0;
     private Player player1;
     private Player player2;
@@ -38,12 +43,15 @@ public class SessionData implements Serializable {
     
     // TODO depricate this by getting this information automatically
     public synchronized static SessionData get(boolean isHost) {
-        SessionData.isHost = isHost;
+        if(isHost) {
+            setOwnPlayerNumber(0);
+        }
         return get();
     }
     
     public synchronized static void dispose() {
         data = null;
+        ownPlayerNumber = -1;
     }
     
     public synchronized static String getDataStringForClient() {
@@ -126,7 +134,7 @@ public class SessionData implements Serializable {
     
     public synchronized void setCfgValue(String key, String value) {
         data.sessionCfg.setProperty(key, value);
-        if(isHost) {
+        if(isHost()) {
             Settings.setProperty(Settings.GAME, key, value);
         }
         if(key.equals("amount_games")) {
@@ -139,7 +147,7 @@ public class SessionData implements Serializable {
         if(keys.length == values.length) {
             for(int i = 0; i < keys.length; i++) {
                 data.sessionCfg.setProperty(keys[i], values[i]);
-                if(isHost) {
+                if(isHost()) {
                     Settings.setProperty(Settings.GAME, keys[i], values[i]);
                 }
                 if(keys[i].equals("amount_games")) {
@@ -159,7 +167,7 @@ public class SessionData implements Serializable {
     }
     
     public synchronized static boolean isHost() {
-        return isHost;
+        return ownPlayerNumber == 0;
     }
     
     public synchronized GameList getGameList() {
@@ -192,4 +200,11 @@ public class SessionData implements Serializable {
         return loadedData;
     }
     
+    public static void setOwnPlayerNumber(int ownPlayerNumber) {
+        SessionData.ownPlayerNumber = ownPlayerNumber;
+    }
+    
+    public static int getOwnPlayerNumber() {
+        return ownPlayerNumber;
+    }
 }

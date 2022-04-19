@@ -164,9 +164,13 @@ public class ClientHandler implements Runnable {
     }
     
     synchronized void sendString(String msg) {
-        if (!msg.startsWith("PING"))
+        if(!msg.startsWith("PING")) {
             DebugWindow.println(handlerTag + " Sending Msg: " +
                                 (msg.length() > 8 ? msg.substring(0, 8) + "..." : msg));
+        }
+        if(msg.startsWith("SDATA>")) {
+            msg = msg.substring(0, 6) + "HdlNr{" + playerNumber + "}" + msg.substring(6);
+        }
         out.println(msg);
     }
     
@@ -194,6 +198,11 @@ public class ClientHandler implements Runnable {
             ioe.printStackTrace();
             return false;
         }
+    }
+    
+    void kickPlayer() throws IOException {
+        sendString("KICK");
+        stopClientHandler();
     }
     
     void stopClientHandler() throws IOException {

@@ -8,6 +8,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.company.skt.controller.Utils;
 import com.company.skt.model.Assets;
 
+import java.util.Arrays;
+
 public abstract class StageScreen implements Screen, InputProcessor, Initialize_Update, EventClickHandler {
     
     private LayeredStages layeredStages;
@@ -110,11 +112,19 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
             if(active && !stage.isActive()) {
                 stage.setActive(true);
                 inputMultiplexer.addProcessor(0, stage);
-            }
-            if(!active && stage.isActive()) {
+            } else if(!active && stage.isActive()) {
                 stage.setActive(false);
                 inputMultiplexer.removeProcessor(stage);
+            } else if((!active && !stage.isActive()) || (active && stage.isActive())) {  // DEBUG
+                System.out.println("[Thread: ### " + Thread.currentThread().getName() +
+                                   " ###] is faulty calling setStageActive(" +
+                                   stage.getName() + ", " + active +
+                                   ") \n | stage.isActive() == " + stage.isActive());
             }
+        } else {
+            // DEBUG
+            System.out.println("StageScreen::setStageActive(stage == null, " + active +
+                               "): if(active &&  !stage.isActive()): finished");
         }
     }
     

@@ -15,7 +15,6 @@ public class HostSession extends Session {
     private static int lastHandlerListening;
     
     private final int PORT = 2152;
-    private boolean clientSearchOngoing;
     private ScheduledThreadPoolExecutor executor;
     private SessionData sessionData;
     private ServerSocket serverSocket;
@@ -38,10 +37,9 @@ public class HostSession extends Session {
         
         sessionData = SessionData.get(true);
         
-        /* TODO seems a bad solution:
-         * better wrap singleThreadScheduled araund a CachedThreadPool */
+        /* TODO seems a crude solution:
+         * better figure out how to combine singleThreadScheduled and CachedThreadPool */
         executor = new ScheduledThreadPoolExecutor(32);
-        
         handlerPlayer1 = new ClientHandler(HostSession.this);
         handlerPlayer2 = new ClientHandler(HostSession.this);
 
@@ -54,7 +52,7 @@ public class HostSession extends Session {
             serverSocket = new ServerSocket(PORT);
             serverSocket.setSoTimeout(1000);
         } catch(IOException e) {e.printStackTrace();}
-        ((Menu)Utils.getCurrentScreen()).event("READY_FOR_LOBBY");
+        Utils.getCurrentScreen().event("READY_FOR_LOBBY");
 
         clientSearch();
     }
@@ -64,12 +62,12 @@ public class HostSession extends Session {
         executor.shutdownNow();
         try {
             if(handlerPlayer1 != null) {
-                DebugWindow.println("[HostSession] stopping handler: handlerPlayer1");
+                DebugWindow.println("[HostSession] stopping handler(1)");
                 handlerPlayer1.stopClientHandler();
                 handlerPlayer1 = null;
             }
             if(handlerPlayer2 != null) {
-                DebugWindow.println("[HostSession] stopping handler: handlerPlayer2");
+                DebugWindow.println("[HostSession] stopping handler(2)");
                 handlerPlayer2.stopClientHandler();
                 handlerPlayer2 = null;
             }
@@ -82,7 +80,6 @@ public class HostSession extends Session {
     
     private synchronized void clientSearch() {
         DebugWindow.println("[HostSession] starting clientsearch");
-        clientSearchOngoing = true;
         executor.scheduleAtFixedRate(() -> {
             if(!handlerPlayer1.hasSocket() || !handlerPlayer2.hasSocket()) {
                 if(!handlerPlayer1.hasSocket()) {
@@ -92,7 +89,7 @@ public class HostSession extends Session {
                     }
                     handlerPlayer1.listenAtPort();
                     if(handlerPlayer1.hasSocket()) {
-                        DebugWindow.println("[HostSession] starting handlerPlayer1");
+                        DebugWindow.println("[HostSession] starting handler(1)");
                         executor.schedule(handlerPlayer1, 0, TimeUnit.MILLISECONDS);
                     }
                 }
@@ -103,12 +100,11 @@ public class HostSession extends Session {
                     }
                     handlerPlayer2.listenAtPort();
                     if(handlerPlayer2.hasSocket()) {
-                        DebugWindow.println("[HostSession] starting handlerPlayer2");
+                        DebugWindow.println("[HostSession] starting handler(2)");
                         executor.schedule(handlerPlayer2, 0, TimeUnit.MILLISECONDS);
                     }
                 }
             } else {
-                clientSearchOngoing = false;
                 HostSession.lastHandlerListening = 0;
                 DebugWindow.println("[HostSession] clientsearch ended");
                 throw new TaskCompleteException();

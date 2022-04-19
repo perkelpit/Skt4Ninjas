@@ -121,6 +121,9 @@ public class Menu extends StageScreen {
                         null, null, null, findStage("mainMenuUI"), findStage("lobbyUI"),
                         () -> {
                             try {session.stopSession();} catch (IOException e) {e.printStackTrace();}
+                            Gdx.app.postRunnable(() -> {
+                                Utils.getCurrentScreen().removeStage(findStage("lobbyUI"));
+                            });
                         }, null);
                 });
                 break;
@@ -161,10 +164,12 @@ public class Menu extends StageScreen {
                         }
                 }
             case "READY":
-                // TODO getbuttonpressed
+                // TODO DEBUG Warum zickt das ohne die if rum?
+                if(!SessionData.isHost()) {
+                    ((ClientSession)session).sendString("RDY_TGL");
+                }
                 break;
             case "KICK_PLAYER":
-
                 switch (subCategory){
                     case "1":
                         // TODO KICKERIKII(player1)

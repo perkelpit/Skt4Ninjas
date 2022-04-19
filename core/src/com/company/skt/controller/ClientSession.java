@@ -1,9 +1,13 @@
 package com.company.skt.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.company.skt.lib.Player;
+import com.company.skt.lib.StageScreen;
+import com.company.skt.model.Local;
 import com.company.skt.model.SessionData;
 import com.company.skt.model.Settings;
 import com.company.skt.view.DebugWindow;
+import com.company.skt.view.DialogUI;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -46,10 +50,10 @@ public class ClientSession extends Session {
                     sendString("PONG");
                 }
                 if (in.startsWith("LOGGEDIN")) {
-                    ((Menu)Utils.getCurrentScreen()).event("READY_FOR_LOBBY");
+                    Utils.getCurrentScreen().event("READY_FOR_LOBBY");
                 }
                 if (in.startsWith("SUMMARY")) {
-                    ((Menu)Utils.getCurrentScreen()).event("READY_FOR_SUMMARY");
+                    Utils.getCurrentScreen().event("READY_FOR_SUMMARY");
                 }
                 if (in.startsWith("SDATA>")) {
                     processSessionDataString(in.substring(in.indexOf('>') + 1));
@@ -61,20 +65,42 @@ public class ClientSession extends Session {
                 if (in.startsWith("QRY_PLAYER")) {
                     sendString("PLAYER>" + thisPlayer.getName());
                 }
+                if (in.startsWith("KICK")) {
+                    sessionLeft(true);
+                }
                 if (in.startsWith("END")) {
-                    // TODO Message to User
-                    ((Menu)Utils.getCurrentScreen()).event("LEAVE_LOBBY");
-                    try {stopSession();}
-                    catch(IOException e) {e.printStackTrace();}
+                    sessionLeft(false);
                 }
             }
         }
+    }
+    
+    private void sessionLeft(boolean kicked) {
+        StageScreen screen = Utils.getCurrentScreen();
+        Gdx.app.postRunnable(() -> {
+            DialogUI.newOkMessage(screen.findStage("lobbyUI"), Local.getString("lb_msg_left"),
+                                  kicked ? Local.getString("lb_msg_kicked") : Local.getString("lb_msg_closed"),
+                                  null, screen.findStage("mainMenuUI"),
+                                  () -> {
+                                      Gdx.app.postRunnable(() -> {
+                                          screen.removeStage(screen.findStage("lobbyUI"));
+                                      });
+                                  });
+        });
+        try {stopSession();} catch(IOException e) {e.printStackTrace();}
+        DebugWindow.setUIFocus(DebugWindow.Focus.Main);
     }
     
     private void processSessionDataString(String in) {
         DebugWindow.println("[ClientSession] processing sessionDataString");
         String invalidStr = "[ClientSession] invalid sessionDataString. should start with ";
         String dataStr = in;
+        if(!dataStr.startsWith("HdlNr{")) {
+            DebugWindow.println(invalidStr + "\"HdlNr{\": " + dataStr);
+        } else {
+            SessionData.setOwnPlayerNumber(Integer.parseInt(dataStr.substring(6,7)));
+            dataStr = dataStr.substring(8);
+        }
         if(!dataStr.startsWith("CFG{")) {
             DebugWindow.println(invalidStr + "\"CFG{\": " + dataStr);
         } else {

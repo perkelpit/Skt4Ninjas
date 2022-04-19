@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.company.skt.controller.Menu;
 import com.company.skt.controller.Utils;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.*;
@@ -43,7 +43,7 @@ public class LobbyUI extends UpdateStage {
 
     // *** BOTTOM RIGHT TABLE ***
     private Table bottomRightTable;
-    private ImageTextButton readyButton, quitButton;
+    private ImageTextButton readyStartButton, quitButton;
 
 
     {
@@ -90,33 +90,37 @@ public class LobbyUI extends UpdateStage {
         player1Name = new Label(Local.getString("lb_player_null"),
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
         topLeftTable.add(player1Name).align(Align.left);
-
-        kickPlayer1Button = new ImageTextButton(
+    
+        if(SessionData.isHost()) {
+            kickPlayer1Button = new ImageTextButton(
                 Local.getString("lb_kick"), new ImageTextButton.ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")));
-        kickPlayer1Button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                Utils.getCurrentScreen().buttonClicked("KICK_PLAYER#1");
-            }
-        });
-        topLeftTable.add(kickPlayer1Button);
+            kickPlayer1Button.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    Utils.getCurrentScreen().buttonClicked("KICK_PLAYER#1");
+                }
+            });
+            topLeftTable.add(kickPlayer1Button);
+        }
         topLeftTable.row();
 
         // *** PLAYER2 ***
         player2Name = new Label(Local.getString("lb_player_null"),
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
         topLeftTable.add(player2Name).align(Align.left);
-        kickPlayer2Button = new ImageTextButton(
+        if(SessionData.isHost()) {
+            kickPlayer2Button = new ImageTextButton(
                 Local.getString("lb_kick"), new ImageTextButton.ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")));
-        kickPlayer2Button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                Utils.getCurrentScreen().buttonClicked("KICK_PLAYER#2");
-            }
-        });
-        topLeftTable.add(kickPlayer2Button);
+            kickPlayer2Button.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    Utils.getCurrentScreen().buttonClicked("KICK_PLAYER#2");
+                }
+            });
+            topLeftTable.add(kickPlayer2Button);
+        }
         topLeftTable.row();
 
 
@@ -147,7 +151,9 @@ public class LobbyUI extends UpdateStage {
                 Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#AMOUNT_GAMES");
             }
         });
-
+        if(!SessionData.isHost()) {
+            amountGamesSelectBox.setDisabled(true);
+        }
         topRightTable.add(amountGamesSelectBox).align(Align.left);
         topRightTable.row();
 
@@ -155,7 +161,7 @@ public class LobbyUI extends UpdateStage {
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
         topRightTable.add(lostFactorLabel).padRight(10 * scaleX).align(Align.left);
 
-        lostFactorSelectBox = new SelectBox<String>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
+        lostFactorSelectBox = new SelectBox<>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
                 null, new ScrollPane.ScrollPaneStyle(), new List.ListStyle(buttonFont, Color.ORANGE,
                 Color.WHITE, new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png")))));
         lostFactorSelectBox.setItems("-1", "-2", "-3", "-4");
@@ -165,6 +171,9 @@ public class LobbyUI extends UpdateStage {
                 Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#LOST_FACTOR");
             }
         });
+        if(!SessionData.isHost()) {
+            lostFactorSelectBox.setDisabled(true);
+        }
         topRightTable.add(lostFactorSelectBox).align(Align.left);
         topRightTable.row();
 
@@ -172,7 +181,7 @@ public class LobbyUI extends UpdateStage {
                 new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
         topRightTable.add(timeLimitLabel).align(Align.left);
 
-        timeLimitSelectBox = new SelectBox<String>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
+        timeLimitSelectBox = new SelectBox<>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
                 null, new ScrollPane.ScrollPaneStyle(), new List.ListStyle(buttonFont, Color.ORANGE,
                 Color.WHITE, new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png")))));
         timeLimitSelectBox.setItems(
@@ -189,6 +198,9 @@ public class LobbyUI extends UpdateStage {
                 Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#TIME_LIMIT");
             }
         });
+        if(!SessionData.isHost()) {
+            timeLimitSelectBox.setDisabled(true);
+        }
         topRightTable.add(timeLimitSelectBox).align(Align.left);
         topRightTable.row();
 
@@ -204,9 +216,11 @@ public class LobbyUI extends UpdateStage {
                 Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#RAMSCH");
             }
         });
+        if(!SessionData.isHost()) {
+            junkCheckbox.setDisabled(true);
+        }
         topRightTable.add(junkCheckbox).align(Align.left);
         topRightTable.row();
-
         addActor(topRightTable);
 
         // ****** BOTTOM LEFT TABLE ******
@@ -228,16 +242,23 @@ public class LobbyUI extends UpdateStage {
                 0, Align.bottomLeft);
 
         // *** READY BUTTON ***
-        readyButton = new ImageTextButton(
-                Local.getString("lb_ready"), new ImageTextButton.ImageTextButtonStyle(
+        readyStartButton = new ImageTextButton(
+            (SessionData.isHost() ? Local.getString("lb_start") : Local.getString("lb_ready")),
+                new ImageTextButton.ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, buttonCheckedDrawable, Fonts.getFont("PirataOne-Regular_Button")));
-        readyButton.addListener(new ClickListener() {
+        readyStartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
                 Utils.getCurrentScreen().buttonClicked("READY");
             }
         });
-        bottomRightTable.add(readyButton);
+        if(SessionData.isHost()) {
+            readyStartButton.setDisabled(true);
+            readyStartButton.setColor(Color.GRAY);
+        } else {
+            readyStartButton.setColor(Color.RED);
+        }
+        bottomRightTable.add(readyStartButton);
         bottomRightTable.row();
 
 
@@ -265,7 +286,50 @@ public class LobbyUI extends UpdateStage {
 
     public void updateUI() {
         SessionData data = SessionData.get();
-
+        
+        // *** READY/START BUTTON ***
+        if(SessionData.isHost()) {
+            if(data.getPlayer(1) != null && data.getPlayer(2) != null &&
+               data.getPlayer(1).isReady() && data.getPlayer(2).isReady()) {
+                readyStartButton.setDisabled(false);
+                readyStartButton.setColor(Color.CLEAR);
+                readyStartButton.setTouchable(Touchable.enabled);
+            } else {
+                readyStartButton.setDisabled(true);
+                readyStartButton.setColor(Color.GRAY);
+                readyStartButton.setTouchable(Touchable.disabled);
+            }
+        } else {
+            if(data.getPlayer(SessionData.getOwnPlayerNumber()) != null) {
+                readyStartButton.setColor(data.getPlayer(SessionData.getOwnPlayerNumber()).isReady() ?
+                                          Color.GREEN : Color.RED);
+            }
+        }
+        
+        // *** KICK BUTTONS ***
+        if(kickPlayer1Button != null) {
+            if(data.getPlayer(1) != null) {
+                kickPlayer1Button.setDisabled(true);
+                kickPlayer1Button.setVisible(true);
+                kickPlayer1Button.setTouchable(Touchable.enabled);
+            } else {
+                kickPlayer1Button.setDisabled(false);
+                kickPlayer1Button.setVisible(false);
+                kickPlayer1Button.setTouchable(Touchable.disabled);
+            }
+        }
+        if(kickPlayer2Button != null) {
+            if(data.getPlayer(2) != null) {
+                kickPlayer2Button.setDisabled(true);
+                kickPlayer2Button.setVisible(true);
+                kickPlayer2Button.setTouchable(Touchable.enabled);
+            } else {
+                kickPlayer2Button.setDisabled(false);
+                kickPlayer2Button.setVisible(false);
+                kickPlayer2Button.setTouchable(Touchable.disabled);
+            }
+        }
+        
         // *** PLAYERLABELS ***
         if (data.getPlayer(0) != null) {
             player0Name.setText(data.getPlayer(0).getName());

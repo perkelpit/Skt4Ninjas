@@ -65,7 +65,7 @@ public class DialogUI extends UpdateStage {
     }
     
     private DialogUI() {
-        super("dialogUI", true);
+        super("dialogUI");
     }
     
     public static void newOkMessage(UpdateStage callingUI,
