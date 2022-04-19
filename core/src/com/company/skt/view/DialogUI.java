@@ -18,10 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
 import com.company.skt.controller.Utils;
-import com.company.skt.lib.AnimationActor;
-import com.company.skt.lib.StageScreen;
-import com.company.skt.lib.TaskCompleteException;
-import com.company.skt.lib.UpdateStage;
+import com.company.skt.lib.*;
 import com.company.skt.model.Assets;
 import com.company.skt.model.Fonts;
 import com.company.skt.model.Local;
@@ -185,12 +182,12 @@ public class DialogUI extends UpdateStage {
     }
     
     public static void newTriggerMessage(UpdateStage callingUI,
-                                  @Null String title, @Null String message,
-                                  @Null Animation<TextureRegion> waitingAnimation,
-                                  @Null String cancelButtonText,
-                                  UpdateStage triggeredUI, UpdateStage fallbackUI,
-                                  @Null final Runnable triggerRunnable, @Null final Runnable timeoutRunnable,
-                                  boolean volatileTrigger, final int timeoutMs) {
+                                         @Null String title, @Null String message,
+                                         @Null Animation<TextureRegion> waitingAnimation,
+                                         @Null String cancelButtonText,
+                                         UpdateStage triggeredUI, UpdateStage fallbackUI,
+                                         @Null final Runnable triggerRunnable, @Null final Runnable timeoutRunnable,
+                                         MutableBoolean trigger, final int timeoutMs) {
     
         triggerChecker = Executors.newSingleThreadScheduledExecutor();
         DialogUI dialog = prepareDialog(title, message);
@@ -201,30 +198,31 @@ public class DialogUI extends UpdateStage {
         addButtons(dialog, asList(cancelButtonText), asList("cancel"), asList(fallbackUI),
                    asList(() -> {
                        dialog.screen.setStageActive(dialog, false);
-                       dialog.screen.removeStage(dialog);
                        dialog.screen.setStageActive(fallbackUI, true);
+                       dialog.screen.removeStage(dialog);
                    }));
         finalizeDialog(dialog, callingUI);
         final long startTime = TimeUtils.millis();
         triggerChecker.scheduleAtFixedRate(() -> {
-            if(volatileTrigger) {
+            if(trigger.isTrue()) {
                 Gdx.app.postRunnable(() -> {
                     dialog.screen.setStageActive(dialog, false);
-                    dialog.screen.removeStage(dialog);
                     dialog.screen.setStageActive(triggeredUI, true);
+                    dialog.screen.removeStage(dialog);
                     if(triggerRunnable != null) {
                         new Thread(triggerRunnable).start();
                     }
                 });
                 triggerChecker.shutdownNow();
                 triggerChecker = null;
+                trigger.setValue(false);
                 throw new TaskCompleteException();
             }
             if(TimeUtils.timeSinceMillis(startTime) > timeoutMs) {
                 Gdx.app.postRunnable(() -> {
                     dialog.screen.setStageActive(dialog, false);
-                    dialog.screen.removeStage(dialog);
                     dialog.screen.setStageActive(fallbackUI, true);
+                    dialog.screen.removeStage(dialog);
                     if(timeoutRunnable != null) {
                         new Thread(timeoutRunnable).start();
                     }
@@ -233,7 +231,7 @@ public class DialogUI extends UpdateStage {
                 triggerChecker = null;
                 throw new TaskCompleteException();
             }
-        }, 2000, 10, TimeUnit.MILLISECONDS);
+        }, 0, 10, TimeUnit.MILLISECONDS);
     }
     
     
@@ -281,8 +279,8 @@ public class DialogUI extends UpdateStage {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     dialog.screen.setStageActive(dialog, false);
-                    dialog.screen.removeStage(dialog);
                     dialog.screen.setStageActive(nextUIs.get(finalI), true);
+                    dialog.screen.removeStage(dialog);
                     if(buttonRunnables.get(finalI) != null) {
                         new Thread(buttonRunnables.get(finalI)).start();
                     }

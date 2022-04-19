@@ -28,7 +28,7 @@ public class ClientSession extends Session {
     private Player thisPlayer;
     private final int PORT = 2152;
     private String serverIP;
-    private boolean connected;
+    private boolean connected, rejected;
     
     private class ClientStringStreamHandler extends StringStreamHandler {
     
@@ -68,7 +68,7 @@ public class ClientSession extends Session {
                 if (in.startsWith("KICK")) {
                     sessionLeft(true);
                 }
-                if (in.startsWith("END")) {
+                if (in.startsWith("END") && !rejected) {
                     sessionLeft(false);
                 }
             }
@@ -221,7 +221,6 @@ public class ClientSession extends Session {
         DebugWindow.println("[ClientSession] starting...");
         sessionData = SessionData.get();
         thisPlayer = new Player(fetchPlayerName());
-        // TODO move to triggeredDialog
         DebugWindow.println("[ClientSession] trying to connect...");
         connected = connect();
         if(!connected) {

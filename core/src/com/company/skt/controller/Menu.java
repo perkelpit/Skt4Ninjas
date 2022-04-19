@@ -2,6 +2,8 @@ package com.company.skt.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.company.skt.Skt;
+import com.company.skt.lib.HasSession;
+import com.company.skt.lib.MutableBoolean;
 import com.company.skt.lib.StageScreen;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.Assets;
@@ -11,11 +13,11 @@ import com.company.skt.view.*;
 
 import java.io.IOException;
 
-public class Menu extends StageScreen {
+public class Menu extends StageScreen implements HasSession {
     
     private Session session;
     private SessionData data;
-    private volatile Boolean clientSessionReadyForLobby;
+    private MutableBoolean clientSessionReadyForLobby;
     
     @Override
     public void initialize() {
@@ -25,7 +27,7 @@ public class Menu extends StageScreen {
         addStage(new MainMenuUI("mainMenuUI", true));
         addStage(new SettingsUI("settingsUI"));
         data = SessionData.get();
-        clientSessionReadyForLobby = Boolean.TRUE;
+        clientSessionReadyForLobby = new MutableBoolean();
     }
     
     @Override
@@ -68,7 +70,7 @@ public class Menu extends StageScreen {
                                 return false;
                             }
                             for (String part : parts) {
-                                int i = Integer.parseInt(part);
+                                int i = Integer.parseInt(part); //
                                 if (i < 0 || i > 255) {
                                     return false;
                                 }
@@ -163,18 +165,23 @@ public class Menu extends StageScreen {
                                 break;
                         }
                 }
+                break;
             case "READY":
-                // TODO DEBUG Warum zickt das ohne die if rum?
-                if(!SessionData.isHost()) {
-                    ((ClientSession)session).sendString("RDY_TGL");
+                if (SessionData.isHost()){
+
+                }
+                else {
+                    ((ClientSession) session).sendString("RDY_TGL");
                 }
                 break;
             case "KICK_PLAYER":
                 switch (subCategory){
                     case "1":
                         // TODO KICKERIKII(player1)
+                        break;
                     case "2":
                         // TODO KICKERIKII(player2)
+                        break;
                 }
                 break;
             default :
@@ -197,7 +204,7 @@ public class Menu extends StageScreen {
             case "READY_FOR_LOBBY":
                 DebugWindow.println("[Menu|Event] ready for lobby");
                 if(!SessionData.isHost()) {
-                    clientSessionReadyForLobby = true;
+                    clientSessionReadyForLobby.setValue(true);
                 } else {
                     Gdx.app.postRunnable(() -> {
                         addStage(new LobbyUI("lobbyUI", true));
@@ -260,6 +267,17 @@ public class Menu extends StageScreen {
                         Local.getString("no_server_found") + ".", null, findStage("mainMenuUI"), null);
                 });
                 break;
+            case "CONNECTION_REJECTED":
+                Gdx.app.postRunnable(() ->{
+                    DialogUI.newOkMessage(
+                            findStage("mainMenuUI"), Local.getString("rejected_title"),
+                            Local.getString("rejected_message") + ".", null, findStage("mainMenuUI"), null);
+                        });
+                break;
         }
+    }
+
+    public void setSessionToNull(){
+        session = null;
     }
 }

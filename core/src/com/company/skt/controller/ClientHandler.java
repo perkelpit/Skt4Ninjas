@@ -220,7 +220,6 @@ public class ClientHandler implements Runnable {
             in.stopStreamHandler();
             in = null;
         }
-        playerNumber = -1;
         player = null;
         if(sessionData != null) {
             sessionData.setPlayer(player, playerNumber);
