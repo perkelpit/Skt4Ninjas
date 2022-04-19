@@ -10,7 +10,7 @@ public class MutableBoolean {
         this.value = value;
     }
 
-    public void setValue(boolean value) {
+    public void set(boolean value) {
         this.value = value;
     }
 

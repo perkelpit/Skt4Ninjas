@@ -215,7 +215,7 @@ public class DialogUI extends UpdateStage {
                 });
                 triggerChecker.shutdownNow();
                 triggerChecker = null;
-                trigger.setValue(false);
+                trigger.set(false);
                 throw new TaskCompleteException();
             }
             if(TimeUtils.timeSinceMillis(startTime) > timeoutMs) {

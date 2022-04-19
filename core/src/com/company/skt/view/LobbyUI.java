@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.Align;
 import com.company.skt.controller.Utils;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.*;
-import com.badlogic.gdx.Gdx;
 
 import java.util.Properties;
 

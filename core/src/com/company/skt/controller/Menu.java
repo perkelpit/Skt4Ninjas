@@ -204,7 +204,7 @@ public class Menu extends StageScreen implements HasSession {
             case "READY_FOR_LOBBY":
                 DebugWindow.println("[Menu|Event] ready for lobby");
                 if(!SessionData.isHost()) {
-                    clientSessionReadyForLobby.setValue(true);
+                    clientSessionReadyForLobby.set(true);
                 } else {
                     Gdx.app.postRunnable(() -> {
                         addStage(new LobbyUI("lobbyUI", true));
