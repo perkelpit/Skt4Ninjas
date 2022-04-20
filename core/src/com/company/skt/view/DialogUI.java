@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
 import com.company.skt.controller.Utils;
 import com.company.skt.lib.*;
+import com.company.skt.lib.Trigger.*;
 import com.company.skt.model.Assets;
 import com.company.skt.model.Fonts;
 import com.company.skt.model.Local;
@@ -43,7 +44,8 @@ public class DialogUI extends UpdateStage {
     private BitmapFont buttonFont;
     private TextureRegionDrawable buttonDrawable;
     private TextureRegionDrawable buttonPressedDrawable;
-    
+
+    private static Trigger trigger;
     private static ScheduledExecutorService triggerChecker;
     private static volatile String input;
     private static float scaleX;
@@ -188,8 +190,8 @@ public class DialogUI extends UpdateStage {
                                          @Null Animation<TextureRegion> waitingAnimation,
                                          @Null String cancelButtonText,
                                          UpdateStage triggeredUI, UpdateStage fallbackUI,
-                                         @Null final Runnable triggerRunnable, @Null final Runnable timeoutRunnable,
-                                         MutableBoolean trigger, final int timeoutMs) {
+                                         @Null final Runnable successRunnable, @Null final Runnable failRunnable,
+                                         @Null final Runnable timeoutRunnable, final int timeoutMs) {
     
         triggerChecker = Executors.newSingleThreadScheduledExecutor();
         DialogUI dialog = prepareDialog(title, message);
@@ -206,18 +208,32 @@ public class DialogUI extends UpdateStage {
         finalizeDialog(dialog, callingUI);
         final long startTime = TimeUtils.millis();
         triggerChecker.scheduleAtFixedRate(() -> {
-            if(trigger.isTrue()) {
+            if(getTrigger() == Trigger.SUCCESS) {
+                setTrigger(Trigger.WAITING);
                 Gdx.app.postRunnable(() -> {
                     dialog.screen.setStageActive(dialog, false);
                     dialog.screen.setStageActive(triggeredUI, true);
                     dialog.screen.removeStage(dialog);
-                    if(triggerRunnable != null) {
-                        new Thread(triggerRunnable).start();
+                    if(successRunnable != null) {
+                        new Thread(successRunnable).start();
                     }
                 });
                 triggerChecker.shutdownNow();
                 triggerChecker = null;
-                trigger.set(false);
+                throw new TaskCompleteException();
+            }
+            if(getTrigger() == Trigger.FAIL) {
+                Gdx.app.postRunnable(() -> {
+                    setTrigger(Trigger.WAITING);
+                    dialog.screen.setStageActive(dialog, false);
+                    dialog.screen.setStageActive(fallbackUI, true);
+                    dialog.screen.removeStage(dialog);
+                    if(failRunnable != null) {
+                        new Thread(failRunnable).start();
+                    }
+                });
+                triggerChecker.shutdownNow();
+                triggerChecker = null;
                 throw new TaskCompleteException();
             }
             if(TimeUtils.timeSinceMillis(startTime) > timeoutMs) {
@@ -307,5 +323,12 @@ public class DialogUI extends UpdateStage {
     public static synchronized String getInputString() {
         return input;
     }
-    
+
+    public static synchronized Trigger getTrigger() {
+        return trigger;
+    }
+
+    public static synchronized void setTrigger(Trigger trigger) {
+        DialogUI.trigger = trigger;
+    }
 }
