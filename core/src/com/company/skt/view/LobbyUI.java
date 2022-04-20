@@ -325,7 +325,7 @@ public class LobbyUI extends UpdateStage {
             if(data.getPlayer(1) != null && data.getPlayer(2) != null &&
                data.getPlayer(1).isReady() && data.getPlayer(2).isReady()) {
                 readyStartButton.setDisabled(false);
-                readyStartButton.setColor(Color.CLEAR);
+                readyStartButton.setColor(Color.WHITE);
                 readyStartButton.setTouchable(Touchable.enabled);
             } else {
                 readyStartButton.setDisabled(true);

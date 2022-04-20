@@ -259,6 +259,7 @@ public class Menu extends StageScreen implements HasSession {
                             null, null, findStage("lobbyUI"),
                             findStage("mainMenuUI"), null, () -> {
                                 Gdx.app.postRunnable(() -> {
+                                    try {session.stopSession();} catch(IOException e) {e.printStackTrace();}
                                     DialogUI.newOkMessage(
                                             findStage("mainMenuUI"), Local.getString("rejected_title"),
                                             Local.getString("rejected_message") + ".",
