@@ -121,6 +121,8 @@ public class HostSession extends Session {
                 }
             }
         }, 0, 50, TimeUnit.MILLISECONDS);
+        
+        
     }
     
     void unreadyAllClients() {

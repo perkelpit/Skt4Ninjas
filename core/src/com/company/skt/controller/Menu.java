@@ -239,10 +239,10 @@ public class Menu extends StageScreen implements HasSession {
                 switch (subCategory) {
                     case "IP":
                         session = new ClientSession(DialogUI.getInputString());
-                        DialogUI.newTriggerMessage(findStage("mainMenuUI"), null,
+                        /*DialogUI.newTriggerMessage(findStage("mainMenuUI"), null,
                                 Local.getString("dialog_msg_server_searching"),
                                 null, null, findStage("mainMenuUI"),
-                                findStage("mainMenuUI"), null, null, null, 5000);
+                                findStage("mainMenuUI"), null, null, null, 5000);*/
                         break;
                     case "PLAYER_NAME":
                         // TODO
@@ -250,7 +250,7 @@ public class Menu extends StageScreen implements HasSession {
                 }
                 break;
             case "CLIENT_SERVER_FOUND":
-                DialogUI.setTrigger(Trigger.SUCCESS);
+                //DialogUI.setTrigger(Trigger.SUCCESS);
                 Gdx.app.postRunnable(() -> {
                     addStage(new LobbyUI("lobbyUI"));
                     ((LobbyUI) findStage("lobbyUI")).updateUI();
@@ -269,7 +269,7 @@ public class Menu extends StageScreen implements HasSession {
                 });
                 break;
             case "CLIENT_NO_SERVER_FOUND":
-                DialogUI.setTrigger(Trigger.FAIL);
+                //DialogUI.setTrigger(Trigger.FAIL);
                 Gdx.app.postRunnable(() -> {
                     DialogUI.newOkMessage(
                             findStage("mainMenuUI"), Local.getString("error") + "!",

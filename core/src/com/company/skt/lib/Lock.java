@@ -20,6 +20,7 @@ public class Lock {
     
     public synchronized void syncNotify() {
         this.notify();
+
     }
     
     public synchronized void syncNotifyAll() {
