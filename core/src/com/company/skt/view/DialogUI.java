@@ -233,7 +233,7 @@ public class DialogUI extends UpdateStage {
                 triggerChecker = null;
                 throw new TaskCompleteException();
             }
-        }, 0, 10, TimeUnit.MILLISECONDS);
+        }, 1000, 10, TimeUnit.MILLISECONDS);
     }
     
     
