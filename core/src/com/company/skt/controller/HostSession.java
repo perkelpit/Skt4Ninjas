@@ -1,27 +1,28 @@
 package com.company.skt.controller;
 
+import com.company.skt.Skt;
 import com.company.skt.lib.HasSession;
-import com.company.skt.lib.TaskCompleteException;
 import com.company.skt.lib.Player;
+import com.company.skt.lib.TaskCompleteException;
 import com.company.skt.model.SessionData;
 import com.company.skt.model.Settings;
 import com.company.skt.view.DebugWindow;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.concurrent.*;
+import java.util.concurrent.TimeUnit;
 
 public class HostSession extends Session {
     
     private static int lastHandlerListening;
     
     private final int PORT = 2152;
-    private ScheduledThreadPoolExecutor executor;
     private SessionData sessionData;
     private ServerSocket serverSocket;
     private ClientHandler handlerPlayer1;
     private ClientHandler handlerPlayer2;
     private ExcessHandler excessHandler;
+    private boolean stop;
     
     HostSession() {
         try {startSession();} catch(IOException e) {e.printStackTrace();}
@@ -41,7 +42,6 @@ public class HostSession extends Session {
         
         /* TODO seems a crude solution:
          * better figure out how to combine singleThreadScheduled and CachedThreadPool */
-        executor = new ScheduledThreadPoolExecutor(32);
         handlerPlayer1 = new ClientHandler(this);
         handlerPlayer2 = new ClientHandler(this);
         excessHandler = new ExcessHandler(this);
@@ -62,7 +62,7 @@ public class HostSession extends Session {
     
     @Override
     void stopSession() {
-        executor.shutdownNow();
+        stop = true;
         try {
             if(handlerPlayer1 != null) {
                 DebugWindow.println("[HostSession] stopping handler(1)");
@@ -85,7 +85,10 @@ public class HostSession extends Session {
     
     private synchronized void clientSearch() {
         DebugWindow.println("[HostSession] starting clientsearch");
-        executor.scheduleAtFixedRate(() -> {
+        Skt.getExecutor().scheduleAtFixedRate(() -> {
+            if(stop || Skt.isStop()) {
+                throw new TaskCompleteException();
+            }
             if(!handlerPlayer1.hasSocket() || !handlerPlayer2.hasSocket()) {
                 if(!handlerPlayer1.hasSocket()) {
                     if(HostSession.lastHandlerListening != 1) {
@@ -95,7 +98,7 @@ public class HostSession extends Session {
                     handlerPlayer1.listenAtPort();
                     if(handlerPlayer1.hasSocket()) {
                         DebugWindow.println("[HostSession] starting ClientHandler(1)");
-                        executor.schedule(handlerPlayer1, 0, TimeUnit.MILLISECONDS);
+                        Skt.getExecutor().schedule(handlerPlayer1, 0, TimeUnit.MILLISECONDS);
                     }
                 }
                 if(handlerPlayer1.hasSocket() && !handlerPlayer2.hasSocket()) {
@@ -106,7 +109,7 @@ public class HostSession extends Session {
                     handlerPlayer2.listenAtPort();
                     if(handlerPlayer2.hasSocket()) {
                         DebugWindow.println("[HostSession] starting ClientHandler(2)");
-                        executor.schedule(handlerPlayer2, 0, TimeUnit.MILLISECONDS);
+                        Skt.getExecutor().schedule(handlerPlayer2, 0, TimeUnit.MILLISECONDS);
                     }
                 }
             } else {
@@ -117,7 +120,7 @@ public class HostSession extends Session {
                 excessHandler.listenAtPort();
                 if(excessHandler.hasSocket()) {
                     DebugWindow.println("[HostSession] starting ExcessHandler");
-                    executor.schedule(excessHandler, 0, TimeUnit.MILLISECONDS);
+                    Skt.getExecutor().schedule(excessHandler, 0, TimeUnit.MILLISECONDS);
                 }
             }
         }, 0, 50, TimeUnit.MILLISECONDS);
@@ -159,10 +162,6 @@ public class HostSession extends Session {
         } else {
             return handlerPlayer2;
         }
-    }
-    
-    ScheduledExecutorService getExecutor() {
-        return executor;
     }
     
     ServerSocket getServerSocket() {

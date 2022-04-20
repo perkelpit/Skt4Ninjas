@@ -1,9 +1,12 @@
 package com.company.skt.controller;
 
+import com.company.skt.Skt;
+
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
-abstract class StreamHandler<T> extends Thread {
+abstract class StreamHandler<T> implements Runnable {
   protected volatile boolean stop;
   protected int delay;
   protected Closeable c;
@@ -19,20 +22,16 @@ abstract class StreamHandler<T> extends Thread {
   
   void startStreamHandler() {
     stop = false;
-    this.start();
+    Skt.getExecutor().schedule(this, 0, TimeUnit.MILLISECONDS);
   }
   
   void stopStreamHandler() {
     stop = true;
-    try {
-      c.close();
-    } catch (IOException e) {e.printStackTrace();}
+    try {c.close();} catch (IOException e) {e.printStackTrace();}
   }
   
   protected void delay(int ms) {
-    try {
-      Thread.sleep(ms);
-    } catch (InterruptedException e) {e.printStackTrace();}
+    try {Thread.sleep(ms);} catch (InterruptedException e) {e.printStackTrace();}
   }
   
   public void run() {

@@ -25,6 +25,9 @@ public class DesktopLauncher {
 		if(debug) {
 			config.setWindowedMode(1280, 720);
 			config.setWindowPosition(485, (Toolkit.getDefaultToolkit().getScreenSize().height / 2) - 360);
+			Settings.setProperty(Settings.APP, "resolution_x", "1280");
+			Settings.setProperty(Settings.APP, "resolution_y", "720");
+			Settings.acceptAltAppCfg();
 		} else {
 			if(appCfg.getProperty("fullscreen").equals("true")) {
 				config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());

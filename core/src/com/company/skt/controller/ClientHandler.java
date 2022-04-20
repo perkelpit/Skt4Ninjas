@@ -1,5 +1,6 @@
 package com.company.skt.controller;
 
+import com.company.skt.Skt;
 import com.company.skt.lib.Lock;
 import com.company.skt.lib.Player;
 import com.company.skt.lib.TaskCompleteException;
@@ -24,6 +25,7 @@ public class ClientHandler implements Runnable {
     private PrintWriter out;
     private HostStringStreamHandler in;
     private HeartBeat heartBeat;
+    private boolean stop;
     protected volatile boolean connected;
     
     
@@ -52,8 +54,8 @@ public class ClientHandler implements Runnable {
         
         public void start() {
             DebugWindow.println(handlerTag + " starting heartbeat");
-            hostSession.getExecutor().scheduleAtFixedRate(() -> {
-                if(stop) {
+            Skt.getExecutor().scheduleAtFixedRate(() -> {
+                if(stop || ClientHandler.this.stop || Skt.isStop()) {
                     DebugWindow.println(handlerTag + " stopping heartbeat");
                     throw new TaskCompleteException();
                 }
@@ -207,6 +209,7 @@ public class ClientHandler implements Runnable {
     
     void stopClientHandler() throws IOException {
         connected = false;
+        stop = true;
         if(heartBeat != null) {
             heartBeat.stop();
             heartBeat = null;

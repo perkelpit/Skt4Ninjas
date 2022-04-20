@@ -15,12 +15,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
+import com.company.skt.Skt;
 import com.company.skt.controller.Utils;
 import com.company.skt.lib.*;
-import com.company.skt.lib.Trigger.*;
 import com.company.skt.model.Assets;
 import com.company.skt.model.Fonts;
 import com.company.skt.model.Local;
@@ -46,7 +45,6 @@ public class DialogUI extends UpdateStage {
     private TextureRegionDrawable buttonPressedDrawable;
 
     private static Trigger trigger;
-    private static ScheduledExecutorService triggerChecker;
     private static volatile String input;
     private static float scaleX;
     private static float scaleY;
@@ -193,7 +191,7 @@ public class DialogUI extends UpdateStage {
                                          @Null final Runnable successRunnable, @Null final Runnable failRunnable,
                                          @Null final Runnable timeoutRunnable, final int timeoutMs) {
     
-        triggerChecker = Executors.newSingleThreadScheduledExecutor();
+
         DialogUI dialog = prepareDialog(title, message);
         if(waitingAnimation != null) {
             dialog.table.row();
@@ -207,7 +205,10 @@ public class DialogUI extends UpdateStage {
                    }));
         finalizeDialog(dialog, callingUI);
         final long startTime = TimeUtils.millis();
-        triggerChecker.scheduleAtFixedRate(() -> {
+        Skt.getExecutor().scheduleAtFixedRate(() -> {
+            if(Skt.isStop()) {
+                throw new TaskCompleteException();
+            }
             if(getTrigger() == Trigger.SUCCESS) {
                 setTrigger(Trigger.WAITING);
                 Gdx.app.postRunnable(() -> {
@@ -218,8 +219,6 @@ public class DialogUI extends UpdateStage {
                         new Thread(successRunnable).start();
                     }
                 });
-                triggerChecker.shutdownNow();
-                triggerChecker = null;
                 throw new TaskCompleteException();
             }
             if(getTrigger() == Trigger.FAIL) {
@@ -232,8 +231,6 @@ public class DialogUI extends UpdateStage {
                         new Thread(failRunnable).start();
                     }
                 });
-                triggerChecker.shutdownNow();
-                triggerChecker = null;
                 throw new TaskCompleteException();
             }
             if(TimeUtils.timeSinceMillis(startTime) > timeoutMs) {
@@ -245,8 +242,6 @@ public class DialogUI extends UpdateStage {
                         new Thread(timeoutRunnable).start();
                     }
                 });
-                triggerChecker.shutdownNow();
-                triggerChecker = null;
                 throw new TaskCompleteException();
             }
         }, 1000, 10, TimeUnit.MILLISECONDS);

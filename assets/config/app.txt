@@ -1,9 +1,9 @@
-#Tue Mar 22 15:16:32 CET 2022
-ref_res=1920x1080
+#Wed Apr 20 17:45:45 CEST 2022
 resolution_y=720
-resolution_x=1280
-fullscreen=false
-name=Skt
-player_name=P
-lang=1
 version=a0.02
+resolution_x=1280
+name=Skt
+ref_res=1920x1080
+player_name=P
+fullscreen=false
+lang=1

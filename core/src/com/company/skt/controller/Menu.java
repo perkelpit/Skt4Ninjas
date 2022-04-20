@@ -92,9 +92,8 @@ public class Menu extends StageScreen implements HasSession {
                         mainMenuUI, Local.getString("dialog_question_quit"),
                         null, null, null, mainMenuUI, mainMenuUI,
                         () -> {
-                            if (Skt.isDebug()) {
-                                Skt.getDebugWindowPositionUpdater().shutdownNow();
-                            }
+                            Skt.setStop(true);
+                            Skt.getExecutor().shutdown();
                             DebugWindow.disposeDebugWindow();
                             Gdx.app.exit();
                         }, null);
