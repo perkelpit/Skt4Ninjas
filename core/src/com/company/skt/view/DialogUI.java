@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.*;
 import com.company.skt.controller.Utils;
@@ -114,9 +115,10 @@ public class DialogUI extends UpdateStage {
         TextFieldStyle textFieldStyle = new TextFieldStyle();
         textFieldStyle.font = Fonts.getFont("pirata_16p_black_bord1white");
         textFieldStyle.fontColor = Color.WHITE;
+        textFieldStyle.background = new TextureRegionDrawable(
+            new TextureRegion(Assets.<Texture>get("TextfieldTexture.png")));
         TextField inputField = new TextField(defaultInput, textFieldStyle);
         inputField.setWidth(800 * scaleX);
-        inputField.setDisabled(false);
         inputField.setTextFieldListener((textField, c) -> {
             if(c == '\r' || c == '\n' ) {
                 boolean pass = true;
