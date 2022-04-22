@@ -25,8 +25,6 @@ import com.company.skt.model.Fonts;
 import com.company.skt.model.Local;
 
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Arrays.asList;
@@ -113,7 +111,7 @@ public class DialogUI extends UpdateStage {
         setInputString("");
         DialogUI dialog = prepareDialog(title, message);
         TextFieldStyle textFieldStyle = new TextFieldStyle();
-        textFieldStyle.font = Fonts.getFont("pirata_16p_black_bord1white");
+        textFieldStyle.font = Fonts.get("CV_24p_black_brd2white");
         textFieldStyle.fontColor = Color.WHITE;
         textFieldStyle.background = new TextureRegionDrawable(
             new TextureRegion(Assets.<Texture>get("TextfieldTexture.png")));
@@ -140,7 +138,7 @@ public class DialogUI extends UpdateStage {
         dialog.buttons = new Array<>();
         dialog.buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
         dialog.buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
-        dialog.buttonFont = Fonts.getFont("PirataOne-Regular_Button");
+        dialog.buttonFont = Fonts.get("button");
         dialog.buttons.add(new ImageTextButton(
             (okButtonText != null ?
              okButtonText : Local.getString("ok")),
@@ -254,7 +252,7 @@ public class DialogUI extends UpdateStage {
         /* ### TITLE LABLE ### */
         if(title != null) {
             dialog.labelStyleTitle = new LabelStyle();
-            dialog.labelStyleTitle.font = Fonts.getFont("PirataOne-Regular_Button");
+            dialog.labelStyleTitle.font = Fonts.get("button");
             dialog.titleLable = new Label(title, dialog.labelStyleTitle);
             dialog.table.add(dialog.titleLable);
         }
@@ -262,7 +260,7 @@ public class DialogUI extends UpdateStage {
         /* ### MESSAGE LABLE ### */
         if(message != null) {
             dialog.labelStyleMessage = new LabelStyle();
-            dialog.labelStyleMessage.font = Fonts.getFont("PirataOne-Regular_Message");
+            dialog.labelStyleMessage.font = Fonts.get("medLable");
             dialog.messageLable = new Label(message, dialog.labelStyleMessage);
             dialog.table.row();
             dialog.table.add(dialog.messageLable);
@@ -278,7 +276,7 @@ public class DialogUI extends UpdateStage {
         dialog.buttons = new Array<>();
         dialog.buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
         dialog.buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
-        dialog.buttonFont = Fonts.getFont("PirataOne-Regular_Button");
+        dialog.buttonFont = Fonts.get("button");
         dialog.table.row();
         
         for(int i = 0; i < buttonTexts.size(); i++) {

@@ -10,6 +10,7 @@ import com.company.skt.lib.TaskCompleteException;
 import com.company.skt.model.Assets;
 import com.company.skt.model.Fonts;
 import com.company.skt.model.Local;
+import com.company.skt.model.Styles;
 import com.company.skt.view.DebugWindow;
 
 import java.io.File;
@@ -45,6 +46,7 @@ public class Skt extends ScreenController {
 		window = graphics.getWindow();
 		Local.boot(basePath + "local/");
 		Fonts.boot(basePath + "fonts/");
+		Styles.boot(basePath);
 		Assets.boot(basePath);
 		if(isLog()) {
 			DebugWindow.bootLogging(basePath + "logs/");

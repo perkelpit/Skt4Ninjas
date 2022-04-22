@@ -49,7 +49,7 @@ public class LobbyUI extends UpdateStage {
     {
         appCfg = Settings.getProperties(Settings.APP);
 
-        buttonFont = Fonts.getFont("PirataOne-Regular_Button");
+        buttonFont = Fonts.get("button");
         buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
         buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
         buttonCheckedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTextureChecked.png"));
@@ -82,19 +82,19 @@ public class LobbyUI extends UpdateStage {
 
         // *** PLAYER0 ***
         player0Name = new Label(Local.getString("lb_player_null"),
-                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+                new Label.LabelStyle(Fonts.get("medLable"), null));
         topLeftTable.add(player0Name);
         topLeftTable.row();
 
         // *** PLAYER1 ***
         player1Name = new Label(Local.getString("lb_player_null"),
-                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+                new Label.LabelStyle(Fonts.get("medLable"), null));
         topLeftTable.add(player1Name).align(Align.left);
     
         if(SessionData.isHost()) {
             kickPlayer1Button = new ImageTextButton(
                 Local.getString("lb_kick"), new ImageTextButton.ImageTextButtonStyle(
-                buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")));
+                buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")));
             kickPlayer1Button.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y){
@@ -107,12 +107,12 @@ public class LobbyUI extends UpdateStage {
 
         // *** PLAYER2 ***
         player2Name = new Label(Local.getString("lb_player_null"),
-                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+                new Label.LabelStyle(Fonts.get("medLable"), null));
         topLeftTable.add(player2Name).align(Align.left);
         if(SessionData.isHost()) {
             kickPlayer2Button = new ImageTextButton(
                 Local.getString("lb_kick"), new ImageTextButton.ImageTextButtonStyle(
-                buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")));
+                buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")));
             kickPlayer2Button.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y){
@@ -138,7 +138,7 @@ public class LobbyUI extends UpdateStage {
 
         // *** GAME SETTINGS ***
         numberOfGamesLabel = new Label(Local.getString("lb_no-of-games") + ": ",
-                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+                new Label.LabelStyle(Fonts.get("medLable"), null));
         topRightTable.add(numberOfGamesLabel).padRight(10 * scaleX).align(Align.left);
 
         amountGamesSelectBox = new SelectBox<>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
@@ -162,7 +162,7 @@ public class LobbyUI extends UpdateStage {
         topRightTable.row();
 
         lostFactorLabel = new Label(Local.getString("lb_lost_factor") + ": ",
-                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+                new Label.LabelStyle(Fonts.get("medLable"), null));
         topRightTable.add(lostFactorLabel).padRight(10 * scaleX).align(Align.left);
 
         lostFactorSelectBox = new SelectBox<>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
@@ -186,7 +186,7 @@ public class LobbyUI extends UpdateStage {
         topRightTable.row();
 
         timeLimitLabel = new Label(Local.getString("time-limit") + ": ",
-                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+                new Label.LabelStyle(Fonts.get("medLable"), null));
         topRightTable.add(timeLimitLabel).align(Align.left);
 
         timeLimitSelectBox = new SelectBox<>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
@@ -220,7 +220,7 @@ public class LobbyUI extends UpdateStage {
                 new CheckBox.CheckBoxStyle(
                         new TextureRegionDrawable(Assets.<Texture>get("CheckTexture.png")),
                                 new TextureRegionDrawable(Assets.<Texture>get("CheckTextureActive.png")),
-                                        Fonts.getFont("PirataOne-Regular_Button"),
+                                        Fonts.get("medLable"),
                                         null));
         junkCheckbox.addListener(new ChangeListener() {
             @Override
@@ -244,7 +244,7 @@ public class LobbyUI extends UpdateStage {
         chatArea = new TextArea(
                 "testArea",
                 new TextField.TextFieldStyle(
-                        Fonts.getFont("PirataOne-Regular_Button"),
+                        Fonts.get("textField"),
                         Color.WHITE,
                         null,
                         null,
@@ -255,7 +255,7 @@ public class LobbyUI extends UpdateStage {
 
         chatField = new TextField("testField",
                 new TextField.TextFieldStyle(
-                        Fonts.getFont("PirataOne-Regular_Button"),
+                        Fonts.get("textField"),
                         Color.WHITE,
                         null,
                         null,
@@ -278,7 +278,7 @@ public class LobbyUI extends UpdateStage {
         readyStartButton = new ImageTextButton(
             (SessionData.isHost() ? Local.getString("lb_start") : Local.getString("lb_ready")),
                 new ImageTextButton.ImageTextButtonStyle(
-                buttonDrawable, buttonPressedDrawable, buttonCheckedDrawable, Fonts.getFont("PirataOne-Regular_Button")));
+                buttonDrawable, buttonPressedDrawable, buttonCheckedDrawable, Fonts.get("button")));
         readyStartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
@@ -298,7 +298,7 @@ public class LobbyUI extends UpdateStage {
         // *** QUIT BUTTON ***
         quitButton = new ImageTextButton(
                 Local.getString("quit"), new ImageTextButton.ImageTextButtonStyle(
-                buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")));
+                buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")));
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){

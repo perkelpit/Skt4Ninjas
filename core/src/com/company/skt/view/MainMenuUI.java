@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.company.skt.controller.Menu;
 import com.company.skt.controller.Utils;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.*;
@@ -33,9 +32,9 @@ public class MainMenuUI extends UpdateStage {
         appCfg = Settings.getProperties(Settings.APP);
 
         labelStyleWelcome = new LabelStyle();
-        labelStyleWelcome.font = Fonts.getFont("PirataOne-Regular_Welcome");
+        labelStyleWelcome.font = Fonts.get("bigTitle");
         
-        buttonFont = Fonts.getFont("PirataOne-Regular_Button");
+        buttonFont = Fonts.get("button");
         buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
         buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
     }

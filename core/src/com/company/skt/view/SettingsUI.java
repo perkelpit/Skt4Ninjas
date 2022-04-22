@@ -56,7 +56,7 @@ public class SettingsUI extends UpdateStage {
         
         buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
         buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
-        buttonFont = Fonts.getFont("PirataOne-Regular_Button");
+        buttonFont = Fonts.get("button");
 
         scaleX = Utils.getScaleFactorX();
         scaleY = Utils.getScaleFactorY();
@@ -83,7 +83,7 @@ public class SettingsUI extends UpdateStage {
         // *** GAME TAB BUTTON ***
         gameTabButton = new ImageTextButton(
             Local.getString("sm_tab_game"), new ImageTextButtonStyle(
-                buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")
+                buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")
         ));
         gameTabButton.addListener(new ClickListener() {
            @Override
@@ -97,7 +97,7 @@ public class SettingsUI extends UpdateStage {
         // *** VIDEO TAB BUTTON ***
        videoTabButton = new ImageTextButton(
                 Local.getString("sm_tab_video"), new ImageTextButtonStyle(
-               buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")
+               buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")
         ));
         videoTabButton.addListener(new ClickListener() {
             @Override
@@ -111,7 +111,7 @@ public class SettingsUI extends UpdateStage {
         // *** AUDIO TAB BUTTON ***
         audioTabButton = new ImageTextButton(
                 Local.getString("sm_tab_audio"), new ImageTextButtonStyle(
-                buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")
+                buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")
         ));
         audioTabButton.addListener(new ClickListener() {
             @Override
@@ -125,7 +125,7 @@ public class SettingsUI extends UpdateStage {
         // *** QUIT SETTINGS TAB BUTTON ***
         quitSettingsButton = new ImageTextButton(
                 Local.getString("sm_quit"), new ImageTextButtonStyle(
-                buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")
+                buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")
         ));
         quitSettingsButton.addListener(new ClickListener() {
             @Override
@@ -147,17 +147,17 @@ public class SettingsUI extends UpdateStage {
         // *** CHANGE NAME ***
         changeNameLabel = new Label(
                 Local.getString("sm_game_label_change_name"),
-                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+                new Label.LabelStyle(Fonts.get("button"), null));
         gameTable.add(changeNameLabel);
 
         changeNameTextField = new TextField(Settings.getProperties(Settings.APP).getProperty("player_name"),
-                new TextField.TextFieldStyle(Fonts.getFont("PirataOne-Regular_Button"), Color.WHITE,
-                        null, null, null));
+                new TextField.TextFieldStyle(Fonts.get("button"), Color.WHITE,
+                                             null, null, null));
         gameTable.add(changeNameTextField);
 
         changeNameButton = new ImageTextButton(
                 Local.getString("sm_game_button_change_name"), new ImageTextButtonStyle(
-                buttonDrawable, buttonPressedDrawable, null, Fonts.getFont("PirataOne-Regular_Button")
+                buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")
         ));
         changeNameButton.addListener(new ClickListener() {
             @Override
@@ -170,7 +170,7 @@ public class SettingsUI extends UpdateStage {
 
         // *** NUMBER OF GAMES ***
         numberOfGamesLabel = new Label(Local.getString("lb_no-of-games") + ": ",
-                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+                new Label.LabelStyle(Fonts.get("medLable"), null));
         gameTable.add(numberOfGamesLabel).padRight(10 * scaleX).align(Align.left);
 
         amountGamesSelectBox = new SelectBox<>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
@@ -188,7 +188,7 @@ public class SettingsUI extends UpdateStage {
 
         // *** LOSTFACTOR ***
         lostFactorLabel = new Label(Local.getString("lb_lost_factor") + ": ",
-                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+                new Label.LabelStyle(Fonts.get("medLable"), null));
         gameTable.add(lostFactorLabel).padRight(10 * scaleX).align(Align.left);
 
         lostFactorSelectBox = new SelectBox<>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
@@ -206,7 +206,7 @@ public class SettingsUI extends UpdateStage {
 
         // *** TIMELIMIT ***
         timeLimitLabel = new Label(Local.getString("time-limit") + ": ",
-                new Label.LabelStyle(Fonts.getFont("PirataOne-Regular_Button"), null));
+                new Label.LabelStyle(Fonts.get("medLable"), null));
         gameTable.add(timeLimitLabel).align(Align.left);
 
         timeLimitSelectBox = new SelectBox<>(new SelectBox.SelectBoxStyle(buttonFont, Color.WHITE,
@@ -234,7 +234,7 @@ public class SettingsUI extends UpdateStage {
                 new CheckBox.CheckBoxStyle(
                         new TextureRegionDrawable(Assets.<Texture>get("CheckTexture.png")),
                         new TextureRegionDrawable(Assets.<Texture>get("CheckTextureActive.png")),
-                        Fonts.getFont("PirataOne-Regular_Button"),
+                        Fonts.get("medLable"),
                         null));
         junkCheckbox.addListener(new ChangeListener() {
             @Override
