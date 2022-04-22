@@ -22,6 +22,7 @@ public class Skt extends ScreenController {
 	
 	private static String basePath;
 	private static boolean debug;
+	private static boolean log;
 	private static boolean stop;
 	private Lwjgl3Graphics graphics;
 	private Lwjgl3Window window;
@@ -31,8 +32,9 @@ public class Skt extends ScreenController {
 		executor = new ScheduledThreadPoolExecutor(16);
 	}
 
-	public Skt(boolean debug) {
+	public Skt(boolean debug, boolean log) {
 		Skt.debug = debug;
+		Skt.log = log;
 	}
 	
 	@Override
@@ -44,6 +46,9 @@ public class Skt extends ScreenController {
 		Local.boot(basePath + "local/");
 		Fonts.boot(basePath + "fonts/");
 		Assets.boot(basePath);
+		if(isLog()) {
+			DebugWindow.bootLogging(basePath + "logs/");
+		}
 		window.setWindowListener(new Lwjgl3WindowAdapter() {
 			@Override
 			public boolean closeRequested() {
@@ -90,6 +95,10 @@ public class Skt extends ScreenController {
 		return debug;
 	}
 	
+	public static boolean isLog() {
+		return log;
+	}
+	
 	public static String getBasePath() {
 		return basePath;
 	}
@@ -101,4 +110,5 @@ public class Skt extends ScreenController {
 	public static boolean isStop() {
 		return stop;
 	}
+	
 }

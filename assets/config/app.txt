@@ -1,4 +1,4 @@
-#Wed Apr 20 18:09:06 CEST 2022
+#Fri Apr 22 15:54:47 CEST 2022
 resolution_y=720
 resolution_x=1280
 version=a0.02

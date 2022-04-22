@@ -34,7 +34,20 @@ public class DebugWindow extends JFrame {
     private static Focus focus;
     private static DateTimeFormatter dateTimeFormatter;
     private static LocalDateTime now;
-
+    
+    public static void bootLogging(String logPath) {
+        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
+        logFolder = new File(logPath);
+        now = LocalDateTime.now();
+        dateTimeFormatter.format(now);
+        String nowStr = now.toString();
+        nowStr = nowStr.replace(":","-");
+        nowStr = nowStr.replace("T","_");
+        logFile = new File(logPath + nowStr + ".log");
+        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
+        try {prepareLogging();} catch(IOException e) {e.printStackTrace();}
+    }
+    
     public static void createDebugWindow(String logPath) {
         if (debugWindow == null) {
             debugWindow = new DebugWindow(logPath);
@@ -79,8 +92,10 @@ public class DebugWindow extends JFrame {
     }
 
     public static void println(String string) {
-        if(Skt.isDebug()) {
+        if(Skt.isLog()) {
             log(string);
+        }
+        if(Skt.isDebug()) {
             if (textAreaBottom != null) {
                 textAreaBottom.append(string + "\n");
                 try {
@@ -193,17 +208,7 @@ public class DebugWindow extends JFrame {
     }
     
     private DebugWindow(String logPath) {
-        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
-        logFolder = new File(logPath);
-        now = LocalDateTime.now();
-        dateTimeFormatter.format(now);
-        String nowStr = now.toString();
-        nowStr = nowStr.replace(":","-");
-        nowStr = nowStr.replace("T","_");
-        logFile = new File(logPath + nowStr + ".log");
-        dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
         focus = Focus.Main;
-        try {prepareLogging();} catch(IOException e) {e.printStackTrace();}
         Dimension windowSize = new Dimension(400, 750);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setType(Type.UTILITY);
