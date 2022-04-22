@@ -152,7 +152,7 @@ public class LobbyUI extends UpdateStage {
                 if(amountGamesSelectBox.hit(Gdx.input.getX(), Gdx.input.getY(), true) != null) {
 
                 }*/
-                Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#AMOUNT_GAMES");
+                Utils.getCurrentScreen().buttonClicked("LOBBY_SETTINGS_CLICKED#AMOUNT_GAMES");
             }
         });
         if(!SessionData.isHost()) {
@@ -176,7 +176,7 @@ public class LobbyUI extends UpdateStage {
                 if(lostFactorSelectBox.hit(Gdx.input.getX(), Gdx.input.getY(), true) != null) {
 
                 }*/
-                Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#LOST_FACTOR");
+                Utils.getCurrentScreen().buttonClicked("LOBBY_SETTINGS_CLICKED#LOST_FACTOR");
             }
         });
         if(!SessionData.isHost()) {
@@ -207,7 +207,7 @@ public class LobbyUI extends UpdateStage {
                 if(timeLimitSelectBox.hit(Gdx.input.getX(), Gdx.input.getY(), true) != null) {
 
                 }*/
-                Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#TIME_LIMIT");
+                Utils.getCurrentScreen().buttonClicked("LOBBY_SETTINGS_CLICKED#TIME_LIMIT");
             }
         });
         if(!SessionData.isHost()) {
@@ -225,7 +225,7 @@ public class LobbyUI extends UpdateStage {
         junkCheckbox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Utils.getCurrentScreen().buttonClicked("GAME_SETTINGS_CLICKED#RAMSCH");
+                Utils.getCurrentScreen().buttonClicked("LOBBY_SETTINGS_CLICKED#RAMSCH");
             }
         });
         if(!SessionData.isHost()) {

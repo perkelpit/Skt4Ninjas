@@ -6,6 +6,7 @@ import com.company.skt.lib.*;
 import com.company.skt.model.Assets;
 import com.company.skt.model.Local;
 import com.company.skt.model.SessionData;
+import com.company.skt.model.Settings;
 import com.company.skt.view.*;
 
 import java.io.IOException;
@@ -127,6 +128,51 @@ public class Menu extends StageScreen implements HasSession {
                 });
                 break;
             case "GAME_SETTINGS_CLICKED":
+                switch (subCategory) {
+                    case "CHANGE_NAME":
+                        Settings.setProperty(Settings.APP, "player_name",
+                                ((SettingsUI) findStage("settingsUI")).changeNameTextField.getText());
+                        break;
+                    case "LOST_FACTOR":
+                        Settings.setProperty(Settings.GAME, "lost_factor",
+                                ((SettingsUI) findStage("settingsUI")).lostFactorSelectBox.getSelected());
+                        break;
+                    case "RAMSCH":
+                        Settings.setProperty(Settings.GAME,"ramsch",
+                                String.valueOf(((SettingsUI) findStage("settingUI")).junkCheckbox.isChecked()));
+                        break;
+                    case "AMOUNT_GAMES":
+                        Settings.setProperty(Settings.GAME, "amount_games",
+                                ((SettingsUI) findStage("settingsUI")).amountGamesSelectBox.getSelected());
+                        break;
+                    case "TIME_LIMIT":
+                        switch (((SettingsUI) findStage("settingsUI")).timeLimitSelectBox.getSelectedIndex()) {
+                            case 0:
+                                Settings.setProperty(Settings.GAME, "time_limit", "0");
+                                break;
+                            case 1:
+                                Settings.setProperty(Settings.GAME, "time_limit", "30");
+                                break;
+                            case 2:
+                                Settings.setProperty(Settings.GAME, "time_limit", "60");
+                                break;
+                            case 3:
+                                Settings.setProperty(Settings.GAME, "time_limit", "120");
+                                break;
+                            case 4:
+                                Settings.setProperty(Settings.GAME, "time_limit", "180");
+                                break;
+                            case 5:
+                                Settings.setProperty(Settings.GAME, "time_limit", "300");
+                                break;
+                            case 6:
+                                Settings.setProperty(Settings.GAME, "time_limit", "600");
+                                break;
+                        }
+                }
+                //Settings.acceptAltCfg(); // TODO acceptaltcfg + button
+                break;
+            case "LOBBY_SETTINGS_CLICKED":
                 switch (subCategory) {
                     case "LOST_FACTOR":
                         data.setCfgValue("lost_factor", ((LobbyUI) findStage("lobbyUI")).lostFactorSelectBox.getSelected());
@@ -259,7 +305,11 @@ public class Menu extends StageScreen implements HasSession {
                             null, null, findStage("lobbyUI"),
                             findStage("mainMenuUI"), null, () -> {
                                 Gdx.app.postRunnable(() -> {
-                                    try {session.stopSession();} catch(IOException e) {e.printStackTrace();}
+                                    try {
+                                        session.stopSession();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                     DialogUI.newOkMessage(
                                             findStage("mainMenuUI"), Local.getString("rejected_title"),
                                             Local.getString("rejected_message") + ".",

@@ -45,7 +45,7 @@ public abstract class Settings {
                 altAppCfg.setProperty(key, value);
                 break;
             
-            case GAME:
+            case GAME:// TODO alt game config
                 gameCfg.setProperty(key, value);
                 writeTo(gameCfg, gameCfgPathStr);
                 break;
@@ -133,7 +133,7 @@ public abstract class Settings {
     }
     
     public static void acceptAltAppCfg() {
-        appCfg = altAppCfg;
+        appCfg = altAppCfg;// TODO change to accept alt config
         altAppCfg = null;
         writeTo(appCfg, appCfgPathStr);
     }
