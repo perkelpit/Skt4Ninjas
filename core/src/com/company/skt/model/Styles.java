@@ -11,15 +11,16 @@ public abstract class Styles {
     }
     
     public static void get(String widgetName) {
-        String category;
-        String subCategory = "";
+        String mainCase;
+        String subCase;
         if (widgetName.contains("#")) {
-            category = widgetName.substring(0, widgetName.indexOf("#"));
-            subCategory = widgetName.substring(widgetName.indexOf("#") + 1);
+            mainCase = widgetName.substring(0, widgetName.indexOf("#"));
+            subCase = widgetName.substring(widgetName.indexOf("#") + 1);
         } else {
-            category = widgetName;
+            mainCase = widgetName;
+            subCase = "";
         }
-        switch(category) {
+        switch(mainCase) {
             case "Label":
                 
                 break;

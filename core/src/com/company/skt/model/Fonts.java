@@ -84,15 +84,16 @@ public abstract class Fonts {
     
     public static BitmapFont get(String usage){
         String fontName;
-        String category;
-        String subCategory = "";
+        String mainCase;
+        String subCase;
         if (usage.contains("#")) {
-            category = usage.substring(0, usage.indexOf("#"));
-            subCategory = usage.substring(usage.indexOf("#") + 1);
+            mainCase = usage.substring(0, usage.indexOf("#"));
+            subCase = usage.substring(usage.indexOf("#") + 1);
         } else {
-            category = usage;
+            mainCase = usage;
+            subCase = "";
         }
-        switch(category) {
+        switch(mainCase) {
             case "button":
                 fontName = "CV_32p_black_brd2white";
                 break;

@@ -32,16 +32,17 @@ public class Menu extends StageScreen implements HasSession {
     }
 
     public void buttonClicked(String click) {
-        String category;
-        String subCategory = "";
+        String mainCase;
+        String subCase;
         if (click.contains("#")) {
-            category = click.substring(0, click.indexOf("#"));
-            subCategory = click.substring(click.indexOf("#") + 1);
+            mainCase = click.substring(0, click.indexOf("#"));
+            subCase = click.substring(click.indexOf("#") + 1);
         } else {
-            category = click;
+            mainCase = click;
+            subCase = "";
         }
 
-        switch (category) {
+        switch (mainCase) {
             // *** MAIN MENU-CLICKS ***
             case "HOST":
                 DebugWindow.setUIFocus(DebugWindow.Focus.Lobby);
@@ -128,7 +129,7 @@ public class Menu extends StageScreen implements HasSession {
                 });
                 break;
             case "GAME_SETTINGS_CLICKED":
-                switch (subCategory) {
+                switch (subCase) {
                     case "CHANGE_NAME":
                         Settings.setProperty(Settings.APP, "player_name",
                                 ((SettingsUI) findStage("settingsUI")).changeNameTextField.getText());
@@ -173,7 +174,7 @@ public class Menu extends StageScreen implements HasSession {
                 //Settings.acceptAltCfg(); // TODO acceptaltcfg + button
                 break;
             case "LOBBY_SETTINGS_CLICKED":
-                switch (subCategory) {
+                switch (subCase) {
                     case "LOST_FACTOR":
                         data.setCfgValue("lost_factor", ((LobbyUI) findStage("lobbyUI")).lostFactorSelectBox.getSelected());
                         break;
@@ -211,18 +212,18 @@ public class Menu extends StageScreen implements HasSession {
                 break;
             case "READY":
                 if (SessionData.isHost()) {
-
+                    // TODO switch to SummaryUI/PlayScrenn
                 } else {
                     ((ClientSession) session).sendString("RDY_TGL");
                 }
                 break;
             case "KICK_PLAYER":
-                switch (subCategory) {
+                switch (subCase) {
                     case "1":
-                        // TODO KICKERIKII(player1)
+                        // TODO remove player1
                         break;
                     case "2":
-                        // TODO KICKERIKII(player2)
+                        // TODO remove player2
                         break;
                 }
                 break;
@@ -233,15 +234,16 @@ public class Menu extends StageScreen implements HasSession {
     }
 
     public void event(String event) {
-        String category;
-        String subCategory = "";
+        String mainCase;
+        String subCase;
         if (event.contains("#")) {
-            category = event.substring(0, event.indexOf("#"));
-            subCategory = event.substring(event.indexOf("#") + 1);
+            mainCase = event.substring(0, event.indexOf("#"));
+            subCase = event.substring(event.indexOf("#") + 1);
         } else {
-            category = event;
+            mainCase = event;
+            subCase = "";
         }
-        switch (category) {
+        switch (mainCase) {
             case "READY_FOR_LOBBY":
                 DebugWindow.println("[Menu|Event] ready for lobby");
                 if (!SessionData.isHost()) {
@@ -281,7 +283,7 @@ public class Menu extends StageScreen implements HasSession {
                 });
                 break;
             case "DIALOG_INPUT_READY":
-                switch (subCategory) {
+                switch (subCase) {
                     case "IP":
                         session = new ClientSession(DialogUI.getInputString());
                         /*DialogUI.newTriggerMessage(findStage("mainMenuUI"), null,
