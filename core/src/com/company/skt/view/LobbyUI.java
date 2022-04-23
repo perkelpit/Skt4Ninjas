@@ -85,7 +85,7 @@ public class LobbyUI extends UpdateStage {
                 new Label.LabelStyle(Fonts.get("medLable"), null));
         topLeftTable.add(player0Name);
         topLeftTable.row();
-
+        
         // *** PLAYER1 ***
         player1Name = new Label(Local.getString("lb_player_null"),
                 new Label.LabelStyle(Fonts.get("medLable"), null));

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.utils.Null;
 
 import java.util.HashMap;
 
@@ -22,6 +23,7 @@ public abstract class Fonts {
         
         /* ### FALLBACK FONT ### */
         BitmapFont fallbackFont = new BitmapFont();
+        fallbackFont.setColor(Color.RED);
         FontsMap.put("Arial_15p_white", fallbackFont);
         
         /* ### STANDARD TTF ###*/
@@ -65,19 +67,6 @@ public abstract class Fonts {
                 break;
         }
         return FontsMap.get(fontName);
-    }
-    
-    public static BitmapFont get(int fontSize, Color fontColor) {
-        return get(stdTTF, fontSize, fontColor);
-    }
-    
-    public static BitmapFont get(FileHandle ttfFile, int fontSize, Color fontColor) {
-        FreeTypeFontParameter fontParams = new FreeTypeFontParameter();
-        fontParams.size = fontSize;
-        fontParams.color = fontColor;
-        fontParams.minFilter = Texture.TextureFilter.Linear;
-        fontParams.magFilter = Texture.TextureFilter.Linear;
-        return new FreeTypeFontGenerator(ttfFile).generateFont(fontParams);
     }
     
     private static void generateFonts() {
@@ -132,6 +121,46 @@ public abstract class Fonts {
             "CVc_20p_black_brd1lightGray",
             new FreeTypeFontGenerator(
                 Gdx.files.internal(path + "coolvetica_condensed_rg.ttf")).generateFont(fontParams));
+    }
+    
+    
+    public static BitmapFont get(int fontSize, Color fontColor) {
+        return get(stdTTF, fontSize, fontColor);
+    }
+    
+    public static BitmapFont get(FileHandle ttfFile, int fontSize, Color fontColor) {
+        FreeTypeFontParameter fontParams = new FreeTypeFontParameter();
+        fontParams.size = fontSize;
+        fontParams.color = fontColor;
+        fontParams.minFilter = Texture.TextureFilter.Linear;
+        fontParams.magFilter = Texture.TextureFilter.Linear;
+        return new FreeTypeFontGenerator(ttfFile).generateFont(fontParams);
+    }
+    
+    public static BitmapFont get(@Null FileHandle ttfFile, int fontSize, @Null Color fontColor, float fontGamma,
+                                 int borderWidth, boolean borderStraight, float borderGamma, @Null Color borderColor,
+                                 int shadowOffsetX, int shadowOffsetY, @Null Color shadowColor,
+                                 int spaceX, int spaceY, int padTop, int padBottom, int padLeft, int padRight) {
+        FreeTypeFontParameter fontParams = new FreeTypeFontParameter();
+        fontParams.size = fontSize;
+        fontParams.color = fontColor != null ? fontColor : Color.BLACK;
+        fontParams.gamma = fontGamma != 0.0f ? fontGamma : 1.8f;
+        fontParams.borderWidth = borderWidth;
+        fontParams.borderStraight = borderStraight;
+        fontParams.borderGamma = borderGamma != 0.0f ? borderGamma : 1.8f;
+        fontParams.borderColor = borderColor != null ? borderColor : Color.BLACK;
+        fontParams.shadowOffsetX = shadowOffsetX;
+        fontParams.shadowOffsetY = shadowOffsetY;
+        fontParams.shadowColor = shadowColor != null ? shadowColor : Color.BLACK;
+        fontParams.spaceX = spaceX;
+        fontParams.spaceY = spaceY;
+        fontParams.padTop = padTop;
+        fontParams.padBottom = padBottom;
+        fontParams.padLeft = padLeft;
+        fontParams.padRight = padRight;
+        fontParams.minFilter = Texture.TextureFilter.Linear;
+        fontParams.magFilter = Texture.TextureFilter.Linear;
+        return new FreeTypeFontGenerator(ttfFile != null ? ttfFile : stdTTF).generateFont(fontParams);
     }
     
 }
