@@ -13,10 +13,6 @@ public abstract class Fonts {
     
     static String path;
     static HashMap<String, BitmapFont> FontsMap;
-    static private FreeTypeFontParameter CV_48p_black_brd2lightGray;
-    static private FreeTypeFontParameter CV_28p_black_brd2lightGray;
-    static private FreeTypeFontParameter CVc_24p_black_brd2lightGray;
-    static private FreeTypeFontParameter CVc_16p_black_brd1lightGray;
     
     public static void boot(String path) {
         Fonts.path = path;
@@ -25,7 +21,7 @@ public abstract class Fonts {
         /* ### FALLBACK / ERROR ### */
         BitmapFont stdFont = new BitmapFont();
         stdFont.setColor(Color.RED);
-        FontsMap.put("Arial_15p_Std", stdFont);
+        FontsMap.put("Arial_15p_red", stdFont);
         
         generateFonts();
     }
@@ -61,66 +57,64 @@ public abstract class Fonts {
                 fontName = "CVc_24p_black_brd2lightGray";
                 break;
             default:
-                fontName = "Arial_15p_Std";
+                fontName = "Arial_15p_red";
                 break;
         }
         return FontsMap.get(fontName);
     }
     
     private static void generateFonts() {
-        /* ### 48P BLACK, BORDER: 2, WHITE ### */
-        CV_48p_black_brd2lightGray = new FreeTypeFontParameter();
-        CV_48p_black_brd2lightGray.size = 48;
-        CV_48p_black_brd2lightGray.color = Color.BLACK;
-        CV_48p_black_brd2lightGray.borderWidth = 2;
-        CV_48p_black_brd2lightGray.borderColor = Color.LIGHT_GRAY;
-        CV_48p_black_brd2lightGray.borderStraight = true;
-        CV_48p_black_brd2lightGray.minFilter = Texture.TextureFilter.Linear;
-        CV_48p_black_brd2lightGray.magFilter = Texture.TextureFilter.Linear;
+        FreeTypeFontParameter fontParams = new FreeTypeFontParameter();
+    
+        /* ### 48P BLACK, BORDER: 2, LIGHT_GRAY ### */
+        fontParams.size = 48;
+        fontParams.color = Color.BLACK;
+        fontParams.borderWidth = 2;
+        fontParams.borderColor = Color.LIGHT_GRAY;
+        fontParams.borderStraight = true;
+        fontParams.minFilter = Texture.TextureFilter.Linear;
+        fontParams.magFilter = Texture.TextureFilter.Linear;
         FontsMap.put("CV_48p_black_brd2lightGray",
                      new FreeTypeFontGenerator(
-                         Gdx.files.internal(path + "coolvetica_rg.ttf")).generateFont(CV_48p_black_brd2lightGray));
+                         Gdx.files.internal(path + "coolvetica_rg.ttf")).generateFont(fontParams));
     
-        /* ### 32P BLACK, BORDER: 2, WHITE ### */
-        CV_28p_black_brd2lightGray = new FreeTypeFontParameter();
-        CV_28p_black_brd2lightGray.size = 28;
-        CV_28p_black_brd2lightGray.color = Color.BLACK;
-        CV_28p_black_brd2lightGray.borderWidth = 2;
-        CV_28p_black_brd2lightGray.borderColor = Color.LIGHT_GRAY;
-        CV_28p_black_brd2lightGray.borderStraight = true;
-        CV_28p_black_brd2lightGray.minFilter = Texture.TextureFilter.Linear;
-        CV_28p_black_brd2lightGray.magFilter = Texture.TextureFilter.Linear;
+        /* ### 28P BLACK, BORDER: 2, LIGHT_GRAY ### */
+        fontParams.size = 28;
+        fontParams.color = Color.BLACK;
+        fontParams.borderWidth = 2;
+        fontParams.borderColor = Color.LIGHT_GRAY;
+        fontParams.borderStraight = true;
+        fontParams.minFilter = Texture.TextureFilter.Linear;
+        fontParams.magFilter = Texture.TextureFilter.Linear;
         FontsMap.put("CV_28p_black_brd2lightGray",
                      new FreeTypeFontGenerator(
-                         Gdx.files.internal(path + "coolvetica_rg.ttf")).generateFont(CV_28p_black_brd2lightGray));
+                         Gdx.files.internal(path + "coolvetica_rg.ttf")).generateFont(fontParams));
     
-        /* ### 24P BLACK, BORDER: 2, WHITE ### */
-        CVc_24p_black_brd2lightGray = new FreeTypeFontParameter();
-        CVc_24p_black_brd2lightGray.size = 24;
-        CVc_24p_black_brd2lightGray.color = Color.BLACK;
-        CVc_24p_black_brd2lightGray.borderWidth = 2;
-        CVc_24p_black_brd2lightGray.borderColor = Color.LIGHT_GRAY;
-        CVc_24p_black_brd2lightGray.borderStraight = true;
-        CVc_24p_black_brd2lightGray.minFilter = Texture.TextureFilter.Linear;
-        CVc_24p_black_brd2lightGray.magFilter = Texture.TextureFilter.Linear;
+        /* ### 24P BLACK, BORDER: 2, LIGHT_GRAY ### */
+        fontParams.size = 24;
+        fontParams.color = Color.BLACK;
+        fontParams.borderWidth = 2;
+        fontParams.borderColor = Color.LIGHT_GRAY;
+        fontParams.borderStraight = true;
+        fontParams.minFilter = Texture.TextureFilter.Linear;
+        fontParams.magFilter = Texture.TextureFilter.Linear;
         FontsMap.put("CVc_24p_black_brd2lightGray",
                      new FreeTypeFontGenerator(
                          Gdx.files.internal(path + "coolvetica_condensed_rg.ttf")).generateFont(
-                         CVc_24p_black_brd2lightGray));
+                         fontParams));
     
-        /* ### 16P BLACK, BORDER: 1, WHITE ### */
-        CVc_16p_black_brd1lightGray = new FreeTypeFontParameter();
-        CVc_16p_black_brd1lightGray.size = 16;
-        CVc_16p_black_brd1lightGray.color = Color.BLACK;
-        CVc_16p_black_brd1lightGray.borderWidth = 1;
-        CVc_16p_black_brd1lightGray.borderColor = Color.LIGHT_GRAY;
-        CVc_16p_black_brd1lightGray.borderStraight = true;
-        CVc_16p_black_brd1lightGray.minFilter = Texture.TextureFilter.Linear;
-        CVc_16p_black_brd1lightGray.magFilter = Texture.TextureFilter.Linear;
+        /* ### 16P BLACK, BORDER: 1, LIGHT_GRAY ### */
+        fontParams.size = 16;
+        fontParams.color = Color.BLACK;
+        fontParams.borderWidth = 1;
+        fontParams.borderColor = Color.LIGHT_GRAY;
+        fontParams.borderStraight = true;
+        fontParams.minFilter = Texture.TextureFilter.Linear;
+        fontParams.magFilter = Texture.TextureFilter.Linear;
         FontsMap.put(
             "CVc_16p_black_brd1lightGray",
             new FreeTypeFontGenerator(
-                Gdx.files.internal(path + "coolvetica_condensed_rg.ttf")).generateFont(CVc_16p_black_brd1lightGray));
+                Gdx.files.internal(path + "coolvetica_condensed_rg.ttf")).generateFont(fontParams));
     }
     
 }
