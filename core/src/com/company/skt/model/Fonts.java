@@ -20,8 +20,7 @@ public abstract class Fonts {
         
         /* ### FALLBACK / ERROR ### */
         BitmapFont stdFont = new BitmapFont();
-        stdFont.setColor(Color.RED);
-        FontsMap.put("Arial_15p_red", stdFont);
+        FontsMap.put("Arial_15p_white", stdFont);
         
         generateFonts();
     }
@@ -51,13 +50,13 @@ public abstract class Fonts {
                 fontName = "CV_28p_black_brd2lightGray";
                 break;
             case "textField":
-                fontName = "CVc_24p_black_brd2lightGray";
+                fontName = "CVc_20p_black_brd1lightGray";
                 break;
             case "message":
                 fontName = "CVc_24p_black_brd2lightGray";
                 break;
             default:
-                fontName = "Arial_15p_red";
+                fontName = "Arial_15p_white";
                 break;
         }
         return FontsMap.get(fontName);
@@ -103,8 +102,8 @@ public abstract class Fonts {
                          Gdx.files.internal(path + "coolvetica_condensed_rg.ttf")).generateFont(
                          fontParams));
     
-        /* ### 16P BLACK, BORDER: 1, LIGHT_GRAY ### */
-        fontParams.size = 16;
+        /* ### 20P BLACK, BORDER: 1, LIGHT_GRAY ### */
+        fontParams.size = 20;
         fontParams.color = Color.BLACK;
         fontParams.borderWidth = 1;
         fontParams.borderColor = Color.LIGHT_GRAY;
@@ -112,7 +111,7 @@ public abstract class Fonts {
         fontParams.minFilter = Texture.TextureFilter.Linear;
         fontParams.magFilter = Texture.TextureFilter.Linear;
         FontsMap.put(
-            "CVc_16p_black_brd1lightGray",
+            "CVc_20p_black_brd1lightGray",
             new FreeTypeFontGenerator(
                 Gdx.files.internal(path + "coolvetica_condensed_rg.ttf")).generateFont(fontParams));
     }

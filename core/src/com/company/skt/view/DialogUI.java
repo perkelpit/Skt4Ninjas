@@ -111,7 +111,7 @@ public class DialogUI extends UpdateStage {
         setInputString("");
         DialogUI dialog = prepareDialog(title, message);
         TextFieldStyle textFieldStyle = new TextFieldStyle();
-        textFieldStyle.font = Fonts.get("CV_24p_black_brd2white");
+        textFieldStyle.font = Fonts.get("textField");
         textFieldStyle.fontColor = Color.WHITE;
         textFieldStyle.background = new TextureRegionDrawable(
             new TextureRegion(Assets.<Texture>get("TextfieldTexture.png")));
