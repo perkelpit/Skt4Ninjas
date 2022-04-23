@@ -1,6 +1,7 @@
 package com.company.skt.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,15 +13,19 @@ import java.util.HashMap;
 public abstract class Fonts {
     
     static String path;
+    static FileHandle stdTTF;
     static HashMap<String, BitmapFont> FontsMap;
     
     public static void boot(String path) {
         Fonts.path = path;
         FontsMap = new HashMap<>();
         
-        /* ### FALLBACK / ERROR ### */
-        BitmapFont stdFont = new BitmapFont();
-        FontsMap.put("Arial_15p_white", stdFont);
+        /* ### FALLBACK FONT ### */
+        BitmapFont fallbackFont = new BitmapFont();
+        FontsMap.put("Arial_15p_white", fallbackFont);
+        
+        /* ### STANDARD TTF ###*/
+        stdTTF = Gdx.files.internal(path + "coolvetica_rg.ttf");
         
         generateFonts();
     }
@@ -60,6 +65,19 @@ public abstract class Fonts {
                 break;
         }
         return FontsMap.get(fontName);
+    }
+    
+    public static BitmapFont get(int fontSize, Color fontColor) {
+        return get(stdTTF, fontSize, fontColor);
+    }
+    
+    public static BitmapFont get(FileHandle ttfFile, int fontSize, Color fontColor) {
+        FreeTypeFontParameter fontParams = new FreeTypeFontParameter();
+        fontParams.size = fontSize;
+        fontParams.color = fontColor;
+        fontParams.minFilter = Texture.TextureFilter.Linear;
+        fontParams.magFilter = Texture.TextureFilter.Linear;
+        return new FreeTypeFontGenerator(ttfFile).generateFont(fontParams);
     }
     
     private static void generateFonts() {
