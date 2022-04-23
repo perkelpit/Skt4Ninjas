@@ -26,6 +26,7 @@ public abstract class Fonts {
         BitmapFont stdFont = new BitmapFont();
         stdFont.setColor(Color.RED);
         FontsMap.put("Arial_15p_Std", stdFont);
+        
         generateFonts();
     }
     
