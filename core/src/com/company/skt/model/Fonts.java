@@ -26,7 +26,47 @@ public abstract class Fonts {
         BitmapFont stdFont = new BitmapFont();
         stdFont.setColor(Color.RED);
         FontsMap.put("Arial_15p_Std", stdFont);
+        generateFonts();
+    }
     
+    public static BitmapFont get(String usage){
+        String fontName;
+        String mainCase;
+        String subCase;
+        if (usage.contains("#")) {
+            mainCase = usage.substring(0, usage.indexOf("#"));
+            subCase = usage.substring(usage.indexOf("#") + 1);
+        } else {
+            mainCase = usage;
+            subCase = "";
+        }
+        switch(mainCase) {
+            case "button":
+                fontName = "CV_28p_black_brd2lightGray";
+                break;
+            case "bigTitle":
+                fontName = "CV_48p_black_brd2lightGray";
+                break;
+            case "medTitle":
+                fontName = "CV_28p_black_brd2lightGray";
+                break;
+            case "medLable":
+                fontName = "CV_28p_black_brd2lightGray";
+                break;
+            case "textField":
+                fontName = "CVc_24p_black_brd2lightGray";
+                break;
+            case "message":
+                fontName = "CVc_24p_black_brd2lightGray";
+                break;
+            default:
+                fontName = "Arial_15p_Std";
+                break;
+        }
+        return FontsMap.get(fontName);
+    }
+    
+    private static void generateFonts() {
         /* ### 48P BLACK, BORDER: 2, WHITE ### */
         CV_48p_black_brd2lightGray = new FreeTypeFontParameter();
         CV_48p_black_brd2lightGray.size = 48;
@@ -80,43 +120,6 @@ public abstract class Fonts {
             "CVc_16p_black_brd1lightGray",
             new FreeTypeFontGenerator(
                 Gdx.files.internal(path + "coolvetica_condensed_rg.ttf")).generateFont(CVc_16p_black_brd1lightGray));
-    }
-    
-    public static BitmapFont get(String usage){
-        String fontName;
-        String mainCase;
-        String subCase;
-        if (usage.contains("#")) {
-            mainCase = usage.substring(0, usage.indexOf("#"));
-            subCase = usage.substring(usage.indexOf("#") + 1);
-        } else {
-            mainCase = usage;
-            subCase = "";
-        }
-        switch(mainCase) {
-            case "button":
-                fontName = "CV_28p_black_brd2lightGray";
-                break;
-            case "bigTitle":
-                fontName = "CV_48p_black_brd2lightGray";
-                break;
-            case "medTitle":
-                fontName = "CV_28p_black_brd2lightGray";
-                break;
-            case "medLable":
-                fontName = "CV_28p_black_brd2lightGray";
-                break;
-            case "textField":
-                fontName = "CVc_24p_black_brd2lightGray";
-                break;
-            case "message":
-                fontName = "CVc_24p_black_brd2lightGray";
-                break;
-            default:
-                fontName = "Arial_15p_Std";
-                break;
-        }
-        return FontsMap.get(fontName);
     }
     
 }
