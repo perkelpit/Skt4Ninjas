@@ -62,6 +62,9 @@ public abstract class Fonts {
             case "message":
                 fontName = "CVc_24p_black_brd2lightGray";
                 break;
+            case "selectBox":
+                fontName = "CVc_24p_black_brd2lightGray";
+                break;
             default:
                 fontName = "Arial_15p_white";
                 break;
