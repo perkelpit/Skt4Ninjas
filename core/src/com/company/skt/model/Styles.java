@@ -14,12 +14,6 @@ import com.badlogic.gdx.utils.Null;
 
 public abstract class Styles {
     
-    private static String path;
-    
-    public static void boot(String basePath) {
-        Styles.path = basePath + "styles/";
-    }
-    
     public static LabelStyle newLabelStyle() {
         LabelStyle labelStyle = new LabelStyle();
         labelStyle.font = Fonts.get("medLable");

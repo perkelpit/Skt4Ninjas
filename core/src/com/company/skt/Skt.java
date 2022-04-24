@@ -46,7 +46,6 @@ public class Skt extends ScreenController {
 		window = graphics.getWindow();
 		Local.boot(basePath + "local/");
 		Fonts.boot(basePath + "fonts/");
-		Styles.boot(basePath);
 		Assets.boot(basePath);
 		if(isLog()) {
 			DebugWindow.bootLogging(basePath + "logs/");
