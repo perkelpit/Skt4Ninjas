@@ -20,13 +20,13 @@ public abstract class Styles {
         Styles.path = basePath + "styles/";
     }
     
-    public LabelStyle newLabelStyle() {
+    public static LabelStyle newLabelStyle() {
         LabelStyle labelStyle = new LabelStyle();
         labelStyle.font = Fonts.get("medLable");
         return labelStyle;
     }
     
-    public LabelStyle newLabelStyle(@Null BitmapFont font, @Null Color fontColor, @Null Drawable background) {
+    public static LabelStyle newLabelStyle(@Null BitmapFont font, @Null Color fontColor, @Null Drawable background) {
         LabelStyle style = new LabelStyle();
         style.font = font != null ? font : Fonts.get("medLable");
         style.fontColor = fontColor != null ? fontColor : Color.BLACK;
@@ -35,7 +35,7 @@ public abstract class Styles {
         return style;
     }
     
-    public ImageTextButtonStyle newImageTextButtonStyle() {
+    public static ImageTextButtonStyle newImageTextButtonStyle() {
         ImageTextButtonStyle style = new ImageTextButtonStyle();
         style.up = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
         style.down = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
@@ -43,7 +43,7 @@ public abstract class Styles {
         return style;
     }
     
-    public ImageTextButtonStyle newImageTextButtonStyle(@Null Drawable up, @Null Drawable down,
+    public static ImageTextButtonStyle newImageTextButtonStyle(@Null Drawable up, @Null Drawable down,
                                                          @Null Drawable focused, @Null Drawable checkedFocus,
                                                          @Null Drawable checked, @Null Drawable checkedDown) {
         ImageTextButtonStyle style = new ImageTextButtonStyle();
@@ -61,7 +61,7 @@ public abstract class Styles {
         return style;
     }
     
-    public ImageTextButtonStyle newImageTextButtonStyle(@Null Drawable up, @Null Drawable down,
+    public static ImageTextButtonStyle newImageTextButtonStyle(@Null Drawable up, @Null Drawable down,
                                                          @Null BitmapFont font, @Null Color fontColor) {
         ImageTextButtonStyle style = new ImageTextButtonStyle();
         style.up = up != null ? up : new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
@@ -71,7 +71,7 @@ public abstract class Styles {
         return style;
     }
     
-    public SelectBoxStyle newSelectBoxStyle() {
+    public static SelectBoxStyle newSelectBoxStyle() {
         SelectBoxStyle style = new SelectBoxStyle();
         style.font = Fonts.get("selectBox");
         style.fontColor = Color.BLACK;
