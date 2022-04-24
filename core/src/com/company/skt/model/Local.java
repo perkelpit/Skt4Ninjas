@@ -38,7 +38,7 @@ public abstract class Local {
         Local.lang = lang;
     }
     
-    public static String getString(String key) {
+    public static String get(String key) {
         String s = local.getProperty(key);
         if (s == null) {
             return key;

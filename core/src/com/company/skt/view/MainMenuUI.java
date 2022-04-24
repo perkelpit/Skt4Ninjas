@@ -59,15 +59,15 @@ public class MainMenuUI extends UpdateStage {
         
         // *** LABEL ***
         welcomeMessageLabel = new Label(
-                Local.getString("mm_greet") + " " +
-                Settings.getProperties(Settings.APP).getProperty("player_name"),
+            Local.get("mm_greet") + " " +
+            Settings.getProperties(Settings.APP).getProperty("player_name"),
                                         labelStyleWelcome);
         menuTable.add(welcomeMessageLabel);
         menuTable.row();
         
         // *** HOST BUTTON ***
         hostButton = new ImageTextButton(
-            Local.getString("mm_host"), new ImageTextButtonStyle(
+            Local.get("mm_host"), new ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, null, buttonFont));
         hostButton.addListener(new ClickListener() {
             @Override
@@ -80,7 +80,7 @@ public class MainMenuUI extends UpdateStage {
         
         // *** JOIN BUTTON ***
         joinButton = new ImageTextButton(
-            Local.getString("mm_join"), new ImageTextButtonStyle(
+            Local.get("mm_join"), new ImageTextButtonStyle(
             buttonDrawable, buttonPressedDrawable, null, buttonFont));
         joinButton.addListener(new ClickListener() {
             @Override
@@ -93,7 +93,7 @@ public class MainMenuUI extends UpdateStage {
         
         // *** ARCHIVE BUTTON ***
         archiveButton = new ImageTextButton(
-            Local.getString("mm_archive"), new ImageTextButtonStyle(
+            Local.get("mm_archive"), new ImageTextButtonStyle(
             buttonDrawable, buttonPressedDrawable, null, buttonFont));
         archiveButton.addListener(new ClickListener() {
             @Override
@@ -106,7 +106,7 @@ public class MainMenuUI extends UpdateStage {
         
         // *** SETTINGS ***
         settingsButton = new ImageTextButton(
-            Local.getString("mm_settings"), new ImageTextButtonStyle(
+            Local.get("mm_settings"), new ImageTextButtonStyle(
             buttonDrawable, buttonPressedDrawable, null, buttonFont));
         settingsButton.addListener(new ClickListener() {
             @Override
@@ -119,7 +119,7 @@ public class MainMenuUI extends UpdateStage {
     
         // *** CREDITS BUTTON ***
         creditsButton = new ImageTextButton(
-            Local.getString("mm_credits"), new ImageTextButtonStyle(
+            Local.get("mm_credits"), new ImageTextButtonStyle(
             buttonDrawable, buttonPressedDrawable, null, buttonFont));
         creditsButton.addListener(new ClickListener() {
             @Override
@@ -132,7 +132,7 @@ public class MainMenuUI extends UpdateStage {
         
         // *** EXIT BUTTON ***
         exitButton = new ImageTextButton(
-            Local.getString("mm_exit"), new ImageTextButtonStyle(
+            Local.get("mm_exit"), new ImageTextButtonStyle(
             buttonDrawable, buttonPressedDrawable, null, buttonFont));
         exitButton.addListener(new ClickListener() {
             @Override

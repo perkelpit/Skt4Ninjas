@@ -83,8 +83,8 @@ public class ClientSession extends Session {
     private void sessionLeft(boolean kicked) {
         StageScreen screen = Utils.getCurrentScreen();
         Gdx.app.postRunnable(() -> {
-            DialogUI.newOkMessage(screen.findStage("lobbyUI"), Local.getString("lb_msg_left"),
-                                  kicked ? Local.getString("lb_msg_kicked") : Local.getString("lb_msg_closed"),
+            DialogUI.newOkMessage(screen.findStage("lobbyUI"), Local.get("lb_msg_left"),
+                                  kicked ? Local.get("lb_msg_kicked") : Local.get("lb_msg_closed"),
                                   null, screen.findStage("mainMenuUI"),
                                   () -> {
                                       Gdx.app.postRunnable(() -> {

@@ -82,7 +82,7 @@ public class SettingsUI extends UpdateStage {
 
         // *** GAME TAB BUTTON ***
         gameTabButton = new ImageTextButton(
-            Local.getString("sm_tab_game"), new ImageTextButtonStyle(
+            Local.get("sm_tab_game"), new ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")
         ));
         gameTabButton.addListener(new ClickListener() {
@@ -96,7 +96,7 @@ public class SettingsUI extends UpdateStage {
 
         // *** VIDEO TAB BUTTON ***
        videoTabButton = new ImageTextButton(
-                Local.getString("sm_tab_video"), new ImageTextButtonStyle(
+           Local.get("sm_tab_video"), new ImageTextButtonStyle(
                buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")
         ));
         videoTabButton.addListener(new ClickListener() {
@@ -110,7 +110,7 @@ public class SettingsUI extends UpdateStage {
 
         // *** AUDIO TAB BUTTON ***
         audioTabButton = new ImageTextButton(
-                Local.getString("sm_tab_audio"), new ImageTextButtonStyle(
+            Local.get("sm_tab_audio"), new ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")
         ));
         audioTabButton.addListener(new ClickListener() {
@@ -124,7 +124,7 @@ public class SettingsUI extends UpdateStage {
 
         // *** QUIT SETTINGS TAB BUTTON ***
         quitSettingsButton = new ImageTextButton(
-                Local.getString("sm_quit"), new ImageTextButtonStyle(
+            Local.get("sm_quit"), new ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")
         ));
         quitSettingsButton.addListener(new ClickListener() {
@@ -146,7 +146,7 @@ public class SettingsUI extends UpdateStage {
 
         // *** CHANGE NAME ***
         changeNameLabel = new Label(
-                Local.getString("sm_game_label_change_name"),
+                Local.get("sm_game_label_change_name"),
                 new Label.LabelStyle(Fonts.get("button"), null));
         gameTable.add(changeNameLabel);
 
@@ -156,7 +156,7 @@ public class SettingsUI extends UpdateStage {
         gameTable.add(changeNameTextField);
 
         changeNameButton = new ImageTextButton(
-                Local.getString("sm_game_button_change_name"), new ImageTextButtonStyle(
+            Local.get("sm_game_button_change_name"), new ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")
         ));
         changeNameButton.addListener(new ClickListener() {
@@ -169,7 +169,7 @@ public class SettingsUI extends UpdateStage {
         gameTable.row();
 
         // *** NUMBER OF GAMES ***
-        numberOfGamesLabel = new Label(Local.getString("lb_no-of-games") + ": ",
+        numberOfGamesLabel = new Label(Local.get("lb_no-of-games") + ": ",
                 new Label.LabelStyle(Fonts.get("medLable"), null));
         gameTable.add(numberOfGamesLabel).padRight(10 * scaleX).align(Align.left);
 
@@ -187,7 +187,7 @@ public class SettingsUI extends UpdateStage {
         gameTable.row();
 
         // *** LOSTFACTOR ***
-        lostFactorLabel = new Label(Local.getString("lb_lost_factor") + ": ",
+        lostFactorLabel = new Label(Local.get("lb_lost_factor") + ": ",
                 new Label.LabelStyle(Fonts.get("medLable"), null));
         gameTable.add(lostFactorLabel).padRight(10 * scaleX).align(Align.left);
 
@@ -205,7 +205,7 @@ public class SettingsUI extends UpdateStage {
         gameTable.row();
 
         // *** TIMELIMIT ***
-        timeLimitLabel = new Label(Local.getString("time-limit") + ": ",
+        timeLimitLabel = new Label(Local.get("time-limit") + ": ",
                 new Label.LabelStyle(Fonts.get("medLable"), null));
         gameTable.add(timeLimitLabel).align(Align.left);
 
@@ -213,13 +213,13 @@ public class SettingsUI extends UpdateStage {
                 null, new ScrollPane.ScrollPaneStyle(), new List.ListStyle(buttonFont, Color.ORANGE,
                 Color.WHITE, new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png")))));
         timeLimitSelectBox.setItems(
-                Local.getString("lb_tl_opt_no-tl"),
-                "30" + Local.getString("abr_second"),
-                "1" + Local.getString("abr_minute"),
-                "2" + Local.getString("abr_minute"),
-                "3" + Local.getString("abr_minute"),
-                "5" + Local.getString("abr_minute"),
-                "10" + Local.getString("abr_minute"));
+                Local.get("lb_tl_opt_no-tl"),
+                "30" + Local.get("abr_second"),
+                "1" + Local.get("abr_minute"),
+                "2" + Local.get("abr_minute"),
+                "3" + Local.get("abr_minute"),
+                "5" + Local.get("abr_minute"),
+                "10" + Local.get("abr_minute"));
         timeLimitSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -230,7 +230,7 @@ public class SettingsUI extends UpdateStage {
         gameTable.row();
 
         // *** RAMSCH ***
-        junkCheckbox = new CheckBox(Local.getString("lb_include_junk"),
+        junkCheckbox = new CheckBox(Local.get("lb_include_junk"),
                 new CheckBox.CheckBoxStyle(
                         new TextureRegionDrawable(Assets.<Texture>get("CheckTexture.png")),
                         new TextureRegionDrawable(Assets.<Texture>get("CheckTextureActive.png")),

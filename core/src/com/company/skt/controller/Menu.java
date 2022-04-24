@@ -51,9 +51,9 @@ public class Menu extends StageScreen implements HasSession {
                 break;
             case "JOIN":
                 DialogUI.newInputDialog(
-                        findStage("mainMenuUI"), "IP", "localhost",
-                        Local.getString("dialog_title_ip"), Local.getString("dialog_prompt_ip"),
-                        null, null, findStage("mainMenuUI"), findStage("mainMenuUI"),
+                    findStage("mainMenuUI"), "IP", "localhost",
+                    Local.get("dialog_title_ip"), Local.get("dialog_prompt_ip"),
+                    null, null, findStage("mainMenuUI"), findStage("mainMenuUI"),
                         arg0 -> {
                             if (arg0 == null || arg0.isEmpty()) {
                                 return false;
@@ -74,7 +74,7 @@ public class Menu extends StageScreen implements HasSession {
                                 return !arg0.endsWith(".");
                             }
                         },
-                        null);
+                    null);
                 break;
             case "ARCHIVE":
                 DebugWindow.println("[MainMenu] archive clicked");
@@ -91,7 +91,7 @@ public class Menu extends StageScreen implements HasSession {
             case "EXIT":
                 UpdateStage mainMenuUI = findStage("mainMenuUI");
                 DialogUI.newYesNoQuestion(
-                        mainMenuUI, Local.getString("dialog_question_quit"),
+                        mainMenuUI, Local.get("dialog_question_quit"),
                         null, null, null, mainMenuUI, mainMenuUI,
                         () -> {
                             Skt.setStop(true);
@@ -114,7 +114,7 @@ public class Menu extends StageScreen implements HasSession {
                 Gdx.app.postRunnable(() -> {
                     DialogUI.newYesNoQuestion(
                             findStage("lobbyUI"),
-                            (SessionData.isHost() ? Local.getString("lb_q_end") : Local.getString("lb_q_quit")),
+                            (SessionData.isHost() ? Local.get("lb_q_end") : Local.get("lb_q_quit")),
                             null, null, null, findStage("mainMenuUI"), findStage("lobbyUI"),
                             () -> {
                                 try {
@@ -303,7 +303,7 @@ public class Menu extends StageScreen implements HasSession {
                     ((LobbyUI) findStage("lobbyUI")).updateUI();
                     DialogUI.newTriggerMessage(
                             findStage("mainMenuUI"), null,
-                            Local.getString("dialog_msg_server_found_trying_to_join_lobby"),
+                            Local.get("dialog_msg_server_found_trying_to_join_lobby"),
                             null, null, findStage("lobbyUI"),
                             findStage("mainMenuUI"), null, () -> {
                                 Gdx.app.postRunnable(() -> {
@@ -313,8 +313,8 @@ public class Menu extends StageScreen implements HasSession {
                                         e.printStackTrace();
                                     }
                                     DialogUI.newOkMessage(
-                                            findStage("mainMenuUI"), Local.getString("rejected_title"),
-                                            Local.getString("rejected_message") + ".",
+                                            findStage("mainMenuUI"), Local.get("rejected_title"),
+                                            Local.get("rejected_message") + ".",
                                             null, findStage("mainMenuUI"), null);
                                 });
                             }, null, 20000);
@@ -324,8 +324,8 @@ public class Menu extends StageScreen implements HasSession {
                 //DialogUI.setTrigger(Trigger.FAIL);
                 Gdx.app.postRunnable(() -> {
                     DialogUI.newOkMessage(
-                            findStage("mainMenuUI"), Local.getString("error") + "!",
-                            Local.getString("no_server_found") + ".", null, findStage("mainMenuUI"), null);
+                        findStage("mainMenuUI"), Local.get("error") + "!",
+                        Local.get("no_server_found") + ".", null, findStage("mainMenuUI"), null);
                 });
                 break;
             case "CONNECTION_REJECTED":

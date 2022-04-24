@@ -141,7 +141,7 @@ public class DialogUI extends UpdateStage {
         dialog.buttonFont = Fonts.get("button");
         dialog.buttons.add(new ImageTextButton(
             (okButtonText != null ?
-             okButtonText : Local.getString("ok")),
+             okButtonText : Local.get("ok")),
             new ImageTextButtonStyle(
                 dialog.buttonDrawable, dialog.buttonPressedDrawable, null, dialog.buttonFont)));
         dialog.buttons.get(0).addListener(new ClickListener() {
@@ -163,7 +163,7 @@ public class DialogUI extends UpdateStage {
         dialog.table.add(dialog.buttons.get(0));
         dialog.buttons.add(new ImageTextButton(
             (cancelButtonText != null ?
-             cancelButtonText : Local.getString("cancel")),
+             cancelButtonText : Local.get("cancel")),
             new ImageTextButtonStyle(
                 dialog.buttonDrawable, dialog.buttonPressedDrawable, null, dialog.buttonFont)));
         dialog.buttons.get(1).addListener(new ClickListener() {
@@ -282,7 +282,7 @@ public class DialogUI extends UpdateStage {
         for(int i = 0; i < buttonTexts.size(); i++) {
             dialog.buttons.add(new ImageTextButton(
                 (buttonTexts.get(i) != null ?
-                 buttonTexts.get(i) : Local.getString(stdButtonTextLocalStrings.get(i))),
+                 buttonTexts.get(i) : Local.get(stdButtonTextLocalStrings.get(i))),
                 new ImageTextButtonStyle(
                     dialog.buttonDrawable, dialog.buttonPressedDrawable, null, dialog.buttonFont)));
             int finalI = i;

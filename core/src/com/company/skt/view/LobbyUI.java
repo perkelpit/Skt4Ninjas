@@ -81,19 +81,19 @@ public class LobbyUI extends UpdateStage {
         // **** PLAYER ****
 
         // *** PLAYER0 ***
-        player0Name = new Label(Local.getString("lb_player_null"),
+        player0Name = new Label(Local.get("lb_player_null"),
                 new Label.LabelStyle(Fonts.get("medLable"), null));
         topLeftTable.add(player0Name);
         topLeftTable.row();
         
         // *** PLAYER1 ***
-        player1Name = new Label(Local.getString("lb_player_null"),
+        player1Name = new Label(Local.get("lb_player_null"),
                 new Label.LabelStyle(Fonts.get("medLable"), null));
         topLeftTable.add(player1Name).align(Align.left);
     
         if(SessionData.isHost()) {
             kickPlayer1Button = new ImageTextButton(
-                Local.getString("lb_kick"), new ImageTextButton.ImageTextButtonStyle(
+                Local.get("lb_kick"), new ImageTextButton.ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")));
             kickPlayer1Button.addListener(new ClickListener() {
                 @Override
@@ -106,12 +106,12 @@ public class LobbyUI extends UpdateStage {
         topLeftTable.row();
 
         // *** PLAYER2 ***
-        player2Name = new Label(Local.getString("lb_player_null"),
+        player2Name = new Label(Local.get("lb_player_null"),
                 new Label.LabelStyle(Fonts.get("medLable"), null));
         topLeftTable.add(player2Name).align(Align.left);
         if(SessionData.isHost()) {
             kickPlayer2Button = new ImageTextButton(
-                Local.getString("lb_kick"), new ImageTextButton.ImageTextButtonStyle(
+                Local.get("lb_kick"), new ImageTextButton.ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")));
             kickPlayer2Button.addListener(new ClickListener() {
                 @Override
@@ -137,7 +137,7 @@ public class LobbyUI extends UpdateStage {
                 Align.bottomLeft);
 
         // *** GAME SETTINGS ***
-        numberOfGamesLabel = new Label(Local.getString("lb_no-of-games") + ": ",
+        numberOfGamesLabel = new Label(Local.get("lb_no-of-games") + ": ",
                 new Label.LabelStyle(Fonts.get("medLable"), null));
         topRightTable.add(numberOfGamesLabel).padRight(10 * scaleX).align(Align.left);
 
@@ -161,7 +161,7 @@ public class LobbyUI extends UpdateStage {
         topRightTable.add(amountGamesSelectBox).align(Align.left);
         topRightTable.row();
 
-        lostFactorLabel = new Label(Local.getString("lb_lost_factor") + ": ",
+        lostFactorLabel = new Label(Local.get("lb_lost_factor") + ": ",
                 new Label.LabelStyle(Fonts.get("medLable"), null));
         topRightTable.add(lostFactorLabel).padRight(10 * scaleX).align(Align.left);
 
@@ -185,7 +185,7 @@ public class LobbyUI extends UpdateStage {
         topRightTable.add(lostFactorSelectBox).align(Align.left);
         topRightTable.row();
 
-        timeLimitLabel = new Label(Local.getString("time-limit") + ": ",
+        timeLimitLabel = new Label(Local.get("time-limit") + ": ",
                 new Label.LabelStyle(Fonts.get("medLable"), null));
         topRightTable.add(timeLimitLabel).align(Align.left);
 
@@ -193,13 +193,13 @@ public class LobbyUI extends UpdateStage {
                 null, new ScrollPane.ScrollPaneStyle(), new List.ListStyle(buttonFont, Color.ORANGE,
                 Color.WHITE, new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png")))));
         timeLimitSelectBox.setItems(
-                Local.getString("lb_tl_opt_no-tl"),
-                "30" + Local.getString("abr_second"),
-                "1" + Local.getString("abr_minute"),
-                "2" + Local.getString("abr_minute"),
-                "3" + Local.getString("abr_minute"),
-                "5" + Local.getString("abr_minute"),
-                "10" + Local.getString("abr_minute"));
+                Local.get("lb_tl_opt_no-tl"),
+                "30" + Local.get("abr_second"),
+                "1" + Local.get("abr_minute"),
+                "2" + Local.get("abr_minute"),
+                "3" + Local.get("abr_minute"),
+                "5" + Local.get("abr_minute"),
+                "10" + Local.get("abr_minute"));
         timeLimitSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -216,7 +216,7 @@ public class LobbyUI extends UpdateStage {
         topRightTable.add(timeLimitSelectBox).align(Align.left);
         topRightTable.row();
 
-        junkCheckbox = new CheckBox(Local.getString("lb_include_junk"),
+        junkCheckbox = new CheckBox(Local.get("lb_include_junk"),
                 new CheckBox.CheckBoxStyle(
                         new TextureRegionDrawable(Assets.<Texture>get("CheckTexture.png")),
                                 new TextureRegionDrawable(Assets.<Texture>get("CheckTextureActive.png")),
@@ -276,7 +276,7 @@ public class LobbyUI extends UpdateStage {
 
         // *** READY BUTTON ***
         readyStartButton = new ImageTextButton(
-            (SessionData.isHost() ? Local.getString("lb_start") : Local.getString("lb_ready")),
+            (SessionData.isHost() ? Local.get("lb_start") : Local.get("lb_ready")),
                 new ImageTextButton.ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, buttonCheckedDrawable, Fonts.get("button")));
         readyStartButton.addListener(new ClickListener() {
@@ -297,7 +297,7 @@ public class LobbyUI extends UpdateStage {
 
         // *** QUIT BUTTON ***
         quitButton = new ImageTextButton(
-                Local.getString("quit"), new ImageTextButton.ImageTextButtonStyle(
+            Local.get("quit"), new ImageTextButton.ImageTextButtonStyle(
                 buttonDrawable, buttonPressedDrawable, null, Fonts.get("button")));
         quitButton.addListener(new ClickListener() {
             @Override
@@ -368,19 +368,19 @@ public class LobbyUI extends UpdateStage {
             player0Name.setText(data.getPlayer(0).getName());
         }
         else{
-            player0Name.setText(Local.getString("lb_player_null"));
+            player0Name.setText(Local.get("lb_player_null"));
         }
         if (data.getPlayer(1) != null) {
             player1Name.setText(data.getPlayer(1).getName());
         }
         else{
-            player1Name.setText(Local.getString("lb_player_null"));
+            player1Name.setText(Local.get("lb_player_null"));
         }
         if (data.getPlayer(2) != null) {
             player2Name.setText(data.getPlayer(2).getName());
         }
         else{
-            player2Name.setText(Local.getString("lb_player_null"));
+            player2Name.setText(Local.get("lb_player_null"));
         }
 
         // *** SETTINGS ***
