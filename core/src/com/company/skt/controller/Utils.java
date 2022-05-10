@@ -15,6 +15,18 @@ import com.company.skt.model.Settings;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * {@code Utils} is a currently very messy utility-class holding all those static methods which have not found a
+ * better place by now. Some of those methods are even remnants of a previously made "space-game" for learning libGDX'
+ * basics. They are left in until it´s certain they aren´t needed for animation purposes. <br>
+ * <p>
+ * By now only following methods are in use in {@code skt}: <br>
+ * - {@code scale}-methods: <br> used to scale textures from reference-resolution to actual resolution. <br>
+ * - {@code setCurrentScreen} and {@code getCurrentScreen}: <br> used at many places to get a reference to
+ * the current screen <br>
+ * - {@code getScaleFactorX and ..Y}: <br> provide/calculate those values, needed at different places
+ * </p>
+ * */
 public abstract class Utils {
     /* TODO split class into:
      * model.Utils(methods only used by skt) and

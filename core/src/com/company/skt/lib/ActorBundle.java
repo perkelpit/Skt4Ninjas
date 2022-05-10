@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 
+/** A loose {@link Actor} bundle which assembles arround an {@link Array} holding the actors and provides some core
+ * functionality to iterate over those {@link Actor}s. Some of those functionalities only take effect if the actor is
+ * an {@link BaseActor}, {@link BaseGroup} or inherits from them.*/
 public class ActorBundle<T extends Actor> extends Actor implements InitializeUpdate, Named {
     
     private boolean initialized;

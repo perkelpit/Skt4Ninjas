@@ -9,6 +9,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.company.skt.controller.Utils;
 
+/** Inherits from libGDX´s {@link Group} to provide some additional functionality specified in {@link InitializeUpdate}
+ * and {@link Named} and the funtionality to overlap with and bounce off others of its kind. To achieve this it has
+ * an {@link BoundaryActor}. <br>
+ * It also adds the ability to set if the group should be treated as solid, i.e. if it can bounce off other solid
+ * {@link BaseGroup}s or if it should overlap at all. <br>
+ * Additionally there is a convenience-method to get the center of the group.
+ * */
 public class BaseGroup extends Group implements InitializeUpdate, Named {
     
     private boolean solid;

@@ -14,6 +14,13 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * This class houses the UI-elements created with AWT and SWING for a debug window monitoring some relevant values and
+ * showing messages created by the program via {@code DebugWindow.println()} docked to the left of the game if the
+ * program has been started with the {@code debug}-argument. <br>
+ * It houses also the aformentioned {@link #println(String)}-method and {@link #log(String)} to write those messages
+ * to a time stamped file, if the {@code log}-argument had been passed.
+ * */
 public class DebugWindow extends JFrame {
     
     public enum Focus {

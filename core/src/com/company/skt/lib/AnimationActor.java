@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/** A subclass to {@link BaseActor} to show an {@link Animation}*/
 public class AnimationActor extends BaseActor {
     
     private Animation<TextureRegion> animation;

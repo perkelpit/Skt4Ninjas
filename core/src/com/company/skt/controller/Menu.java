@@ -11,6 +11,11 @@ import com.company.skt.view.*;
 
 import java.io.IOException;
 
+/**
+ * {@code Menu} is the {@link StageScreen} for all those menus until the actual game session starts: <br>
+ * Main menu, settings menu, (planned)profiles menu and lobby. <br>
+ * It handles all the {@code clicks} and {@code events} happening within those UIs and corresponding
+ * controller- and model-classes via {@link #click(String)} and {@link #event(String)}. */
 public class Menu extends StageScreen implements HasSession {
 
     private Session session;

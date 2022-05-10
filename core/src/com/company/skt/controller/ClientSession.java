@@ -19,6 +19,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Properties;
 
+/**
+ * A {@code ClientSession} is created following a click on the JOIN-button in
+ * {@link com.company.skt.view.MainMenuUI MainMenuUI}. It handles the client´s interactions with the Host of the game.
+ * To do it´s duties it has a nested class {@link ClientStringStreamHandler}.
+ * */
 public class ClientSession extends Session {
     
     private SessionData sessionData;
@@ -31,6 +36,13 @@ public class ClientSession extends Session {
     private String serverIP;
     private boolean connected, rejected;
     
+    /* [INNER CLASS] STREAM HANDLER for Strings */
+    /**
+     * Implements the last abstract method left over from inheriting from {@link StringStreamHandler}:
+     * {@link #process(String)}. <br>
+     * This method is the place where the {@link ClientSession}´s reactions to incoming
+     * messages from the host are specified or deligated.
+     * */
     private class ClientStringStreamHandler extends StringStreamHandler {
     
         private boolean isInitialSessionData;
@@ -96,6 +108,14 @@ public class ClientSession extends Session {
         DebugWindow.setUIFocus(DebugWindow.Focus.Main);
     }
     
+    /**
+     * Main method to process incoming {@code SessionData-Strings} from the host.
+     * This happens in 3 steps: <br>
+     * 1. extracting the ordinal player number of this client. <br>
+     * 2. parsing the {@code config-substring} into {@code keys} and {@code values} to change those in
+     * {@link SessionData}´s {@code gameCfg}. <br>
+     * 3. parsing the {@code player-substring} into the different players to set their UI-relevant values in
+     * {@link SessionData}*/
     private void processSessionDataString(String in) {
         DebugWindow.println("[ClientSession] processing sessionDataString");
         String invalidStr = "[ClientSession] invalid sessionDataString. should start with ";

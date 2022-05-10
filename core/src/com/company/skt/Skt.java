@@ -19,6 +19,16 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * {@code Skt} is the actual starting point of the program. It boots all those "static" classes (
+ * {@link Local}, {@link Assets}, {@link Fonts} except {@link com.company.skt.model.Settings Settings}, which needs to
+ * be booted earlier in {@code com.company.skt.DesktopLauncher}. <br><br>
+ * It also processes the program args {@code log} and {@code debug} passed as params in the constructor: <br>
+ * If {@code log} is {@code true} all those messages created by the program via
+ * {@code DebugWindow.println()} are written to a time stamped log file. <br>
+ * If {@code debug} is {@code true} a debug window monitoring some relevant values and
+ * showing those messages will be docked to the left of the game, which is set to a resolution of 1280x720 and to
+ * windowed mode by {@code com.company.skt.DesktopLauncher}. */
 public class Skt extends ScreenController {
 	
 	private static String basePath;

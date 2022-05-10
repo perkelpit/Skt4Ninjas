@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/** Extended {@link BaseActor} to display a texture.*/
 public class TextureActor extends BaseActor {
     
     private TextureRegion texture;

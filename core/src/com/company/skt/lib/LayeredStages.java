@@ -3,6 +3,8 @@ package com.company.skt.lib;
 
 import com.badlogic.gdx.utils.Array;
 
+/** Used by {@link StageScreen} to hold it´s stages and provides via adding {@link AlignedStage}s instead of
+ * {@link UpdateStage}s the functionality to create a parallax-effect.*/
 public class LayeredStages extends UpdateStage {
 
     private Array<UpdateStage> stages;

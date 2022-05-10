@@ -3,6 +3,9 @@ package com.company.skt.lib;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * A subclass to {@link UpdateStage} and used by {@link LayeredStages} providing functionalities to
+ * implement a parallax-effect */
 public class AlignedStage extends UpdateStage {
     
     MovedGroup cameraActor;

@@ -3,6 +3,12 @@ package com.company.skt.lib;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Polygon;
 
+/** Inherits from {@link BaseActor} and is used by {@link BaseGroup} to provide overlapping and bouncing
+ * funtionalities. <br>
+ * at it´s core it creates a {@code standard rectangle} around the {@link BaseGroup} calculated from the sizes
+ * of it´s childs. This reactangle is in every case used first to check if there may be/is an overlap to save
+ * performance. A more precise {@link Polygon} may be added via {@link #setCustomBoundary(float[], float, float)}
+ * to enhance the overlap check. */
 public class BoundaryActor extends BaseActor {
     
     private Polygon boundary;

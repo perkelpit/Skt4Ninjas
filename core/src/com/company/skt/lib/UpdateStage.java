@@ -3,6 +3,9 @@ package com.company.skt.lib;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+/** Extends libGDX´s {@link Stage} to add functionalities specified by {@link InitializeUpdate} and
+ * {@link Named}. It also adds the ability to set the stage´s active-state to determine if it is shown and if
+ * libGDX input-events are passed to it. */
 public class UpdateStage extends Stage implements InitializeUpdate, Named {
   
   private boolean initialized;

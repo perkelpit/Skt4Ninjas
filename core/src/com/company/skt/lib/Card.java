@@ -1,5 +1,8 @@
 package com.company.skt.lib;
 
+/** A class to represent a Card in Skat. <br>
+ * The rank of the card and if it´s trump can be set automatically by passing the game mode in the
+ * corresponding methods {@link #setCardRank(int)} and {@link #setTrump(int)} */
 public class Card {
     
     public static final int CLUBS = 0;
@@ -101,8 +104,7 @@ public class Card {
         if (!b) isLed = false;
     }
     public boolean getLed() {
-        if (isLed) return true;
-        return false;
+        return isLed;
     }
     
     public int getSuitID() {

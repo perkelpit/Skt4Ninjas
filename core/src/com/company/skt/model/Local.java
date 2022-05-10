@@ -1,7 +1,5 @@
 package com.company.skt.model;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;

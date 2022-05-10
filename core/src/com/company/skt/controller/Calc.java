@@ -4,6 +4,9 @@ import com.company.skt.lib.Card;
 import com.company.skt.lib.Game;
 import com.company.skt.lib.Hand;
 
+/**
+ * {@code Calc} is a utility-class to get Skat-related values, namely the value of a game or the bid value.
+ * */
 public abstract class Calc {
     
     public static int getGameValue(Game game) {

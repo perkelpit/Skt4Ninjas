@@ -6,6 +6,13 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * {@code StreamHandler<T>} was once the super-class of {@link StringStreamHandler} and the depricated
+ * {@code ObjectStreamHandler}. Left this way and not merged with {@code StringStreamHandler} to leave the possibility
+ * to reimplement another sort of StreamHandler. <br>
+ * Implements {@link Runnable} to be executed in a different thread because it has an - stoppable - infinite loop.
+ * This loop is - for the sake of performance - delayed by an amount of milliseconds specified in the constructor.
+ * */
 abstract class StreamHandler<T> implements Runnable {
   protected volatile boolean stop;
   protected int delay;

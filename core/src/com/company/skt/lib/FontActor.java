@@ -6,12 +6,15 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 
+/** A {@link BaseActor}-subclass to display a bit of text. */
 public class FontActor extends BaseActor {
     private BitmapFont font;
     private String text;
     private GlyphLayout layout;
     private int align;
     private boolean wrap;
+    
+    // TODO rework the constructors and the ugly redundant calls to createLayout()
     
     public FontActor(String name) {
         super(name);

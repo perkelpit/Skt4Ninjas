@@ -29,6 +29,18 @@ import java.util.concurrent.TimeUnit;
 
 import static java.util.Arrays.asList;
 
+/**
+ * {@code DialogUI} is a sub-framework to dynamically create dialog stages. It roughly leans to Java´s own dialogs.
+ * It provides following dialog types: <br>
+ * {@link #newOkMessage(UpdateStage, String, String, String, UpdateStage, Runnable) Ok-Message / 1-Button-Dialog} <br>
+ * {@link #newYesNoQuestion(UpdateStage, String, String, String, String, UpdateStage, UpdateStage, Runnable, Runnable)
+ * Yes-No-Message / 2-Button-Dialog}<br>
+ * {@link #newYesNoCancelQuestion(UpdateStage, String, String, String, String, String, UpdateStage, UpdateStage,
+ * UpdateStage, Runnable, Runnable, Runnable) Yes-No-CancelMessage / 3-Button-Dialog} <br>
+ * {@link #newInputDialog(UpdateStage, String, String, String, String, String, String, UpdateStage, UpdateStage,
+ * Predicate, Runnable) Input-Dialog} <br>
+ * {@link #newTriggerMessage(UpdateStage, String, String, Animation, String, UpdateStage, UpdateStage, Runnable,
+ * Runnable, Runnable, int) Trigger-Message}*/
 public class DialogUI extends UpdateStage {
     
     private StageScreen screen;
@@ -64,6 +76,12 @@ public class DialogUI extends UpdateStage {
         super("dialogUI");
     }
     
+    /**
+     * A 1-Button-Dialog whichs button text defaults to "Ok"(or corresponding Strings in other languages). <br>
+     * After hitting the button, the corresponding UI passed as param is activated.
+     * A {@link Runnable}, called after hitting the button, may be passed. The rest of the {@code nullable} params
+     * should be self-explanatory.
+     * */
     public static void newOkMessage(UpdateStage callingUI,
                              @Null String title, @Null String message,
                              @Null String okButtonText,
@@ -74,7 +92,12 @@ public class DialogUI extends UpdateStage {
         finalizeDialog(dialog, callingUI);
     }
     
-    
+    /**
+     * A 2-Button-Dialog whichs buttons texts default to "Yes" and "No"(or corresponding Strings in other languages). <br>
+     * After hitting a button, the corresponding UI passed as param is activated.
+     * A {@link Runnable}, called after hitting a button, may be passed. The rest of the {@code nullable} params
+     * should be self-explanatory.
+     * */
     public static void newYesNoQuestion(UpdateStage callingUI,
                                  @Null String title, @Null String message,
                                  @Null String yesButtonText, @Null String noButtonText,
@@ -87,6 +110,13 @@ public class DialogUI extends UpdateStage {
         finalizeDialog(dialog, callingUI);
     }
     
+    /**
+     * A 3-Button-Dialog whichs buttons texts default to "Yes", "No" and "Cancel"
+     * (or corresponding Strings in other languages). <br>
+     * After hitting a button, the corresponding UI passed as param is activated.
+     * A {@link Runnable}, called after hitting a button, may be passed. The rest of the {@code nullable} params
+     * should be self-explanatory.
+     * */
     public static void newYesNoCancelQuestion(UpdateStage callingUI,
                                        @Null String title, @Null String message,
                                        @Null String yesButtonText, @Null String noButtonText,
@@ -102,6 +132,17 @@ public class DialogUI extends UpdateStage {
         finalizeDialog(dialog, callingUI);
     }
     
+    /**
+     * A Input-Dialog with two buttons. The button-texts default to "Ok" and "Cancel".
+     * (or corresponding Strings in other languages). <br>
+     * After hitting a button, the corresponding UI passed as param is activated and the {@code String} in the
+     * {@code TextField} is stored in the {@code static String input} to be gathered by another code fragment.
+     * Hitting {@code ENTER} within the {@code TextField} is treated like clicking the ok-button. <br>
+     * A {@link Runnable}, called after hitting a button, may be passed. <br>
+     * A {@link Predicate} to test if the input is valid may be passed. <br>
+     * The rest of the {@code nullable} params
+     * should be self-explanatory.
+     * */
     public static void newInputDialog(UpdateStage callingUI, String eventSubcategory, @Null String defaultInput,
                                       @Null String title, @Null String message,
                                       @Null String okButtonText, @Null String cancelButtonText,
@@ -181,6 +222,19 @@ public class DialogUI extends UpdateStage {
         finalizeDialog(dialog, callingUI);
     }
     
+    /**
+     * A Trigger-Dialog one button. The button-text default to "Cancel".
+     * (or corresponding Strings in other languages). <br>
+     * After hitting the button, the corresponding UI passed as param is activated.
+     * After the {@code private static Trigger trigger} is set to {@code SUCCESS} or {@code FAIL},
+     * the corresponding UI passed as param is activated.
+     * Hitting {@code ENTER} within the {@code TextField} is treated like clicking the ok-button. <br>
+     * A {@link Runnable}, called after hitting the cancel-button(fallbackUI), after the Trigger is set or
+     * after the time-out is reached, may be passed. <br>
+     * The rest of the {@code nullable} params
+     * should be self-explanatory. <br>
+     * A time-out-value in milliseconds has to be passed.
+     * */
     public static void newTriggerMessage(UpdateStage callingUI,
                                          @Null String title, @Null String message,
                                          @Null Animation<TextureRegion> waitingAnimation,

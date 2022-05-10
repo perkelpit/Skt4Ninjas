@@ -5,6 +5,13 @@ import com.company.skt.model.Assets;
 import com.company.skt.model.SessionData;
 import com.company.skt.view.*;
 
+/**
+ * ### Currently a Stub/Sceletton ### <br>
+ * {@code Play} is the {@link StageScreen} for all those menus and scenes from the beginning of the actual game session
+ * to it´s end: <br>
+ * {@link SummaryUI} and {@link GameUI}. <br>
+ * It handles all the {@code clicks} and {@code events} happening within those UIs and corresponding
+ * controller- and model-classes via {@link #click(String)} and {@link #event(String)}. */
 public class Play extends StageScreen {
     
     private Session session;
@@ -30,10 +37,10 @@ public class Play extends StageScreen {
     
     public void click(String buttonName) {
         switch(buttonName) {
-            case "DUMMY1_DONT_ANOY_ME_INTELLIJ":
+            case "DUMMY1_DONT_ANNOY_ME_INTELLIJ":
                 // TODO fill DUMMY1
                 break;
-            case "DUMMY2_DONT_ANOY_ME_INTELLIJ":
+            case "DUMMY2_DONT_ANNOY_ME_INTELLIJ":
                 // TODO fill DUMMY2
                 break;
         }
@@ -47,13 +54,13 @@ public class Play extends StageScreen {
                     ((HostSession)session).sendStringToAll(SessionData.getDataStringForClient());
                 }
                 if(findStage("gameUI") != null) {
-                    ((GameUI)findStage("playUI")).updateUI();
+                    ((GameUI)findStage("gameUI")).updateUI();
                 }
                 if(findStage("summaryUI") != null) {
                     ((SummaryUI)findStage("summaryUI")).updateUI();
                 }
                 break;
-            case "DUMMY1_DONT_ANOY_ME_INTELLIJ":
+            case "DUMMY1_DONT_ANNOY_ME_INTELLIJ":
                 // TODO fill DUMMY1
                 break;
         }

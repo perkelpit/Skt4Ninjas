@@ -1,5 +1,6 @@
 package com.company.skt.lib;
 
+/** Holds all the data connected to a player regarding a single Skat {@link Game}-round*/
 public class PlayerData {
     public Hand startHand;
     public Hand currentHand;

@@ -2,6 +2,9 @@ package com.company.skt.lib;
 
 import java.util.ArrayList;
 
+/** Respresents a Skat game session with multiple {@link Game}-rounds. Holds only those game rounds which have been
+ * finished. The List is considered {@code closed} when {@code played} equals {@code maxGames} or when it´s manually
+ * closed. */
 public class GameList extends ArrayList<Game> {
     
     private static final long serialVersionUID = 170357016241913470L;

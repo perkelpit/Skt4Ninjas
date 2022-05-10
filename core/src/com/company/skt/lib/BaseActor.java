@@ -5,12 +5,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-/** <pre> Extended Actor:
- * - boundary polygon w/ default ractangle-shape
- * - corresponding overlaps() methods
- * - update() via Updatable
- * - possibility to stop act(), but not update()
- * - solid setable (default: false) </pre>
+/** Inherits from libGDX´s {@link Actor} to provide some additional functionality specified in {@link InitializeUpdate}
+ * and {@link Named}.
+ * It also adds the ability to set the opacity and a convenience-method to get the center of the actor.
  * */
 public class BaseActor extends Actor implements InitializeUpdate, Named {
     

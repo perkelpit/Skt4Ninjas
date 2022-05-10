@@ -11,7 +11,13 @@ import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * {@code ClientHandler} handles a client in skt. For it having an stoppable infinite-loop
+ * it implements {@link Runnable} to be executed in an own thread. The instances of this class are created by
+ * {@link HostSession}. To do it´s duties it has two nested classes: <br>
+ * {@link HostStringStreamHandler HostStringStreamHandler} and {@link HeartBeat HeartBeat} <br><br>
+ * @see ExcessHandler
+ * */
 public class ClientHandler implements Runnable {
     
     /* ### [CLIENT HANDLER]: FIELDS */
@@ -30,7 +36,13 @@ public class ClientHandler implements Runnable {
     
     
     /* ### [INNER CLASS]: HEARTBEAT ### */
-    
+    /**
+     * {@code HeartBeat} checks the connectivity of it´s client utilizing the incoming and outgoing
+     * {@code String}-streams. This is done by sending {@code PING} to the client and checking for a {@code
+     * PING} within the given {@code pingRate}. <br>
+     * It changes the {@code connectivity-value} or the {@code ready-value} of it´s player
+     * if needed. <br>
+     * */
     private class HeartBeat {
         private Lock lock;
         private int pingRate;
@@ -104,7 +116,12 @@ public class ClientHandler implements Runnable {
     
     
     /* ### [INNER CLASS]: STREAM HANDLER for Strings ### */
-    
+    /**
+     * Implements the last abstract method left over from inheriting from {@link StringStreamHandler}:
+     * {@link #process(String)}. <br>
+     * This method is the place where the {@link ClientHandler}´s reactions to incoming
+     * messages from the client are specified or deligated.
+     * */
     private class HostStringStreamHandler extends StringStreamHandler {
         private ClientHandler clientHandler;
         

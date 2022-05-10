@@ -8,6 +8,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.company.skt.controller.Utils;
 import com.company.skt.model.Assets;
 
+/**
+ * Abstract class implenting {@link Screen}, {@link InputProcessor}, {@link InitializeUpdate} and
+ * {@link EventClickHandler} to bundle the needed funtionality of {@code Skt}´s {@code screens}. <br>
+ * It also already implements all funtionalities common to all {@code screens}.
+ * */
 public abstract class StageScreen implements Screen, InputProcessor, InitializeUpdate, EventClickHandler {
     
     private LayeredStages layeredStages;

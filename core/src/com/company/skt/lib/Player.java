@@ -1,12 +1,15 @@
 package com.company.skt.lib;
 
+/** Represents a Skat Player. Regarding the clients, only the name is relevant. The rest of the values are used by
+ * the host. <br>
+ * {@link #toString()} is only for logging and {@link com.company.skt.view.DebugWindow DebugWindow}-purposes.*/
 public class Player {
     
     public static final int CONNECTION_LOST = -1;
     public static final int CONNECTION_WARNING = 0;
     public static final int CONNECTION_OK = 1;
     private String name;
-    public Tally tally; // TODO what was that for ???
+    public Tally tally;
     private boolean isReady;
     private int connectivity;
     

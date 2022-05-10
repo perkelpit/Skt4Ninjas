@@ -4,6 +4,8 @@ import com.company.skt.view.DebugWindow;
 
 import java.io.IOException;
 
+/**
+ * special {@link ClientHandler}-subclass to handle connection attempts to the server if the game is already full. */
 public class ExcessHandler extends ClientHandler {
 
     ExcessHandler(HostSession hostSession) {

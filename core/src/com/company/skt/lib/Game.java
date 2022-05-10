@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+/** Represents a single Skat round and holds all corresponding data. */
 public class Game {
     
     public static final int GRAND = 24;

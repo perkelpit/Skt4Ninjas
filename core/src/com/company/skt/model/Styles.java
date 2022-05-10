@@ -17,6 +17,13 @@ import com.badlogic.gdx.utils.Null;
 
 import java.awt.*;
 
+/**
+ * {@code Styles} main use ist to provide different standard styles needed by UI-widgets from
+ * libGDX´ {@code Scene2D.ui} and by this rendering program-wide ui-changes easy. <br>
+ * <p>
+ * Note: the parameter-free methods provide the standard styles, the others are for special cases or testing purposes.
+ * */
+
 public abstract class Styles {
     
     public static LabelStyle newLabelStyle() {
@@ -93,7 +100,6 @@ public abstract class Styles {
         style.font = Fonts.get("textField");
         style.fontColor = Color.BLACK;
         style.background = new TextureRegionDrawable((Texture)Assets.get("TextfieldTexture2.png"));
-        // style.cursor = new TextureRegionDrawable((Texture)Assets.get("textEditCursor.png"));
         style.focusedBackground = new TextureRegionDrawable((Texture)Assets.get("TextfieldTexture2.png"));
         style.disabledBackground = new TextureRegionDrawable((Texture)Assets.get("TextfieldTexture2.png"));
         style.disabledFontColor = Color.DARK_GRAY;

@@ -17,7 +17,8 @@ import com.company.skt.model.*;
 
 import java.util.Properties;
 
-
+/**
+ * The UI which marks the entry point to the program regarding the user. */
 public class MainMenuUI extends UpdateStage {
 
     private Table menuTable;

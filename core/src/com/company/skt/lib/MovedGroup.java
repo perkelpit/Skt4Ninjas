@@ -3,6 +3,8 @@ package com.company.skt.lib;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+/** An extension of {@link BaseGroup} to provide movement funtionalities like speed, acceleration, deceleration
+ * and maxSpeed.*/
 public class MovedGroup extends BaseGroup {
     private Vector2 velocityVector;
     private Vector2 accelerationVector;

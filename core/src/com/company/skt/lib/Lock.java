@@ -1,5 +1,7 @@
 package com.company.skt.lib;
 
+/** A wrapper class around a plane {@link Object} to ensure that Threads calling {@code wait(), notify() or
+ * notifyAll() owns the monitor.}*/
 public class Lock {
     
     public static final int WAIT = 0;

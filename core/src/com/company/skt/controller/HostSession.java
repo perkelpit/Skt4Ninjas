@@ -12,6 +12,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A {@code HostSession} is created following a click on the HOST-button in
+ * {@link com.company.skt.view.MainMenuUI MainMenuUI}. It handles the host´s interactions with the clients via
+ * {@link ClientHandler}s and repells connection attempts when it is full via {@link ExcessHandler}.
+ * */
 public class HostSession extends Session {
     
     private static int lastHandlerListening;

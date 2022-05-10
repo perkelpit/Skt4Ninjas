@@ -17,6 +17,14 @@ import com.company.skt.model.*;
 
 import java.util.Properties;
 
+/** The UI where the clients and the host connect to each other. It has a chat window and the game settings are shown,
+ * only editable by the host. <br>
+ * The clients may hit the ready-button to signal their readiness and allow the host to
+ * start or revoke this state to prevent this. <br>
+ * The host may change the game settings, kick clients and start the game, if all clients are ready and 3 players
+ * including the host are present. <br>
+ * The lobby may be left by client or host at any time by clicking the quit-button.
+ * */
 public class LobbyUI extends UpdateStage {
 
     // *** RESOURCES ***

@@ -15,6 +15,7 @@ import com.company.skt.controller.Utils;
 import com.company.skt.lib.UpdateStage;
 import com.company.skt.model.*;
 
+/** The UI where the {@code APP} and {@code GAME} settings may be changed. */
 public class SettingsUI extends UpdateStage {
 
     // *** Ressources ***

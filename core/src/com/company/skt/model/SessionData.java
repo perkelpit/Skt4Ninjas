@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Null;
 import com.company.skt.controller.Menu;
 import com.company.skt.controller.Play;
 import com.company.skt.controller.Utils;
+import com.company.skt.lib.EventClickHandler;
 import com.company.skt.lib.GameList;
 import com.company.skt.lib.Player;
 import com.company.skt.lib.StageScreen;
@@ -14,6 +15,17 @@ import java.lang.reflect.Type;
 import java.util.Enumeration;
 import java.util.Properties;
 
+/**
+ * {@code SessionData} holds all those values needed for proper management and display of session-related
+ * data. Some values and methods are only used by {@link com.company.skt.controller.HostSession HostSession}, some
+ * only by {@link com.company.skt.controller.ClientSession ClientSession}.<br>
+ * Additionally it provides methods to save and load a SessionData-object.
+ * <p>
+ * Note: always when a value is changed the event {@code SESSION_DATA_CHANGED} is called on the current
+ * {@link StageScreen}. Therefore {@code StageScreen} implements {@link EventClickHandler} and all of it´s
+ * subclasses need to handle the event properly.
+ * </p>
+ * */
 public class SessionData implements Serializable {
     
     private static SessionData data;
@@ -41,7 +53,6 @@ public class SessionData implements Serializable {
         return data;
     }
     
-    // TODO depricate this by getting this information automatically
     public synchronized static SessionData get(boolean isHost) {
         if(isHost) {
             setOwnPlayerNumber(0);
@@ -175,13 +186,8 @@ public class SessionData implements Serializable {
     }
     
     public static void changed() {
-        StageScreen screen = Utils.getCurrentScreen();
-        if(screen instanceof Menu) {
-            ((Menu)Utils.getCurrentScreen()).event("SESSION_DATA_CHANGED");
-        }
-        if(screen instanceof Play) {
-            ((Play)Utils.getCurrentScreen()).event("SESSION_DATA_CHANGED");
-        }
+        EventClickHandler screen = Utils.getCurrentScreen();
+        screen.event("SESSION_DATA_CHANGED");
     }
     
     public static void save(String path) {

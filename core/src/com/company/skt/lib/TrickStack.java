@@ -2,9 +2,8 @@ package com.company.skt.lib;
 
 import java.util.ArrayList;
 
-/* Methodes:
+/** Holds all the tricks earned by a {@link Player} in a single {@link Game}.
  * */
-
 public class TrickStack extends ArrayList<Trick> {
     private boolean closed;
     
