@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * - possibility to stop act(), but not update()
  * - solid setable (default: false) </pre>
  * */
-public class BaseActor extends Actor implements Initialize_Update, Named {
+public class BaseActor extends Actor implements InitializeUpdate, Named {
     
     private boolean initialized;
     private boolean stopped;
@@ -36,7 +36,7 @@ public class BaseActor extends Actor implements Initialize_Update, Named {
     
     @Override
     public void update(float delta) {
-        Initialize_Update.super.update(delta);
+        InitializeUpdate.super.update(delta);
     }
     
     @Override

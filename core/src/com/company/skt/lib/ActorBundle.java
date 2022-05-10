@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 
-public class ActorBundle<T extends Actor> extends Actor implements Initialize_Update, Named {
+public class ActorBundle<T extends Actor> extends Actor implements InitializeUpdate, Named {
     
     private boolean initialized;
     Array<T> actors;
@@ -44,8 +44,8 @@ public class ActorBundle<T extends Actor> extends Actor implements Initialize_Up
         T actor;
         for(int i = 0; i < actors.size; i++) {
             actor = actors.get(i);
-            if(actor instanceof Initialize_Update) {
-                ((Initialize_Update)actor).initialize();
+            if(actor instanceof InitializeUpdate) {
+                ((InitializeUpdate)actor).initialize();
             }
         }
         initialized = true;
@@ -57,12 +57,12 @@ public class ActorBundle<T extends Actor> extends Actor implements Initialize_Up
     
     @Override
     public void update(float delta) {
-        Initialize_Update.super.update(delta);
+        InitializeUpdate.super.update(delta);
         T actor;
         for(int i = 0; i < actors.size; i++) {
             actor = actors.get(i);
-            if(actor instanceof Initialize_Update) {
-                ((Initialize_Update)actor).update(delta);
+            if(actor instanceof InitializeUpdate) {
+                ((InitializeUpdate)actor).update(delta);
             }
         }
     }

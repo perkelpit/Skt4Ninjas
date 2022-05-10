@@ -28,7 +28,6 @@ public class SettingsUI extends UpdateStage {
     private ImageTextButton gameTabButton, videoTabButton, audioTabButton, quitSettingsButton;
 
     // *** gameTable ***
-
     private Table gameTable;
 
     private Label changeNameLabel, numberOfGamesLabel, lostFactorLabel, timeLimitLabel;
@@ -73,8 +72,7 @@ public class SettingsUI extends UpdateStage {
     @Override
     public void initialize() {
         super.initialize();
-
-
+        
         // ### TAB MENU ###
         tabTable.setSize(300 * scaleX, 900 * scaleY);
         tabTable.setPosition(110 * scaleX, 90 * scaleY, Align.bottomLeft);
@@ -88,7 +86,7 @@ public class SettingsUI extends UpdateStage {
         gameTabButton.addListener(new ClickListener() {
            @Override
            public void clicked(InputEvent event, float x, float y){
-               Utils.getCurrentScreen().buttonClicked("TAB_GAME");
+               Utils.getCurrentScreen().click("TAB_GAME");
            }
         });
         tabTable.add(gameTabButton);
@@ -102,7 +100,7 @@ public class SettingsUI extends UpdateStage {
         videoTabButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                Utils.getCurrentScreen().buttonClicked("TAB_VIDEO");
+                Utils.getCurrentScreen().click("TAB_VIDEO");
             }
         });
         tabTable.add(videoTabButton);
@@ -116,7 +114,7 @@ public class SettingsUI extends UpdateStage {
         audioTabButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                Utils.getCurrentScreen().buttonClicked("TAB_AUDIO");
+                Utils.getCurrentScreen().click("TAB_AUDIO");
             }
         });
         tabTable.add(audioTabButton);
@@ -130,7 +128,7 @@ public class SettingsUI extends UpdateStage {
         quitSettingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                Utils.getCurrentScreen().buttonClicked("QUIT_SETTINGS");
+                Utils.getCurrentScreen().click("QUIT_SETTINGS");
             }
         });
         tabTable.add(quitSettingsButton);
@@ -151,8 +149,7 @@ public class SettingsUI extends UpdateStage {
         gameTable.add(changeNameLabel);
 
         changeNameTextField = new TextField(Settings.getProperties(Settings.APP).getProperty("player_name"),
-                new TextField.TextFieldStyle(Fonts.get("button"), Color.WHITE,
-                                             null, null, null));
+                Styles.newTextFieldStyle());
         gameTable.add(changeNameTextField);
 
         changeNameButton = new ImageTextButton(
@@ -162,7 +159,7 @@ public class SettingsUI extends UpdateStage {
         changeNameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                Utils.getCurrentScreen().buttonClicked("CHANGE_NAME");
+                Utils.getCurrentScreen().click("CHANGE_NAME");
             }
         });
         gameTable.add(changeNameButton);

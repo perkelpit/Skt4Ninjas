@@ -1,6 +1,6 @@
 package com.company.skt.lib;
 
-public interface Initialize_Update {
+public interface InitializeUpdate {
   
   void initialize();
   

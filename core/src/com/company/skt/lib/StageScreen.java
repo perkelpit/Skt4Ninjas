@@ -8,9 +8,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.company.skt.controller.Utils;
 import com.company.skt.model.Assets;
 
-import java.util.Arrays;
-
-public abstract class StageScreen implements Screen, InputProcessor, Initialize_Update, EventClickHandler {
+public abstract class StageScreen implements Screen, InputProcessor, InitializeUpdate, EventClickHandler {
     
     private LayeredStages layeredStages;
     private InputMultiplexer inputMultiplexer;
@@ -32,7 +30,7 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     
     @Override
     public void update(float delta) {
-        Initialize_Update.super.update(delta);
+        InitializeUpdate.super.update(delta);
     }
 
     /** disposes and removes Stage by name from stagesArray */
@@ -140,7 +138,7 @@ public abstract class StageScreen implements Screen, InputProcessor, Initialize_
     }
     
     @Override
-    public void buttonClicked(String click) {
+    public void click(String click) {
     
     }
     

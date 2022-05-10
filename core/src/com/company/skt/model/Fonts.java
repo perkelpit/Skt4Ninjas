@@ -11,6 +11,23 @@ import com.badlogic.gdx.utils.Null;
 
 import java.util.HashMap;
 
+/**
+ * {@code Fonts} creates and provides {@link BitmapFont}-objects based on {@code TTF}-files.
+ * <p>
+ * The {@code BitmapFonts} are retrieved via the overloaded {@code get()}-methods: <br>
+ * primary use: call {@link #get(String)} to get a {@code BitmapFont} by predefined usage. <br><br>
+ * For the sake of testing new variants to implement in predefined ones, one of the other
+ * {@code get}-methods can be used either to simply change color and size by using the font set as standard or
+ * to extensively mess around with new {@code TTF}s and/or all the changable values in the process of creating a
+ * {@code BitmapFont}. <br>
+ * Use the {@code switch-case} in {@link #get(String)} and the {@link #generateFonts()} to define new usages ore to
+ * change existing ones.
+ * </p>
+ * <p>
+ * Note: {@code Fonts}-class has to be booted via calling {@link #boot(String)} to set the path where the {@code TTF}s
+ * are located before retrieving any {@code BitmapFont}!
+ * </p>
+ * */
 public abstract class Fonts {
     
     static String path;

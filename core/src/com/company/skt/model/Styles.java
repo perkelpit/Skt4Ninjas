@@ -1,6 +1,7 @@
 package com.company.skt.model;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
@@ -8,9 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox.SelectBoxStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Null;
+
+import java.awt.*;
 
 public abstract class Styles {
     
@@ -62,6 +67,7 @@ public abstract class Styles {
         style.down = down != null ? down : new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
         style.font = font != null ? font : Fonts.get("button");
         style.fontColor = fontColor != null ? fontColor : Color.BLACK;
+
         return style;
     }
     
@@ -79,6 +85,20 @@ public abstract class Styles {
         style.listStyle.selection = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
         style.listStyle.fontColorSelected = Color.ORANGE;
         style.listStyle.fontColorUnselected = Color.WHITE;
+        return style;
+    }
+    
+    public static TextFieldStyle newTextFieldStyle() {
+        TextFieldStyle style = new TextFieldStyle();
+        style.font = Fonts.get("textField");
+        style.fontColor = Color.BLACK;
+        style.background = new TextureRegionDrawable((Texture)Assets.get("TextfieldTexture2.png"));
+        // style.cursor = new TextureRegionDrawable((Texture)Assets.get("textEditCursor.png"));
+        style.focusedBackground = new TextureRegionDrawable((Texture)Assets.get("TextfieldTexture2.png"));
+        style.disabledBackground = new TextureRegionDrawable((Texture)Assets.get("TextfieldTexture2.png"));
+        style.disabledFontColor = Color.DARK_GRAY;
+        style.messageFont = Fonts.get("textField");
+        style.messageFontColor = Color.BLACK;
         return style;
     }
     

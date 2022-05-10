@@ -98,7 +98,7 @@ public class LobbyUI extends UpdateStage {
             kickPlayer1Button.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y){
-                    Utils.getCurrentScreen().buttonClicked("KICK_PLAYER#1");
+                    Utils.getCurrentScreen().click("KICK_PLAYER#1");
                 }
             });
             topLeftTable.add(kickPlayer1Button);
@@ -116,7 +116,7 @@ public class LobbyUI extends UpdateStage {
             kickPlayer2Button.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y){
-                    Utils.getCurrentScreen().buttonClicked("KICK_PLAYER#2");
+                    Utils.getCurrentScreen().click("KICK_PLAYER#2");
                 }
             });
             topLeftTable.add(kickPlayer2Button);
@@ -152,7 +152,7 @@ public class LobbyUI extends UpdateStage {
                 if(amountGamesSelectBox.hit(Gdx.input.getX(), Gdx.input.getY(), true) != null) {
 
                 }*/
-                Utils.getCurrentScreen().buttonClicked("LOBBY_SETTINGS_CLICKED#AMOUNT_GAMES");
+                Utils.getCurrentScreen().click("LOBBY_SETTINGS_CLICKED#AMOUNT_GAMES");
             }
         });
         if(!SessionData.isHost()) {
@@ -176,7 +176,7 @@ public class LobbyUI extends UpdateStage {
                 if(lostFactorSelectBox.hit(Gdx.input.getX(), Gdx.input.getY(), true) != null) {
 
                 }*/
-                Utils.getCurrentScreen().buttonClicked("LOBBY_SETTINGS_CLICKED#LOST_FACTOR");
+                Utils.getCurrentScreen().click("LOBBY_SETTINGS_CLICKED#LOST_FACTOR");
             }
         });
         if(!SessionData.isHost()) {
@@ -207,7 +207,7 @@ public class LobbyUI extends UpdateStage {
                 if(timeLimitSelectBox.hit(Gdx.input.getX(), Gdx.input.getY(), true) != null) {
 
                 }*/
-                Utils.getCurrentScreen().buttonClicked("LOBBY_SETTINGS_CLICKED#TIME_LIMIT");
+                Utils.getCurrentScreen().click("LOBBY_SETTINGS_CLICKED#TIME_LIMIT");
             }
         });
         if(!SessionData.isHost()) {
@@ -225,7 +225,7 @@ public class LobbyUI extends UpdateStage {
         junkCheckbox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Utils.getCurrentScreen().buttonClicked("LOBBY_SETTINGS_CLICKED#RAMSCH");
+                Utils.getCurrentScreen().click("LOBBY_SETTINGS_CLICKED#RAMSCH");
             }
         });
         if(!SessionData.isHost()) {
@@ -241,25 +241,12 @@ public class LobbyUI extends UpdateStage {
         bottomLeftTable.setHeight(Float.parseFloat(appCfg.getProperty("resolution_y")) / 2f);
         bottomLeftTable.setPosition(0, 0, Align.bottomLeft);
 
-        chatArea = new TextArea(
-                "testArea",
-                new TextField.TextFieldStyle(
-                        Fonts.get("textField"),
-                        Color.WHITE,
-                        null,
-                        null,
-                        new TextureRegionDrawable(Assets.<Texture>get("TextfieldTexture.png"))));
+        chatArea = new TextArea("testArea",Styles.newTextFieldStyle());
         chatArea.setDisabled(false);
         bottomLeftTable.add(chatArea);
         bottomLeftTable.row();
 
-        chatField = new TextField("testField",
-                new TextField.TextFieldStyle(
-                        Fonts.get("textField"),
-                        Color.WHITE,
-                        null,
-                        null,
-                        new TextureRegionDrawable(Assets.<Texture>get("TextfieldTexture.png"))));
+        chatField = new TextField("testField", Styles.newTextFieldStyle());
 
         bottomLeftTable.add(chatField);
 
@@ -282,7 +269,7 @@ public class LobbyUI extends UpdateStage {
         readyStartButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                Utils.getCurrentScreen().buttonClicked("READY");
+                Utils.getCurrentScreen().click("READY");
             }
         });
         if(SessionData.isHost()) {
@@ -302,7 +289,7 @@ public class LobbyUI extends UpdateStage {
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                Utils.getCurrentScreen().buttonClicked("QUIT_LOBBY");
+                Utils.getCurrentScreen().click("QUIT_LOBBY");
             }
         });
         bottomRightTable.add(quitButton).padTop(10f * scaleY);

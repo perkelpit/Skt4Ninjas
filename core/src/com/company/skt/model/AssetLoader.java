@@ -15,6 +15,12 @@ import javax.swing.*;
 import java.io.*;
 import java.util.Properties;
 
+/**
+ * {@code AssetLoader} provides resources for the currently set {@link com.company.skt.lib.StageScreen StageScreen}.
+ * It uses an {@link AssetManager} as core to do so.
+ *
+ * @see Assets
+ * */
 class AssetLoader {
     
     AssetManager aM;

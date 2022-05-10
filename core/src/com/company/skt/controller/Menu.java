@@ -31,7 +31,7 @@ public class Menu extends StageScreen implements HasSession {
         super.update(dt);
     }
 
-    public void buttonClicked(String click) {
+    public void click(String click) {
         String mainCase;
         String subCase;
         if (click.contains("#")) {

@@ -28,7 +28,7 @@ public class Play extends StageScreen {
         // TODO update stuff or remove method
     }
     
-    public void buttonClicked(String buttonName) {
+    public void click(String buttonName) {
         switch(buttonName) {
             case "DUMMY1_DONT_ANOY_ME_INTELLIJ":
                 // TODO fill DUMMY1

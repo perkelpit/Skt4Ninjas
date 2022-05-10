@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.company.skt.controller.Utils;
 
-public class BaseGroup extends Group implements Initialize_Update, Named {
+public class BaseGroup extends Group implements InitializeUpdate, Named {
     
     private boolean solid;
     private boolean stopped;
@@ -34,11 +34,11 @@ public class BaseGroup extends Group implements Initialize_Update, Named {
     
     @Override
     public void update(float delta) {
-        Initialize_Update.super.update(delta);
+        InitializeUpdate.super.update(delta);
         Actor child;
         for(int i = 0; i < getAllChildren().size; i++) {
             child = getAllChildren().get(i);
-            ((Initialize_Update)child).update(delta);
+            ((InitializeUpdate)child).update(delta);
         }
     }
     
