@@ -13,7 +13,7 @@ import java.util.Properties;
  * Use {@link #get(String)} in UI-classes.
  * <p>
  * Note: {@code Local}-class has to be booted via calling {@link #boot(String)} to set the path where the
- * language-folders are located before retrieving {@code String}! <br><br>
+ * language-files are located before retrieving {@code String}! <br><br>
  * New languages can be implemented by additions in the {@code switch-case} in {@link #boot(String)} and adding
  * appropriatly named {@code TXT}-files. <br>
  * Localized {@code Strings} have to of the following sheme: <br>
