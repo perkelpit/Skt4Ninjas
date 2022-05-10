@@ -1,0 +1,7 @@
+ref_res=1920x1080
+resolution_x=1280
+resolution_y=720
+fullscreen=false
+name=Skt
+lang=0
+version=a0.02

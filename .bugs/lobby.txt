@@ -1,0 +1,1 @@
+Client verlässt Lobby -> mal funktioniert das abmelden per "QUIT", mal nicht. Reproduzieren, Muster finden

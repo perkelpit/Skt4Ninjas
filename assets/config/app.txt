@@ -1,0 +1,9 @@
+#Mon May 09 18:07:54 CEST 2022
+resolution_y=720
+resolution_x=1280
+version=a0.02
+name=Skt
+ref_res=1920x1080
+fullscreen=false
+player_name=P
+lang=0

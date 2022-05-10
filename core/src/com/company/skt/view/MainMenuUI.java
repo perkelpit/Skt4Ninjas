@@ -1,0 +1,149 @@
+package com.company.skt.view;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton.ImageTextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.company.skt.controller.Utils;
+import com.company.skt.lib.UpdateStage;
+import com.company.skt.model.*;
+
+import java.util.Properties;
+
+/**
+ * The UI which marks the entry point to the program regarding the user. */
+public class MainMenuUI extends UpdateStage {
+
+    private Table menuTable;
+    private Label welcomeMessageLabel;
+    private ImageTextButton hostButton, joinButton, archiveButton, settingsButton, creditsButton, exitButton;
+    private TextureRegionDrawable buttonDrawable, buttonPressedDrawable;
+    private BitmapFont buttonFont;
+    private LabelStyle labelStyleWelcome;
+    private Properties appCfg;
+    
+    {
+        appCfg = Settings.getProperties(Settings.APP);
+
+        labelStyleWelcome = new LabelStyle();
+        labelStyleWelcome.font = Fonts.get("bigTitle");
+        
+        buttonFont = Fonts.get("button");
+        buttonDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexture.png"));
+        buttonPressedDrawable = new TextureRegionDrawable(Assets.<Texture>get("ButtonTexturePressed.png"));
+    }
+
+    public MainMenuUI(String name) {
+        super(name);
+    }
+    
+    public MainMenuUI(String name, boolean active) {
+        super(name, active);
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+
+        // *** TABLE ***
+        menuTable = new Table();
+        menuTable.setWidth(Float.parseFloat(appCfg.getProperty("resolution_x")));
+        menuTable.setHeight(Float.parseFloat(appCfg.getProperty("resolution_y")));
+        menuTable.align(Align.center);
+        
+        // *** LABEL ***
+        welcomeMessageLabel = new Label(
+            Local.get("mm_greet") + " " +
+            Settings.getProperties(Settings.APP).getProperty("player_name"),
+                                        labelStyleWelcome);
+        menuTable.add(welcomeMessageLabel);
+        menuTable.row();
+        
+        // *** HOST BUTTON ***
+        hostButton = new ImageTextButton(
+            Local.get("mm_host"), new ImageTextButtonStyle(
+                buttonDrawable, buttonPressedDrawable, null, buttonFont));
+        hostButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Utils.getCurrentScreen().click("HOST");
+            }
+        });
+        menuTable.add(hostButton);
+        menuTable.row();
+        
+        // *** JOIN BUTTON ***
+        joinButton = new ImageTextButton(
+            Local.get("mm_join"), new ImageTextButtonStyle(
+            buttonDrawable, buttonPressedDrawable, null, buttonFont));
+        joinButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Utils.getCurrentScreen().click("JOIN");
+            }
+        });
+        menuTable.add(joinButton);
+        menuTable.row();
+        
+        // *** ARCHIVE BUTTON ***
+        archiveButton = new ImageTextButton(
+            Local.get("mm_archive"), new ImageTextButtonStyle(
+            buttonDrawable, buttonPressedDrawable, null, buttonFont));
+        archiveButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Utils.getCurrentScreen().click("ARCHIVE");
+            }
+        });
+        menuTable.add(archiveButton);
+        menuTable.row();
+        
+        // *** SETTINGS ***
+        settingsButton = new ImageTextButton(
+            Local.get("mm_settings"), new ImageTextButtonStyle(
+            buttonDrawable, buttonPressedDrawable, null, buttonFont));
+        settingsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Utils.getCurrentScreen().click("SETTINGS");
+            }
+        });
+        menuTable.add(settingsButton);
+        menuTable.row();
+    
+        // *** CREDITS BUTTON ***
+        creditsButton = new ImageTextButton(
+            Local.get("mm_credits"), new ImageTextButtonStyle(
+            buttonDrawable, buttonPressedDrawable, null, buttonFont));
+        creditsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Utils.getCurrentScreen().click("CREDITS");
+            }
+        });
+        menuTable.add(creditsButton);
+        menuTable.row();
+        
+        // *** EXIT BUTTON ***
+        exitButton = new ImageTextButton(
+            Local.get("mm_exit"), new ImageTextButtonStyle(
+            buttonDrawable, buttonPressedDrawable, null, buttonFont));
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Utils.getCurrentScreen().click("EXIT");
+            }
+        });
+        menuTable.add(exitButton);
+        
+        
+        addActor(menuTable);
+    }
+}

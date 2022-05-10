@@ -1,0 +1,5 @@
+#Mon May 09 18:08:57 CEST 2022
+lost_factor=-4
+ramsch=false
+amount_games=6
+time_limit=30

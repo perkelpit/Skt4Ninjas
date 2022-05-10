@@ -1,0 +1,9 @@
+ToolTips
+
+Lobby:
+Ausrichtungen, Größen
+Ready-Status repräsentieren
+Kick-Button kleiner - am besten nur Symbol, nicht Text.
+Ramsch-Setting - ggf. doch als Ja/Nein-DropDown der Einheitlichkeit wg.?
+
+Chat(TextArea :( )
