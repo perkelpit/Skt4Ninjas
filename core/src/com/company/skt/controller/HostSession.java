@@ -45,8 +45,6 @@ public class HostSession extends Session {
         
         sessionData = SessionData.get(true);
         
-        /* TODO seems a crude solution:
-         * better figure out how to combine singleThreadScheduled and CachedThreadPool */
         handlerPlayer1 = new ClientHandler(this);
         handlerPlayer2 = new ClientHandler(this);
         excessHandler = new ExcessHandler(this);

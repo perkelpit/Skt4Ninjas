@@ -40,6 +40,8 @@ public class Skt extends ScreenController {
 	private static ScheduledThreadPoolExecutor executor;
 	
 	static {
+		/* TODO seems a crude solution:
+	 	 * better figure out how to combine singleThreadScheduled and CachedThreadPool */
 		executor = new ScheduledThreadPoolExecutor(16);
 	}
 

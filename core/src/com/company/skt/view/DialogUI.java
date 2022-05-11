@@ -138,7 +138,7 @@ public class DialogUI extends UpdateStage {
      * After hitting a button, the corresponding UI passed as param is activated and the {@code String} in the
      * {@code TextField} is stored in the {@code static String input} to be gathered by another code fragment.
      * Hitting {@code ENTER} within the {@code TextField} is treated like clicking the ok-button. <br>
-     * A {@link Runnable}, called after hitting a button, may be passed. <br>
+     * A {@link Runnable}, called after hitting the cancel button, may be passed. <br>
      * A {@link Predicate} to test if the input is valid may be passed. <br>
      * The rest of the {@code nullable} params
      * should be self-explanatory.
